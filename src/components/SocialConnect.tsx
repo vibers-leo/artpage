@@ -7,26 +7,26 @@ export default function SocialConnect() {
   const socialLinks = [
     {
       name: "Instagram",
-      id: "@artwaygallery_story",
-      url: "https://www.instagram.com/artwaygallery_story/",
+      id: "@yourbrand",
+      url: "#",
       icon: <Instagram size={24} />,
       color: "text-pink-600",
       bgHover: "hover:border-pink-200 hover:shadow-pink-100",
       btnColor: "bg-pink-600 hover:bg-pink-700",
     },
     {
-      name: "Naver Blog",
-      id: "blog.naver.com/art_way_",
-      url: "https://blog.naver.com/art_way_",
-      icon: <BookOpen size={24} />, // 네이버 로고 대신 책 아이콘 사용
+      name: "Blog",
+      id: "yourbrand.blog",
+      url: "#",
+      icon: <BookOpen size={24} />,
       color: "text-green-600",
       bgHover: "hover:border-green-200 hover:shadow-green-100",
       btnColor: "bg-green-500 hover:bg-green-600",
     },
     {
       name: "YouTube",
-      id: "아트웨이 갤러리",
-      url: "https://www.youtube.com/@artwaygallerybusan",
+      id: "Your Brand",
+      url: "#",
       icon: <Youtube size={24} />,
       color: "text-red-600",
       bgHover: "hover:border-red-200 hover:shadow-red-100",
@@ -56,7 +56,7 @@ export default function SocialConnect() {
 
           {/* 바로가기 버튼 */}
           <div className={`text-white text-xs font-bold px-6 py-2 rounded-full transition-colors ${social.btnColor}`}>
-            바로가기
+            Visit
           </div>
         </Link>
       ))}

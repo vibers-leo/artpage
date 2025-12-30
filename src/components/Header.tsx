@@ -3,15 +3,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import MobileMenu from "@/components/MobileMenu";
+import BukchonLogo from "@/components/BukchonLogo";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Header() {
   const pathname = usePathname();
-  const isHome = pathname === "/"; // 메인 페이지 여부 확인
+  // 데모 홈이거나 루트일 때 (혹시 모를 리다이렉트 대비)
+  const isHome = pathname === "/demo" || pathname === "/";
   
-  // 스크롤 감지 (스크롤 내리면 배경색 채우기)
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -22,47 +23,102 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 스타일 분기 처리
   const headerClass = isHome && !isScrolled
-    ? "bg-transparent border-transparent text-white" // 메인 & 스크롤Top: 투명 배경, 흰 글씨
-    : "bg-white/90 backdrop-blur-sm border-gray-100/50 text-gray-500"; // 그 외: 흰 배경, 검은 글씨
+    ? "bg-transparent border-transparent text-white"
+    : "bg-background/95 backdrop-blur-md border-border/50 text-foreground";
 
-  const logoSrc = isHome && !isScrolled 
-    ? "/logo-white.png" // (선택사항) 배경이 어두우니 흰색 로고가 있다면 교체
-    : "/logo.png";      // 기존 로고
-
-  // 로고 색상 반전 필터 (흰색 로고 이미지가 따로 없다면 css filter 사용)
-  const logoFilter = isHome && !isScrolled ? "brightness(0) invert(1)" : "none";
+  const logoVariant = isHome && !isScrolled ? "light" : "dark";
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${headerClass}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${headerClass}`}>
       <div className="max-w-screen-2xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* 로고 */}
-        <Link href="/" className="hover:opacity-70 transition">
-          <Image
-            src="/logo.png" // 기존 로고 파일명 사용
-            alt="ARTWAY"
-            width={130}
-            height={40}
-            className="h-8 w-auto object-contain transition-all"
-            style={{ filter: logoFilter }} // 메인에선 흰색으로 반전
-            priority
-          />
+        <Link href="/demo" className="hover:opacity-70 transition-opacity duration-300">
+          <BukchonLogo variant={logoVariant} />
         </Link>
 
-        {/* 네비게이션 */}
-        {/* bg-white 제거함 */}
-        <nav className={`hidden md:flex gap-12 text-[16px] font-medium tracking-widest ${isHome && !isScrolled ? "text-white/80 hover:text-white" : "text-gray-500"}`}>
-          <Link href="/about" className="hover:text-black hover:opacity-100 transition-colors">소개</Link>
-          <Link href="/archive" className="hover:text-black hover:opacity-100 transition-colors">전시기록</Link>
-          <Link href="/media" className="hover:text-black hover:opacity-100 transition-colors">언론보도</Link>
-          <Link href="/mall" className="hover:text-black hover:opacity-100 transition-colors">SHOP</Link>
-          <Link href="/contact" className="hover:text-black hover:opacity-100 transition-colors">찾아오시는길</Link>
-        </nav>
+        <div className="flex items-center gap-8">
+          {/* 네비게이션 - 영문 소문자 */}
+          <nav className={`hidden md:flex gap-8 text-sm tracking-wide transition-colors duration-300`}>
+            <Link 
+              href="/demo/about" 
+              className={`relative py-1 transition-all duration-300 lowercase ${
+                isHome && !isScrolled 
+                  ? "text-white/90 hover:text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              about
+              <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
+                pathname === "/demo/about" ? "w-full" : ""
+              }`} />
+            </Link>
+            
+            <Link 
+              href="/demo/archive" 
+              className={`relative py-1 transition-all duration-300 lowercase ${
+                isHome && !isScrolled 
+                  ? "text-white/90 hover:text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              archive
+              <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
+                pathname === "/demo/archive" ? "w-full" : ""
+              }`} />
+            </Link>
+            
+            <Link 
+              href="/demo/media" 
+              className={`relative py-1 transition-all duration-300 lowercase ${
+                isHome && !isScrolled 
+                  ? "text-white/90 hover:text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              media
+              <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
+                pathname === "/demo/media" ? "w-full" : ""
+              }`} />
+            </Link>
+            
+            <Link 
+              href="/demo/mall" 
+              className={`relative py-1 transition-all duration-300 lowercase ${
+                isHome && !isScrolled 
+                  ? "text-white/90 hover:text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              shop
+              <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
+                pathname === "/demo/mall" ? "w-full" : ""
+              }`} />
+            </Link>
+            
+            <Link 
+              href="/demo/contact" 
+              className={`relative py-1 transition-all duration-300 lowercase ${
+                isHome && !isScrolled 
+                  ? "text-white/90 hover:text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              contact
+              <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
+                pathname === "/demo/contact" ? "w-full" : ""
+              }`} />
+            </Link>
+          </nav>
 
-        {/* 모바일 메뉴 (색상 props 전달 필요할 수 있음) */}
-        <div className={isHome && !isScrolled ? "text-white" : "text-black"}>
-           <MobileMenu />
+          {/* 언어 전환 버튼 - 왼쪽 여백 추가 */}
+          <div className="hidden md:block ml-4 pl-4 border-l border-border/30">
+            <LanguageSwitcher />
+          </div>
+
+          {/* 모바일 메뉴 - 색상 통일 */}
+          <div className="md:hidden">
+            <MobileMenu />
+          </div>
         </div>
       </div>
     </header>

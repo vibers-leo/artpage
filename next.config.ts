@@ -3,21 +3,18 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // 기존 설정
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
-      // 기존 설정 (나중을 대비한 것)
       {
-        protocol: "https",
-        hostname: "supa.gl",
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
       },
-      // ✅ [추가됨] 현재 오류가 발생하는 Supabase 프로젝트 주소
       {
-        protocol: "https",
-        hostname: "mbldqbzucgynrlhutfda.supabase.co",
-      },
+        protocol: 'https',
+        hostname: 'bk-art-space.com', // 기존에 있을 수 있는 도메인
+      }
     ],
   },
 };

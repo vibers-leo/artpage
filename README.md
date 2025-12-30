@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ArtPage Platform
 
-## Getting Started
+아티스트와 갤러리를 위한 웹사이트 플랫폼
 
-First, run the development server:
+## 프로젝트 구조
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+artpage/
+├── src/app/                 # 메인 플랫폼 (artpage.kr)
+│   ├── page.tsx            # 랜딩 페이지
+│   ├── templates/          # 템플릿 쇼케이스
+│   ├── pricing/            # 가격 정책
+│   └── auth/               # 회원가입/로그인
+│
+├── templates/               # 템플릿 라이브러리
+│   └── gallery-modern/     # 북촌 아트 스페이스 템플릿
+│
+└── tenant/                  # 테넌트 시스템 (서브도메인)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 비즈니스 모델
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 수익 구조
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **초기 세팅비**: 템플릿 설치 + 커스터마이징
+2. **월 구독료**: 호스팅 + 유지보수
+3. **거래 수수료**: 굿즈 판매 시 5-10%
+4. **프리미엄 기능**: 추가 템플릿, 고급 기능
 
-## Learn More
+### 서브도메인 시스템
 
-To learn more about Next.js, take a look at the following resources:
+- `artpage.kr` - 메인 플랫폼
+- `bukchon.artpage.kr` - 북촌 아트 스페이스
+- `artist-name.artpage.kr` - 개인 아티스트
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 기술 스택
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Backend**: Supabase (Auth, Database, Storage)
+- **Payment**: Toss Payments
+- **Hosting**: Vercel
 
-## Deploy on Vercel
+## 템플릿
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Gallery Modern (북촌 아트 스페이스)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 갤러리/미술관용
+- 전시 관리
+- 상품 판매
+- Instagram 연동
+- 다국어 지원 (한/영/일/중)
+
+### 추가 예정 템플릿
+
+- Gallery Minimal
+- Artist Portfolio
+- Studio Creative
+
+## 개발 가이드
+
+### 로컬 실행
+
+```bash
+npm install
+npm run dev
+```
+
+### 환경 변수
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-key
+NEXT_PUBLIC_TOSS_CLIENT_KEY=your-toss-key
+```
+
+## 라이선스
+
+Proprietary - ArtPage Platform

@@ -27,16 +27,16 @@ export default function InstagramProfile() {
         {/* 2. 텍스트 정보 */}
         <div className="flex-1 text-center md:text-left space-y-4">
           <div className="flex flex-col md:flex-row items-center gap-4 justify-center md:justify-start">
-            <h2 className="text-xl font-bold text-gray-900">artwaygallery_story</h2>
+            <h2 className="text-xl font-bold text-gray-900">yourbrand</h2>
             
             {/* 팔로우 버튼 */}
             <Link 
-              href="https://www.instagram.com/artwaygallery_story/" 
+              href="#" 
               target="_blank"
               className="px-6 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition flex items-center gap-2"
             >
               <Instagram size={16} />
-              팔로우
+              Follow
             </Link>
           </div>
 
@@ -49,23 +49,23 @@ export default function InstagramProfile() {
 
           {/* 소개글 */}
           <div className="text-sm leading-relaxed text-gray-600">
-            <p className="font-bold text-gray-900 mb-1">아트웨이갤러리</p>
-            <p>부산광역시 동구 정공단로9 1F-3F</p>
-            <p>➡️ 고석원초대개인전 &apos;Docking&apos;</p>
-            <p>2025.10.29.수 ~ 11.20.목 (매주 월,화 휴관)</p>
-            <p>⏰ 11:00-18:00</p>
-            <p>☎️ 051)915-8385</p>
+            <p className="font-bold text-gray-900 mb-1">Your Brand Name</p>
+            <p>Your address information</p>
+            <p>➡️ Current promotion or event</p>
+            <p>Business hours and schedule</p>
+            <p>⏰ Mon-Fri: 9:00-18:00</p>
+            <p>☎️ 000-0000-0000</p>
           </div>
         </div>
       </div>
 
       {/* 하단 바로가기 링크 */}
       <Link 
-        href="https://www.instagram.com/artwaygallery_story/" 
+        href="#" 
         target="_blank"
         className="mt-8 flex items-center justify-center w-full py-4 border-t border-gray-100 text-sm font-medium text-gray-500 hover:text-blue-500 transition gap-1 group"
       >
-        인스타그램 방문하기
+        Visit Instagram
         <ArrowUpRight size={16} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
       </Link>
     </div>

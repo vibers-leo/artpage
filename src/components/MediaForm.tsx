@@ -17,7 +17,7 @@ export default function MediaForm() {
         <label className="text-sm text-gray-500">제목</label>
         <input
           name="title"
-          placeholder="예: [부산일보] 아트웨이 개관 소식"
+          placeholder="예: [언론사명] 기사 제목"
           className="w-full border border-gray-300 p-3 focus:outline-none focus:border-black transition"
           required
         />

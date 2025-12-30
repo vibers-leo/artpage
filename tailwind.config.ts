@@ -79,6 +79,16 @@ const config: Config = {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
+				},
+				// 한국 전통 색상
+				korean: {
+					blue: 'hsl(var(--korean-blue))',      // 청색
+					red: 'hsl(var(--korean-red))',        // 주홍
+					yellow: 'hsl(var(--korean-yellow))',  // 황금
+					green: 'hsl(var(--korean-green))',    // 녹청
+					purple: 'hsl(var(--korean-purple))',  // 자주
+					pink: 'hsl(var(--korean-pink))',      // 연지
+					beige: 'hsl(var(--korean-beige))',    // 한지
 				}
 			}
 		}

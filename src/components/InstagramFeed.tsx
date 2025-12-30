@@ -21,16 +21,16 @@ export default function InstagramFeed() {
             </div>
           </div>
           <div>
-            <p className="font-bold text-sm">artwaygallery_story</p>
-            <p className="text-xs text-gray-500">아트웨이 갤러리</p>
+            <p className="font-bold text-sm">yourbrand</p>
+            <p className="text-xs text-gray-500">Your Brand Name</p>
           </div>
         </div>
         <a
-          href="https://www.instagram.com/artwaygallery_story/"
+          href="#"
           target="_blank"
           className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-md transition"
         >
-          팔로우
+          Follow
         </a>
       </div>
 
@@ -38,7 +38,7 @@ export default function InstagramFeed() {
         {dummyImages.map((src, i) => (
           <a
             key={i}
-            href="https://www.instagram.com/artwaygallery_story/"
+            href="#"
             target="_blank"
             className="relative aspect-square bg-gray-200 group overflow-hidden"
           >
