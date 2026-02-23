@@ -4,9 +4,9 @@
 
 @layer base {
   :root {
-    --color-primary: #00a859;
-    --color-primary-dark: #008a47;
-    --color-accent: #00d670;
+    --color-primary: #1E40AF;
+    --color-primary-dark: #1E3A8A;
+    --color-accent: #3B82F6;
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
@@ -19,15 +19,15 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-[#00a859] to-[#00d670] text-white hover:shadow-xl hover:scale-105;
+    @apply bg-gradient-to-r from-[#1E40AF] to-[#3B82F6] text-white hover:shadow-xl hover:scale-105;
   }
-  
+
   .btn-outline {
-    @apply border-2 border-[#00a859] text-[#00a859] hover:bg-[#00a859] hover:text-white;
+    @apply border-2 border-[#1E40AF] text-[#1E40AF] hover:bg-[#1E40AF] hover:text-white;
   }
-  
+
   .btn-accent {
-    @apply bg-white text-[#00a859] hover:bg-gray-100;
+    @apply bg-white text-[#1E40AF] hover:bg-gray-100;
   }
   
   .btn-lg {
@@ -43,7 +43,7 @@
   }
   
   .hero {
-    @apply relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00a859] to-[#00d670] text-white overflow-hidden;
+    @apply relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1E40AF] to-[#3B82F6] text-white overflow-hidden;
   }
   
   .section {
