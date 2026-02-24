@@ -184,94 +184,252 @@
 
     const pres = new PptxGenJS();
     pres.layout = 'LAYOUT_16x9';
-    pres.defineLayout({ name: 'CUSTOM', width: 10, height: 5.625 });
-    pres.layout = 'CUSTOM';
+    pres.author = '<%= @bidding.partner || "디어스" %>';
+    pres.title = '<%= @bidding.title %>';
 
     slides.forEach((slide, index) => {
       const pptSlide = pres.addSlide();
+      const isCover = slide.classList.contains('cover');
 
-      // 배경색 추출
-      const bgColor = slide.style.background || '#1a1a1a';
-      const bgMatch = bgColor.match(/#[0-9a-fA-F]{6}/);
-      if (bgMatch) {
-        pptSlide.background = { color: bgMatch[0].substring(1) };
-      }
+      // 커버 슬라이드: 그라디언트 배경
+      if (isCover) {
+        pptSlide.background = {
+          fill: '1E40AF',
+          transparency: 0
+        };
 
-      // 제목 추출
-      const h1 = slide.querySelector('h1');
-      if (h1) {
-        pptSlide.addText(h1.textContent, {
-          x: 0.5,
-          y: 0.5,
-          w: 9,
-          h: 1,
-          fontSize: 48,
-          bold: true,
-          color: 'FFFFFF',
-          fontFace: 'Pretendard'
-        });
-      }
+        const slideTitle = slide.querySelector('.slide-title');
+        const slideSubtitle = slide.querySelector('.slide-subtitle');
 
-      // 부제목 추출
-      const h2 = slide.querySelector('h2');
-      if (h2) {
-        pptSlide.addText(h2.textContent, {
-          x: 0.5,
-          y: h1 ? 1.5 : 0.5,
-          w: 9,
-          h: 0.6,
-          fontSize: 32,
-          color: 'CCCCCC',
-          fontFace: 'Pretendard'
-        });
-      }
-
-      // 본문 추출 (ul, p)
-      const contentElements = slide.querySelectorAll('ul, p, .metric, .strategy-item');
-      let yPos = h1 && h2 ? 2.5 : h1 ? 2 : h2 ? 1.5 : 1;
-
-      contentElements.forEach(el => {
-        if (el.tagName === 'UL') {
-          const items = el.querySelectorAll('li');
-          items.forEach(li => {
-            pptSlide.addText('• ' + li.textContent, {
-              x: 0.5,
-              y: yPos,
-              w: 9,
-              h: 0.4,
-              fontSize: 20,
-              color: 'E0E0E0',
-              fontFace: 'Pretendard'
-            });
-            yPos += 0.5;
-          });
-        } else if (el.classList.contains('metric')) {
-          const value = el.querySelector('.value')?.textContent || '';
-          const label = el.querySelector('.label')?.textContent || '';
-          pptSlide.addText(value + '\n' + label, {
+        if (slideTitle) {
+          pptSlide.addText(slideTitle.textContent.trim(), {
             x: 0.5,
-            y: yPos,
-            w: 2.5,
-            h: 1,
-            fontSize: 24,
-            color: 'FFFFFF',
-            fontFace: 'Pretendard',
-            align: 'center'
-          });
-          yPos += 1.2;
-        } else {
-          pptSlide.addText(el.textContent, {
-            x: 0.5,
-            y: yPos,
+            y: 2.0,
             w: 9,
-            h: 0.4,
-            fontSize: 18,
-            color: 'E0E0E0',
+            h: 1.2,
+            fontSize: 60,
+            bold: true,
+            color: 'FFFFFF',
+            align: 'center',
             fontFace: 'Pretendard'
           });
-          yPos += 0.6;
         }
-      });
+
+        if (slideSubtitle) {
+          pptSlide.addText(slideSubtitle.textContent.trim(), {
+            x: 0.5,
+            y: 3.2,
+            w: 9,
+            h: 0.6,
+            fontSize: 32,
+            color: 'E8F4FF',
+            align: 'center',
+            fontFace: 'Pretendard'
+          });
+        }
+
+        // 추가 정보 (제안사, 제안일 등)
+        const additionalInfo = slide.querySelectorAll('div[style*="margin-top"]');
+        if (additionalInfo.length > 0) {
+          const infoText = additionalInfo[0].innerHTML.replace(/<br>/g, '\n').replace(/<[^>]+>/g, '');
+          pptSlide.addText(infoText, {
+            x: 0.5,
+            y: 4.2,
+            w: 9,
+            h: 0.8,
+            fontSize: 20,
+            color: 'FFFFFF',
+            align: 'center',
+            fontFace: 'Pretendard'
+          });
+        }
+      } else {
+        // 일반 슬라이드: 흰색 배경
+        pptSlide.background = { fill: 'FFFFFF' };
+
+        // 헤더 영역
+        const header = slide.querySelector('.slide-header');
+        if (header) {
+          // 슬라이드 번호
+          const slideNumber = header.querySelector('.slide-number');
+          if (slideNumber) {
+            pptSlide.addText(slideNumber.textContent, {
+              x: 0.625,
+              y: 0.4,
+              w: 1,
+              h: 0.4,
+              fontSize: 18,
+              bold: true,
+              color: '1E40AF',
+              fontFace: 'Pretendard'
+            });
+          }
+
+          // 제목
+          const title = header.querySelector('.slide-title');
+          if (title) {
+            pptSlide.addText(title.textContent, {
+              x: 0.625,
+              y: 0.7,
+              w: 8,
+              h: 0.8,
+              fontSize: 40,
+              bold: true,
+              color: '111111',
+              fontFace: 'Pretendard'
+            });
+          }
+
+          // 부제목
+          const subtitle = header.querySelector('.slide-subtitle');
+          if (subtitle) {
+            pptSlide.addText(subtitle.textContent, {
+              x: 0.625,
+              y: 1.4,
+              w: 8,
+              h: 0.4,
+              fontSize: 20,
+              color: '666666',
+              fontFace: 'Pretendard'
+            });
+          }
+
+          // 헤더 하단 테두리
+          pptSlide.addShape('rect', {
+            x: 0.625,
+            y: 1.75,
+            w: 8.75,
+            h: 0.03,
+            fill: { color: '1E40AF' }
+          });
+        }
+
+        // 본문 콘텐츠
+        const content = slide.querySelector('.slide-content');
+        let yPos = 2.2;
+
+        if (content) {
+          // 테이블 처리
+          const table = content.querySelector('table');
+          if (table) {
+            const rows = [];
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            if (thead) {
+              const headerCells = thead.querySelectorAll('th');
+              rows.push(Array.from(headerCells).map(cell => ({
+                text: cell.textContent.trim(),
+                options: { fill: '1E40AF', color: 'FFFFFF', bold: true, fontSize: 16 }
+              })));
+            }
+
+            if (tbody) {
+              const bodyRows = tbody.querySelectorAll('tr');
+              bodyRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                rows.push(Array.from(cells).map(cell => ({
+                  text: cell.textContent.trim(),
+                  options: { fontSize: 14, color: '333333' }
+                })));
+              });
+            }
+
+            if (rows.length > 0) {
+              pptSlide.addTable(rows, {
+                x: 0.625,
+                y: yPos,
+                w: 8.75,
+                rowH: 0.4,
+                border: { pt: 1, color: 'E5E7EB' },
+                fontFace: 'Pretendard'
+              });
+            }
+          } else {
+            // h3 제목들
+            const h3Elements = content.querySelectorAll('h3');
+            h3Elements.forEach(h3 => {
+              const text = h3.textContent.trim();
+              pptSlide.addText(text, {
+                x: 0.625,
+                y: yPos,
+                w: 8.75,
+                h: 0.4,
+                fontSize: 24,
+                bold: true,
+                color: '3B82F6',
+                fontFace: 'Pretendard'
+              });
+              yPos += 0.6;
+
+              // h3 다음의 ul 또는 p
+              let nextEl = h3.nextElementSibling;
+              while (nextEl && !nextEl.matches('h3')) {
+                if (nextEl.tagName === 'UL') {
+                  const items = nextEl.querySelectorAll('li');
+                  items.forEach(li => {
+                    pptSlide.addText('• ' + li.textContent.trim(), {
+                      x: 0.875,
+                      y: yPos,
+                      w: 8.25,
+                      h: 0.35,
+                      fontSize: 16,
+                      color: '333333',
+                      fontFace: 'Pretendard'
+                    });
+                    yPos += 0.4;
+                  });
+                } else if (nextEl.tagName === 'P') {
+                  pptSlide.addText(nextEl.textContent.trim(), {
+                    x: 0.875,
+                    y: yPos,
+                    w: 8.25,
+                    h: 0.35,
+                    fontSize: 16,
+                    color: '333333',
+                    fontFace: 'Pretendard'
+                  });
+                  yPos += 0.5;
+                } else if (nextEl.classList.contains('strategy-box')) {
+                  // 전략 박스: 배경색 있는 박스
+                  const boxText = nextEl.innerHTML.replace(/<br>/g, '\n').replace(/<[^>]+>/g, '').trim();
+                  pptSlide.addText(boxText, {
+                    x: 0.625,
+                    y: yPos,
+                    w: 8.75,
+                    h: 1.5,
+                    fontSize: 16,
+                    color: '111111',
+                    fill: { color: 'F0F9FF' },
+                    line: { color: '1E40AF', pt: 3, dashType: 'solid' },
+                    fontFace: 'Pretendard',
+                    valign: 'top'
+                  });
+                  yPos += 1.7;
+                }
+                nextEl = nextEl.nextElementSibling;
+              }
+
+              yPos += 0.3;
+            });
+          }
+        }
+
+        // 푸터
+        const footer = slide.querySelector('.footer');
+        if (footer) {
+          pptSlide.addText(footer.textContent.trim(), {
+            x: 7.5,
+            y: 5.0,
+            w: 2,
+            h: 0.3,
+            fontSize: 12,
+            color: '999999',
+            align: 'right',
+            fontFace: 'Pretendard'
+          });
+        }
+      }
     });
 
     const fileName = '<%= @bidding.title.gsub(/[^\w\s-]/, '') %>_슬라이드.pptx';
