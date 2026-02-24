@@ -1,5 +1,5 @@
 class Admin::BiddingsController < ApplicationController
-  before_action :set_bidding, only: [:show, :edit, :update, :destroy, :generate_proposal, :generate_diagnosis, :generate_slides]
+  before_action :set_bidding, only: [:show, :edit, :update, :destroy, :generate_proposal, :generate_diagnosis, :generate_slides, :analyze_with_gemini]
   layout 'admin'
 
   def index
@@ -63,6 +63,23 @@ class Admin::BiddingsController < ApplicationController
   def generate_slides
     @bidding.generate_slides_html
     redirect_to admin_bidding_path(@bidding), notice: '피그마 연동 가능한 슬라이드가 생성되었습니다.'
+  end
+
+  def analyze_with_gemini
+    service = RfpAnalyzerService.new(@bidding)
+
+    # 이미지가 첨부되어 있으면 이미지 분석, 없으면 텍스트 분석
+    result = if @bidding.documents.attached?
+               service.analyze_with_images
+             else
+               service.analyze
+             end
+
+    if result[:success]
+      redirect_to admin_bidding_path(@bidding), notice: '🤖 Gemini AI 분석이 완료되었습니다. 분석 노트와 차별화 전략이 자동 생성되었습니다.'
+    else
+      redirect_to admin_bidding_path(@bidding), alert: "분석 중 오류가 발생했습니다: #{result[:error]}"
+    end
   end
 
   private

@@ -3,6 +3,7 @@
     <h1><%= @bidding.title %></h1>
     <div class="actions">
       <div class="action-group">
+        <%= button_to "🤖 AI 분석", analyze_with_gemini_admin_bidding_path(@bidding), method: :post, class: "btn btn-ai", style: "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;" %>
         <%= button_to "📊 진단 생성", generate_diagnosis_admin_bidding_path(@bidding), method: :post, class: "btn btn-success" %>
         <%= button_to "📄 슬라이드 생성", generate_slides_admin_bidding_path(@bidding), method: :post, class: "btn btn-info" %>
         <%= button_to "📝 아웃라인", generate_proposal_admin_bidding_path(@bidding), method: :post, class: "btn btn-warning" %>
