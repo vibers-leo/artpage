@@ -1,32 +1,67 @@
 // src/app/(platform)/page.tsx
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HeroParallax } from "@/components/ui/hero-parallax";
-import { ArrowRight, ArrowUpRight, Database, Layout, Palette, HeartHandshake, CheckCircle2, Coffee } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Database, Layout, Palette, CheckCircle2, Coffee, Globe, Archive, Brush, Monitor } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { getActiveClients, type Client } from "@/actions/clientActions";
 
 export default function PlatformHomePage() {
   const { t, locale } = useLanguage();
   const p = t.platform; // 단축 변수
+  const a = p.agency; // 에이전시 섹션 단축 변수
+
+  // DB에서 클라이언트 목록 로드 (없으면 정적 데이터 사용)
+  const [dbClients, setDbClients] = useState<Client[]>([]);
+  useEffect(() => {
+    getActiveClients().then((data) => {
+      if (data.length > 0) setDbClients(data);
+    }).catch(() => {/* DB 미설정 시 정적 데이터 사용 */});
+  }, []);
 
   const products = [
-    { title: "Moonbeam", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Cursor", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Rogue", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop" },
-    { title: "Editorally", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" },
-    { title: "Editrix AI", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1482160549825-59d1b23cb208?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Pixel Perfect", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=2787&auto=format&fit=crop" },
-    { title: "Algochurn", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Aceternity UI", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Tailwind Master Kit", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=3000&auto=format&fit=crop" },
-    { title: "SmartBridge", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Renderwork", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Creme Digital", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Golden Bells Academy", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=3000&auto=format&fit=crop" },
-    { title: "Invoker Labs", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=3000&auto=format&fit=crop" },
-    { title: "E Free Invoice", link: "/demo", thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtHyun — Gallery", link: "/arthyun", thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2971&auto=format&fit=crop" },
+    { title: "ArtHyun — Archive", link: "/arthyun/archive", thumbnail: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?q=80&w=2574&auto=format&fit=crop" },
+    { title: "ArtWay — Home", link: "/art-way", thumbnail: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtWay — Archive", link: "/art-way/archive", thumbnail: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop" },
+    { title: "ArtHyun — Portfolio", link: "/arthyun/portfolio", thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" },
+    { title: "ArtHyun — Media", link: "/arthyun/media", thumbnail: "https://images.unsplash.com/photo-1482160549825-59d1b23cb208?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtWay — Portfolio", link: "/art-way", thumbnail: "https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=2787&auto=format&fit=crop" },
+    { title: "ArtHyun — Contact", link: "/arthyun/contact", thumbnail: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtPage — Templates", link: "/templates", thumbnail: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtWay — Media", link: "/art-way/media", thumbnail: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtHyun — Mall", link: "/arthyun/mall", thumbnail: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtWay — Contact", link: "/art-way/contact", thumbnail: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtPage — Features", link: "/features", thumbnail: "https://images.unsplash.com/photo-1520423465871-0866049020b7?q=80&w=2800&auto=format&fit=crop" },
+    { title: "ArtHyun — About", link: "/arthyun/about", thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=3000&auto=format&fit=crop" },
+    { title: "ArtWay — About", link: "/art-way/about", thumbnail: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2968&auto=format&fit=crop" },
+  ];
+
+  const services = [
+    { icon: Globe, title: a.service1_title, desc: a.service1_desc },
+    { icon: Archive, title: a.service2_title, desc: a.service2_desc },
+    { icon: Brush, title: a.service3_title, desc: a.service3_desc },
+    { icon: Monitor, title: a.service4_title, desc: a.service4_desc },
+  ];
+
+  const clientProjects = [
+    {
+      name: a.clients.arthyun.name,
+      desc: a.clients.arthyun.desc,
+      category: a.clients.arthyun.category,
+      href: "/arthyun",
+      image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2971&auto=format&fit=crop",
+    },
+    {
+      name: a.clients.artway.name,
+      desc: a.clients.artway.desc,
+      category: a.clients.artway.category,
+      href: "/art-way",
+      image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=3000&auto=format&fit=crop",
+    },
   ];
 
   return (
@@ -266,6 +301,110 @@ export default function PlatformHomePage() {
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3.5 Agency Portfolio — Client Showcase */}
+      <section className="py-32 px-6 md:px-12 border-t border-border bg-background">
+        <div className="max-w-screen-xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start mb-24">
+            <span className="text-sm font-mono text-muted-foreground block mb-4 md:mb-0">{a.section_label}</span>
+            <h2 className="text-3xl md:text-5xl font-serif font-medium leading-tight max-w-2xl text-right whitespace-pre-line">
+              {a.title}
+            </h2>
+          </div>
+          <p className="text-xl font-light text-foreground/70 max-w-2xl mb-16">
+            {a.desc}
+          </p>
+
+          {/* Client Cards — DB 데이터 우선, 없으면 정적 fallback */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {(dbClients.length > 0
+              ? dbClients.map((c) => ({
+                  key: c.id,
+                  name: c.name,
+                  desc: c.description || "",
+                  category: c.category || "",
+                  href: c.website_url || `/${c.slug}`,
+                  image: c.thumbnail_url,
+                }))
+              : clientProjects.map((c, i) => ({ ...c, key: String(i) }))
+            ).map((client) => (
+              <Link
+                key={client.key}
+                href={client.href}
+                className="group block border border-border rounded-lg overflow-hidden hover:border-foreground/30 transition-all duration-500"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                  {client.image ? (
+                    <Image
+                      src={client.image}
+                      alt={client.name}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-muted-foreground font-serif text-2xl">
+                      {client.name}
+                    </div>
+                  )}
+                  {client.category && (
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-mono rounded-full">
+                        {client.category}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-2xl font-serif">{client.name}</h3>
+                    <ArrowUpRight size={20} className="text-muted-foreground group-hover:text-foreground group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <p className="text-foreground/60 font-light leading-relaxed">
+                    {client.desc}
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <span className="text-sm font-mono text-primary group-hover:underline">
+                      {a.view_site} →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3.6 Agency Services */}
+      <section className="py-32 px-6 md:px-12 border-t border-border bg-muted/30">
+        <div className="max-w-screen-xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start mb-24">
+            <span className="text-sm font-mono text-muted-foreground block mb-4 md:mb-0">{a.services_label}</span>
+            <h2 className="text-3xl md:text-5xl font-serif font-medium leading-tight max-w-2xl text-right whitespace-pre-line">
+              {a.services_title}
+            </h2>
+          </div>
+          <p className="text-xl font-light text-foreground/70 max-w-2xl mb-16">
+            {a.services_desc}
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, idx) => (
+              <div
+                key={idx}
+                className="group p-8 border border-border rounded-lg bg-background hover:border-foreground/30 transition-all duration-500"
+              >
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full border border-border mb-6 group-hover:bg-foreground group-hover:text-background transition-colors duration-500">
+                  <service.icon size={24} />
+                </div>
+                <h3 className="text-xl font-serif mb-3">{service.title}</h3>
+                <p className="text-sm font-light text-foreground/60 leading-relaxed">
+                  {service.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

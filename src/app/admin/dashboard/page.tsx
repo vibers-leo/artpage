@@ -2,11 +2,11 @@
 "use client";
 
 import Link from "next/link";
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Image as ImageIcon, 
-  ShoppingBag, 
+import {
+  LayoutDashboard,
+  FileText,
+  Image as ImageIcon,
+  ShoppingBag,
   Palette,
   Users,
   Settings,
@@ -14,7 +14,8 @@ import {
   TrendingUp,
   Eye,
   Edit,
-  Folder
+  Folder,
+  Building2
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -32,6 +33,7 @@ export default function AdminDashboardPage() {
     { label: "상품 관리", href: "/admin/products", icon: ShoppingBag, color: "bg-accent" },
     { label: "전시 관리", href: "/admin/exhibition", icon: Palette, color: "bg-primary" },
     { label: "포트폴리오", href: "/admin/portfolio", icon: Folder, color: "bg-black" },
+    { label: "클라이언트 관리", href: "/admin/clients", icon: Building2, color: "bg-indigo-600" },
   ];
 
   const recentPages = [

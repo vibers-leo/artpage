@@ -53,7 +53,37 @@ export const translations = {
       cta: {
         title: '당신만의 예술 세계를\n만들 준비가 되셨나요?',
         button: '무료로 시작하기',
-      }
+      },
+      // [신규] 에이전시 섹션
+      agency: {
+        section_label: '03 — OUR WORK',
+        title: '우리가 만든\n예술의 공간들',
+        desc: '갤러리, 작가, 예술 단체를 위한 디지털 공간을 디자인하고 구축합니다.',
+        view_site: '사이트 방문',
+        clients: {
+          arthyun: {
+            name: '아트현 (ArtHyun)',
+            desc: '현대미술 갤러리의 전시 아카이빙과 작가 포트폴리오를 위한 종합 플랫폼',
+            category: '갤러리',
+          },
+          artway: {
+            name: '아트웨이 (ArtWay)',
+            desc: '예술 교육과 문화 프로그램을 연결하는 커뮤니티 중심 플랫폼',
+            category: '문화단체',
+          },
+        },
+        services_label: '04 — SERVICES',
+        services_title: '예술을 위한\n디지털 에이전시',
+        services_desc: '예술 분야에 특화된 웹 솔루션을 제공합니다.',
+        service1_title: '웹사이트 제작',
+        service1_desc: '갤러리, 작가, 예술단체에 최적화된 반응형 웹사이트를 제작합니다.',
+        service2_title: '디지털 아카이빙',
+        service2_desc: '전시 기록, 작품 데이터베이스, 미디어 자료를 체계적으로 관리합니다.',
+        service3_title: '브랜드 디자인',
+        service3_desc: '예술 기관의 정체성을 담은 로고, 컬러 시스템, 타이포그래피를 디자인합니다.',
+        service4_title: '온라인 전시',
+        service4_desc: '물리적 공간을 넘어 온라인에서도 몰입감 있는 전시 경험을 제공합니다.',
+      },
     },
     // [기존] 갤러리 메인
     home: {
@@ -161,7 +191,36 @@ export const translations = {
       cta: {
         title: 'Ready to build your\nown art world?',
         button: 'Start Free Today',
-      }
+      },
+      agency: {
+        section_label: '03 — OUR WORK',
+        title: 'Spaces we\nbrought to life',
+        desc: 'We design and build digital spaces for galleries, artists, and art organizations.',
+        view_site: 'Visit Site',
+        clients: {
+          arthyun: {
+            name: 'ArtHyun',
+            desc: 'A comprehensive platform for contemporary art gallery exhibition archiving and artist portfolios.',
+            category: 'Gallery',
+          },
+          artway: {
+            name: 'ArtWay',
+            desc: 'A community-driven platform connecting art education and cultural programs.',
+            category: 'Organization',
+          },
+        },
+        services_label: '04 — SERVICES',
+        services_title: 'A digital agency\nfor the arts',
+        services_desc: 'We provide web solutions specialized for the art world.',
+        service1_title: 'Website Development',
+        service1_desc: 'Responsive websites optimized for galleries, artists, and art organizations.',
+        service2_title: 'Digital Archiving',
+        service2_desc: 'Systematic management of exhibition records, artwork databases, and media assets.',
+        service3_title: 'Brand Design',
+        service3_desc: 'Logo, color system, and typography design that captures your institution\'s identity.',
+        service4_title: 'Online Exhibitions',
+        service4_desc: 'Immersive exhibition experiences that transcend physical space boundaries.',
+      },
     },
     home: {
       title: 'Bukchon Art Space',
@@ -269,7 +328,36 @@ export const translations = {
       cta: {
         title: 'Ready to build your\nown art world?',
         button: 'Start Free Today',
-      }
+      },
+      agency: {
+        section_label: '03 — OUR WORK',
+        title: 'Spaces we\nbrought to life',
+        desc: 'We design and build digital spaces for galleries, artists, and art organizations.',
+        view_site: 'Visit Site',
+        clients: {
+          arthyun: {
+            name: 'ArtHyun',
+            desc: 'A comprehensive platform for contemporary art gallery exhibition archiving and artist portfolios.',
+            category: 'Gallery',
+          },
+          artway: {
+            name: 'ArtWay',
+            desc: 'A community-driven platform connecting art education and cultural programs.',
+            category: 'Organization',
+          },
+        },
+        services_label: '04 — SERVICES',
+        services_title: 'A digital agency\nfor the arts',
+        services_desc: 'We provide web solutions specialized for the art world.',
+        service1_title: 'Website Development',
+        service1_desc: 'Responsive websites optimized for galleries, artists, and art organizations.',
+        service2_title: 'Digital Archiving',
+        service2_desc: 'Systematic management of exhibition records, artwork databases, and media assets.',
+        service3_title: 'Brand Design',
+        service3_desc: 'Logo, color system, and typography design that captures your institution\'s identity.',
+        service4_title: 'Online Exhibitions',
+        service4_desc: 'Immersive exhibition experiences that transcend physical space boundaries.',
+      },
     },
     home: {
        title: '北村アートスペース',
@@ -338,7 +426,36 @@ export const translations = {
       cta: {
         title: 'Ready to build your\nown art world?',
         button: 'Start Free Today',
-      }
+      },
+      agency: {
+        section_label: '03 — OUR WORK',
+        title: 'Spaces we\nbrought to life',
+        desc: 'We design and build digital spaces for galleries, artists, and art organizations.',
+        view_site: 'Visit Site',
+        clients: {
+          arthyun: {
+            name: 'ArtHyun',
+            desc: 'A comprehensive platform for contemporary art gallery exhibition archiving and artist portfolios.',
+            category: 'Gallery',
+          },
+          artway: {
+            name: 'ArtWay',
+            desc: 'A community-driven platform connecting art education and cultural programs.',
+            category: 'Organization',
+          },
+        },
+        services_label: '04 — SERVICES',
+        services_title: 'A digital agency\nfor the arts',
+        services_desc: 'We provide web solutions specialized for the art world.',
+        service1_title: 'Website Development',
+        service1_desc: 'Responsive websites optimized for galleries, artists, and art organizations.',
+        service2_title: 'Digital Archiving',
+        service2_desc: 'Systematic management of exhibition records, artwork databases, and media assets.',
+        service3_title: 'Brand Design',
+        service3_desc: 'Logo, color system, and typography design that captures your institution\'s identity.',
+        service4_title: 'Online Exhibitions',
+        service4_desc: 'Immersive exhibition experiences that transcend physical space boundaries.',
+      },
     },
     home: {
        title: '北村艺术空间',
