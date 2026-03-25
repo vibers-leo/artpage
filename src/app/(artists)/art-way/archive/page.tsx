@@ -1,17 +1,14 @@
-
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import ArchiveClient from "@/components/templates/art-way/ArchiveClient";
 import { AdminExhibitionButton } from "@/components/templates/art-way/AdminButtons";
 
-// 🚀 ISR 적용: 60초마다 캐시 갱신 (서버 부하 감소 & 속도 향상)
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function ArchivePage() {
-  // 1. 전시 데이터 가져오기 (DB)
-  const { data: exhibitions } = await supabase
-    .from("exhibitions")
-    .select("*")
-    .order("start_date", { ascending: false });
+  const q = query(collection(db, "exhibitions"), orderBy("start_date", "desc"));
+  const querySnapshot = await getDocs(q);
+  const exhibitions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[];
 
   // 2. 관리자 버튼은 클라이언트 컴포넌트에서 처리 (페이지 캐싱을 위해)
 

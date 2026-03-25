@@ -1,20 +1,25 @@
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function MigratedPostPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function MigratedPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   // Fetch Post
-  const { data: post, error } = await supabase
-    .from("migrated_posts")
-    .select("*")
-    .eq("id", id)
-    .single();
+  let post: any = null;
+  try {
+    const docRef = doc(db, "migrated_posts", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      post = docSnap.data();
+    }
+  } catch (error) {
+    console.error("Migrated post fetch error:", error);
+  }
 
-  if (error || !post) {
-    console.error("Migrated post error:", error);
+  if (!post) {
     notFound();
   }
 

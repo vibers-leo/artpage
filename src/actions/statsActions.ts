@@ -1,86 +1,60 @@
 "use server";
 
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { db } from "@/lib/firebase";
+import { collection, query, orderBy, limit, getDocs, getCountFromServer, doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore";
 
 // [방문자 수 증가] (누구나 호출 가능 - 내부적으로 처리)
 export async function incrementVisitor() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll() {},
-      },
+  try {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const statRef = doc(db, "daily_stats", today);
+    
+    const docSnap = await getDoc(statRef);
+    if (docSnap.exists()) {
+      await updateDoc(statRef, { count: increment(1) });
+    } else {
+      await setDoc(statRef, { date: today, count: 1 });
     }
-  );
-
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
-  // 1. 오늘 날짜 레코드 조회
-  const { data: existing } = await supabase
-    .from("daily_stats")
-    .select("*")
-    .eq("date", today)
-    .single();
-
-  if (existing) {
-    // 2. 있으면 카운트 +1
-    await supabase
-      .from("daily_stats")
-      .update({ count: existing.count + 1 })
-      .eq("date", today);
-  } else {
-    // 3. 없으면 새로 생성 (count: 1)
-    await supabase.from("daily_stats").insert({ date: today, count: 1 });
+  } catch (error) {
+    console.error("Increment visitor error:", error);
   }
 }
 
 // [대시보드 통계 조회] (관리자용)
 export async function getDashboardStats() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
-          setAll() {},
-        },
-    }
-  );
+  try {
+    // 1. 전체 전시 수
+    const exhibitionColl = collection(db, "exhibitions");
+    const exhibitionSnapshot = await getCountFromServer(exhibitionColl);
+    const exhibitionCount = exhibitionSnapshot.data().count;
 
-  // 1. 전체 전시 수
-  const { count: exhibitionCount } = await supabase
-    .from("exhibitions")
-    .select("*", { count: "exact", head: true });
+    // 2. 전체 미디어 수
+    const mediaColl = collection(db, "media_releases");
+    const mediaSnapshot = await getCountFromServer(mediaColl);
+    const mediaCount = mediaSnapshot.data().count;
 
-  // 2. 전체 미디어 수
-  const { count: mediaCount } = await supabase
-    .from("media_releases")
-    .select("*", { count: "exact", head: true });
+    // 3. 최근 30일 방문자 통계
+    const q = query(collection(db, "daily_stats"), orderBy("date", "asc"), limit(30));
+    const querySnapshot = await getDocs(q);
+    const visitorStats = querySnapshot.docs.map(doc => doc.data());
 
-  // 3. 최근 7일 방문자 통계
-  const { data: visitorStats } = await supabase
-    .from("daily_stats")
-    .select("*")
-    .order("date", { ascending: true }) // 날짜순 정렬
-    .limit(30); // 최대 30일
+    // 4. 오늘의 방문자 수
+    const today = new Date().toISOString().split("T")[0];
+    const todayStat = visitorStats.find((s: any) => s.date === today);
 
-  // 4. 오늘의 방문자 수
-  const today = new Date().toISOString().split("T")[0];
-  const todayStat = visitorStats?.find((s) => s.date === today);
-
-  return {
-    exhibitionCount: exhibitionCount || 0,
-    mediaCount: mediaCount || 0,
-    todayVisitorCount: todayStat?.count || 0,
-    visitorStats: visitorStats || [],
-  };
+    return {
+      exhibitionCount: exhibitionCount || 0,
+      mediaCount: mediaCount || 0,
+      todayVisitorCount: todayStat ? (todayStat as any).count : 0,
+      visitorStats: visitorStats || [],
+    };
+  } catch (error) {
+    console.error("Get dashboard stats error:", error);
+    return {
+      exhibitionCount: 0,
+      mediaCount: 0,
+      todayVisitorCount: 0,
+      visitorStats: [],
+    };
+  }
 }

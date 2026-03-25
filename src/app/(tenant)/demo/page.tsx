@@ -1,6 +1,7 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, limit, where } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import MainSlider from "@/components/MainSlider";
@@ -9,9 +10,6 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { useEffect, useState } from "react";
 import MasonryGrid from "@/components/MasonryGrid";
 
-// 데이터가 계속 바뀌므로 캐싱하지 않음 (새로고침 시 즉시 반영)
-// export const dynamic = "force-dynamic";
-
 export default function HomePage() {
   const { t } = useLanguage();
   const [exhibitions, setExhibitions] = useState<any[]>([]);
@@ -19,43 +17,40 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("--------------- [메인 페이지 로드 시작] ---------------");
+      try {
+        // 1. 메인 슬라이더용 전시 데이터 가져오기 (Firebase)
+        const q = query(
+          collection(db, "exhibitions"), 
+          where("is_main_slider", "==", true),
+          where("is_active", "==", true),
+          orderBy("created_at", "desc")
+        );
+        const querySnapshot = await getDocs(q);
+        const exData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setExhibitions(exData);
 
-      // 1. 메인 슬라이더용 전시 데이터 가져오기
-      const { data: exData, error: exError } = await supabase
-        .from("exhibitions")
-        .select("*")
-        .eq("is_main_slider", true) 
-        .order("created_at", { ascending: false });
+        // 2. 배경 유튜브 URL 가져오기 (main_banner 컬렉션)
+        const bq = query(
+          collection(db, "main_banner"),
+          where("is_active", "==", true),
+          limit(1)
+        );
+        const bSnapshot = await getDocs(bq);
+        const bannerData = bSnapshot.empty ? null : bSnapshot.docs[0].data();
 
-      if (exError) console.error("❌ 전시 데이터 에러:", exError.message);
-      else {
-        console.log(`✅ 전시 데이터: ${exData?.length}개 로드됨`);
-        setExhibitions(exData || []);
+        // 유튜브 ID 추출
+        const getYoutubeId = (url: string | null | undefined) => {
+          if (!url) return null;
+          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+          const match = url.match(regExp);
+          return (match && match[2].length === 11) ? match[2] : null;
+        };
+
+        const ytId = getYoutubeId(bannerData?.youtube_url);
+        setYoutubeId(ytId);
+      } catch (error) {
+        console.error("Firebase fetch error:", error);
       }
-
-      // 2. 배경 유튜브 URL 가져오기
-      const { data: bannerData, error: bnError } = await supabase
-        .from("main_banner")
-        .select("youtube_url")
-        .eq("is_active", true)
-        .limit(1)
-        .maybeSingle();
-
-      if (bnError) console.error("❌ 배너 데이터 에러:", bnError.message);
-      console.log("✅ 배너 데이터:", bannerData);
-
-      // 유튜브 ID 추출
-      const getYoutubeId = (url: string | null | undefined) => {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-      };
-
-      const ytId = getYoutubeId(bannerData?.youtube_url);
-      console.log("🎥 추출된 유튜브 ID:", ytId);
-      setYoutubeId(ytId);
     }
 
     fetchData();

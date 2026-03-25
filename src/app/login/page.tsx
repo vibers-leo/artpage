@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { login } from "@/actions/authActions";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,24 +14,21 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // 로그인 성공 시 대시보드(또는 온보딩)로 이동
-      router.push("/admin/dashboard");
+      const formData = new FormData(e.currentTarget);
+      const result = await login(formData);
+      
+      if (result?.error) {
+        setError(result.error);
+      }
     } catch (err: any) {
       console.error("Login error:", err);
-      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
-        setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-      } else if (err.code === "auth/too-many-requests") {
-        setError("너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.");
-      } else {
-        setError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
-      }
+      setError("로그인 중 예기치 못한 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }

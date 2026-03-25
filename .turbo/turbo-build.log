@@ -1,0 +1,126 @@
+$ next build
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+  Finished TypeScript in 3.1s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/52) ...
+  Generating static pages using 9 workers (13/52) 
+  Generating static pages using 9 workers (26/52) 
+Error fetching settings: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Error fetching settings: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Error fetching settings: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Error fetching settings: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+  Generating static pages using 9 workers (39/52) 
+Firebase featured portfolios fetch error: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Sitemap generation error (Firebase): [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Firebase main_settings fetch error: [Error [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+✓ Generating static pages using 9 workers (52/52) in 1532ms
+  Finalizing page optimization ...
+
+Route (app)                          Revalidate  Expire
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admin
+├ ○ /admin/dashboard
+├ ○ /admin/exhibition
+├ ƒ /admin/exhibition/edit/[id]
+├ ○ /admin/exhibition/write
+├ ○ /admin/inquiries
+├ ○ /admin/login
+├ ○ /admin/media
+├ ƒ /admin/media/edit/[id]
+├ ○ /admin/media/write
+├ ○ /admin/pages
+├ ƒ /admin/pages/[id]/edit
+├ ○ /admin/portfolio
+├ ○ /admin/portfolio/write
+├ ○ /admin/products
+├ ○ /admin/products/write
+├ ƒ /art-way
+├ ○ /art-way/about
+├ ƒ /art-way/archive
+├ ○ /art-way/contact
+├ ○ /art-way/mall
+├ ƒ /art-way/media
+├ ƒ /art-way/media/[id]
+├ ○ /art-way/media/write
+├ ○ /arthyun                                 1m      1y
+├ ƒ /arthyun/about
+├ ƒ /arthyun/api/instagram/callback
+├ ƒ /arthyun/api/instagram/login
+├ ƒ /arthyun/api/migration/stats
+├ ○ /arthyun/contact
+├ ○ /arthyun/mall
+├ ƒ /arthyun/media
+├ ƒ /arthyun/media/[id]
+├ ƒ /arthyun/media/migrated/[id]
+├ ○ /arthyun/media/write
+├ ƒ /arthyun/portfolio
+├ ○ /arthyun/server-test
+├ ○ /arthyun/sitemap.xml                     1h      1y
+├ ○ /auth/login
+├ ○ /auth/signup
+├ ○ /contact
+├ ○ /demo
+├ ƒ /demo/[slug]
+├ ○ /demo/about
+├ ○ /demo/archive
+├ ○ /demo/contact
+├ ○ /features
+├ ○ /login
+├ ○ /mall
+├ ƒ /mall/[id]
+├ ○ /mall/cart
+├ ○ /mall/checkout
+├ ○ /media
+├ ƒ /media/[id]
+├ ○ /media/write
+├ ○ /onboarding
+├ ○ /portfolio
+├ ○ /pricing
+├ ○ /robots.txt
+├ ○ /sitemap.xml                             1h      1y
+├ ○ /templates
+├ ○ /templates/theme1
+├ ○ /templates/theme2
+└ ○ /templates/theme3
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

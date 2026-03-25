@@ -1,5 +1,5 @@
-// src/app/media/[id]/page.tsx
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -15,19 +15,29 @@ interface Props {
 }
 
 export default async function MediaDetailPage({ params }: Props) {
-  const { id } = await params; // Next.js 16: params를 await로 unwrap
+  const { id } = await params;
 
   // 1. DB에서 ID로 게시물 찾기
-  const { data: post, error } = await supabase
-    .from("media_releases")
-    .select("*")
-    .eq("id", id)
-    .single();
+  let post: any = null;
+  try {
+    const docRef = doc(db, "media_releases", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      post = { id: docSnap.id, ...docSnap.data() };
+    }
+  } catch (error) {
+    console.error("Error fetching media:", error);
+  }
 
-  // 2. 데이터가 없거나 에러나면 404 처리
-  if (error || !post) {
+  // 2. 데이터가 없으면 404 처리
+  if (!post) {
     notFound();
   }
+
+  const publishDate = post.published_date?.toDate ? post.published_date.toDate() : (post.published_date ? new Date(post.published_date) : null);
+  const createdDate = post.created_at?.toDate ? post.created_at.toDate() : (post.created_at ? new Date(post.created_at) : new Date());
+
+  const displayDate = publishDate || createdDate;
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-20 animate-fade-in-up">
@@ -65,10 +75,7 @@ export default async function MediaDetailPage({ params }: Props) {
             </span>
             <span className="flex items-center gap-1">
               <Calendar size={14} />
-              {/* 기사 게시일(published_date) 우선, 없으면 등록일(created_at) */}
-              {post.published_date 
-                ? new Date(post.published_date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
-                : new Date(post.created_at).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
+              {displayDate.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
             </span>
           </div>
 

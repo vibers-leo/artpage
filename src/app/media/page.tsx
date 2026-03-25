@@ -1,19 +1,34 @@
-// src/app/media/page.tsx
+"use client";
 
-import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ExternalLink, Instagram } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, limit } from "firebase/firestore";
 
-export const dynamic = "force-dynamic";
+export default function MediaPage() {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function MediaPage() {
-  const { data: pressReleases } = await supabase
-    .from("media_releases")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(5); // 최근 5개만
-
-  const items = pressReleases || [];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const q = query(
+          collection(db, "media_releases"), 
+          orderBy("created_at", "desc"),
+          limit(10)
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setItems(data);
+      } catch (error) {
+        console.error("Firebase fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,7 +119,9 @@ export default async function MediaPage() {
             Press Release
           </h2>
 
-          {items.length > 0 ? (
+          {loading ? (
+            <div className="py-20 text-center text-gray-400">Loading media...</div>
+          ) : items.length > 0 ? (
             <ul className="space-y-0">
               {items.map((item) => (
                 <li key={item.id} className="group border-b border-border py-6 transition-colors hover:bg-muted/30">
@@ -118,7 +135,11 @@ export default async function MediaPage() {
                       </h3>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm shrink-0">
-                      <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                      <span>
+                        {item.created_at?.toDate 
+                          ? item.created_at.toDate().toLocaleDateString() 
+                          : item.created_at ? new Date(item.created_at).toLocaleDateString() : ""}
+                      </span>
                       <ExternalLink size={14} />
                     </div>
                   </Link>

@@ -2,9 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import { createExhibition } from "@/actions/exhibitionActions";
+import { useRouter } from "next/navigation";
 import dynamicImport from "next/dynamic";
-import { Button } from "@/components/ui/button"; // shadcn 버튼 적용
+import { Button } from "@/components/ui/button";
+import { db, storage } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { toast } from "sonner";
 
 // Editor를 동적으로 import (SSR 방지)
 const Editor = dynamicImport(() => import("@/components/Editor"), {
@@ -12,18 +16,65 @@ const Editor = dynamicImport(() => import("@/components/Editor"), {
   loading: () => <div className="min-h-[200px] border rounded-md p-4 flex items-center justify-center text-gray-400">에디터 로딩 중...</div>
 });
 
-// 정적 생성 방지 (클라이언트 전용 컴포넌트)
+// 정적 생성 방지
 export const dynamic = "force-dynamic";
 
 export default function AdminExhibitionWrite() {
+  const router = useRouter();
   const [descHtml, setDescHtml] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // 로딩 상태 처리
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
-    await createExhibition(formData);
-    // 성공 시 리다이렉트 되므로 setIsLoading(false) 불필요
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const title = formData.get("title") as string;
+      const artist = formData.get("subtitle") as string;
+      const start_date = formData.get("start_date") as string;
+      const end_date = formData.get("end_date") as string;
+      const is_main_slider = formData.get("is_main_slider") === "on";
+      const youtube_url = formData.get("youtube_url") as string;
+      const posterFile = formData.get("poster_image") as File;
+
+      if (!title || !posterFile) {
+        toast.error("제목과 포스터 이미지는 필수입니다.");
+        setIsLoading(false);
+        return;
+      }
+
+      // 1. 이미지 업로드 (Firebase Storage)
+      const fileExt = posterFile.name.split(".").pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const storageRef = ref(storage, `exhibitions/${fileName}`);
+      
+      const uploadResult = await uploadBytes(storageRef, posterFile);
+      const poster_url = await getDownloadURL(uploadResult.ref);
+
+      // 2. DB 저장 (Firestore)
+      await addDoc(collection(db, "exhibitions"), {
+        title,
+        artist: artist || null,
+        description: descHtml,
+        start_date: start_date || null,
+        end_date: end_date || null,
+        poster_url,
+        is_main_slider,
+        youtube_url: youtube_url || null,
+        is_active: true,
+        created_at: serverTimestamp(),
+      });
+
+      toast.success("전시가 성공적으로 등록되었습니다.");
+      router.push("/admin/exhibition");
+      router.refresh();
+    } catch (error: any) {
+      console.error("Error adding exhibition:", error);
+      toast.error("전시 등록 중 오류가 발생했습니다: " + error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -32,7 +83,7 @@ export default function AdminExhibitionWrite() {
         전시 등록 (Admin)
       </h1>
 
-      <form action={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* 1. 기본 정보 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -88,6 +139,17 @@ export default function AdminExhibitionWrite() {
               메인 슬라이더 노출
             </label>
           </div>
+        </div>
+
+        {/* 2.5 유튜브 배경 영상 (Optional) */}
+        <div>
+          <label className="block text-sm font-bold mb-2">유튜브 배경 영상 URL (옵션)</label>
+          <input
+            name="youtube_url"
+            type="text"
+            placeholder="https://www.youtube.com/watch?v=..."
+            className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-black transition"
+          />
         </div>
 
         {/* 3. 포스터 이미지 */}

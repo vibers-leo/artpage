@@ -14,7 +14,7 @@ export default function DeleteMediaButton({ id }: { id: string | number }) {
 
     startTransition(async () => {
       try {
-        await deleteMedia(id);
+        await deleteMedia(String(id));
         toast.success("보도자료가 삭제되었습니다.");
       } catch (error: any) {
         toast.error(error.message);

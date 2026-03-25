@@ -31,5 +31,10 @@ export type PortfolioItem = {
 // Real data fetching will happen in the Page components (Client Side) for now
 // to avoid "Firebase Client SDK in Server Component" issues without firebase-admin.
 export async function getPortfolios() {
-  return []; 
+  return [];
+}
+
+export async function deletePortfolio(id: string | number) {
+  // TODO: Firebase Admin 또는 Client SDK를 통한 삭제 구현 필요
+  throw new Error("포트폴리오 삭제 기능이 아직 구현되지 않았습니다.");
 }

@@ -1,6 +1,6 @@
-// src/app/admin/dashboard/page.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { 
   LayoutDashboard, 
@@ -10,34 +10,45 @@ import {
   Palette,
   Users,
   Settings,
-  BarChart3,
-  TrendingUp,
   Eye,
   Edit,
   Folder
 } from "lucide-react";
+import { getDashboardStats } from "@/actions/statsActions";
 
 export default function AdminDashboardPage() {
-  // 임시 통계 데이터
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const stats = await getDashboardStats();
+      setData(stats);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  // 통계 데이터 매핑
   const stats = [
-    { label: "총 방문자", value: "1,234", change: "+12%", icon: Eye, color: "text-primary" },
-    { label: "페이지 뷰", value: "5,678", change: "+8%", icon: BarChart3, color: "text-secondary" },
-    { label: "상품 판매", value: "₩890K", change: "+23%", icon: ShoppingBag, color: "text-accent" },
-    { label: "전시 수", value: "12", change: "+2", icon: Palette, color: "text-primary" },
+    { label: "오늘의 방문자", value: data?.todayVisitorCount?.toLocaleString() || "0", change: "", icon: Eye, color: "text-primary" },
+    { label: "전체 전시 수", value: data?.exhibitionCount?.toString() || "0", change: "", icon: Palette, color: "text-primary" },
+    { label: "보도자료 수", value: data?.mediaCount?.toString() || "0", change: "", icon: ImageIcon, color: "text-secondary" },
+    { label: "상품(준비중)", value: "0", change: "", icon: ShoppingBag, color: "text-accent" },
   ];
 
   const quickActions = [
-    { label: "페이지 편집", href: "/admin/pages", icon: Edit, color: "bg-primary" },
-    { label: "미디어 관리", href: "/admin/media", icon: ImageIcon, color: "bg-secondary" },
-    { label: "상품 관리", href: "/admin/products", icon: ShoppingBag, color: "bg-accent" },
     { label: "전시 관리", href: "/admin/exhibition", icon: Palette, color: "bg-primary" },
+    { label: "미디어 관리", href: "/admin/media", icon: ImageIcon, color: "bg-secondary" },
+    { label: "문의 관리", href: "/admin/inquiries", icon: FileText, color: "bg-accent" },
     { label: "포트폴리오", href: "/admin/portfolio", icon: Folder, color: "bg-black" },
+    { label: "전문가 승인", href: "/admin/users", icon: Users, color: "bg-blue-600" },
   ];
 
   const recentPages = [
-    { title: "About", updated: "2시간 전", status: "게시됨" },
-    { title: "Archive", updated: "1일 전", status: "게시됨" },
-    { title: "Contact", updated: "3일 전", status: "게시됨" },
+    { title: "Demo Main", updated: "방금 전", status: "게시됨" },
+    { title: "Archive", updated: "방금 전", status: "게시됨" },
+    { title: "Press", updated: "방금 전", status: "게시됨" },
   ];
 
   return (

@@ -1,20 +1,17 @@
 
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import SocialConnect from "@/components/templates/art-way/SocialConnect";
 import { AdminMediaButton } from "@/components/templates/art-way/AdminButtons";
 
-// 🚀 ISR 적용: 60초마다 캐시 갱신 (서버 부하 감소 & 속도 향상)
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function MediaPage() {
-  const { data: pressReleases } = await supabase
-    .from("media_releases")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const items = pressReleases || [];
+  const q = query(collection(db, "media_releases"), orderBy("created_at", "desc"));
+  const querySnapshot = await getDocs(q);
+  const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[];
 
   return (
     <div className="max-w-screen-2xl mx-auto px-6 mt-8 py-12 md:py-20 space-y-24">
@@ -54,8 +51,10 @@ export default async function MediaPage() {
                         <div className="flex items-center gap-1 text-gray-400 text-sm shrink-0">
                           <span>
                             {item.published_date 
-                              ? new Date(item.published_date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
-                              : new Date(item.created_at).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
+                              ? (item.published_date.toDate ? item.published_date.toDate() : new Date(item.published_date)).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
+                              : item.created_at
+                                ? (item.created_at.toDate ? item.created_at.toDate() : new Date(item.created_at)).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
+                                : ""}
                           </span>
                         </div>
                       </div>

@@ -1,33 +1,46 @@
-// src/app/media/[id]/page.tsx
-import { supabase } from "@/lib/supabase";
+"use client";
+
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ExternalLink, Calendar, Newspaper } from "lucide-react";
-
-// 페이지 캐싱 방지
-export const dynamic = "force-dynamic";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default async function MediaDetailPage({ params }: Props) {
-  const { id } = await params; // Next.js 16: params를 await로 unwrap
+export default function MediaDetailPage({ params }: Props) {
+  const { id } = use(params);
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 1. DB에서 ID로 게시물 찾기
-  const { data: post, error } = await supabase
-    .from("media_releases")
-    .select("*")
-    .eq("id", id)
-    .single();
+  useEffect(() => {
+    async function loadPost() {
+      try {
+        const docRef = doc(db, "media_releases", id);
+        const docSnap = await getDoc(docRef);
 
-  // 2. 데이터가 없거나 에러나면 404 처리
-  if (error || !post) {
-    notFound();
-  }
+        if (docSnap.exists()) {
+          setPost({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setPost(null);
+        }
+      } catch (error) {
+        console.error("Error loading media post:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPost();
+  }, [id]);
+
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (!post) return notFound();
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-20 animate-fade-in-up">
@@ -53,7 +66,9 @@ export default async function MediaDetailPage({ params }: Props) {
             </span>
             <span className="flex items-center gap-1">
               <Calendar size={14} />
-              {new Date(post.created_at).toLocaleDateString()}
+              {post.created_at?.toDate 
+                ? post.created_at.toDate().toLocaleDateString() 
+                : post.created_at ? new Date(post.created_at).toLocaleDateString() : ""}
             </span>
           </div>
 

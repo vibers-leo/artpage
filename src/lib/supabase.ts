@@ -6,16 +6,16 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// 필수 환경 변수가 없으면 오류를 발생시킵니다.
+// 필수 환경 변수가 없으면 경고만 출력하고 오류를 발생시키지 않습니다.
+// (Firebase 이전 작업 중이므로, Supabase를 사용하는 페이지에서 개별적으로 처리하도록 합니다.)
 if (!supabaseUrl || !supabaseAnonKey) {
-  // 이 오류가 아닌, Supabase 클라이언트 자체의 URL 검증 오류가 났으므로
-  // URL 값이 있지만 형식이 잘못되었을 가능성이 높습니다.
-  throw new Error(
-    "환경 변수 (NEXT_PUBLIC_SUPABASE_URL 또는 KEY)를 찾을 수 없습니다. .env.local 파일을 확인하세요."
+  console.warn(
+    "⚠️ Supabase 환경 변수가 설정되지 않았습니다. .env.local 파일을 확인하세요. Supabase 관련 기능이 작동하지 않을 수 있습니다."
   );
 }
 
-// Supabase 클라이언트 생성 및 내보내기 (여기서 오류가 발생함)
-// string | undefined가 아닌 string임을 확실히 하기 위해 ! 를 사용하거나,
-// 위에서 이미 검증했으므로 그냥 사용합니다.
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Supabase 클라이언트 생성 (변수가 없으면 null을 허용하지 않으므로 빈 문자열 처리하거나 무시)
+export const supabase = createClient(
+  supabaseUrl || "https://placeholder.supabase.co",
+  supabaseAnonKey || "placeholder-key"
+);

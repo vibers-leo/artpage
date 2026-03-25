@@ -1,4 +1,5 @@
-import { supabase } from "@/lib/supabase";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, where, limit } from "firebase/firestore";
 // 🚨 주의: MainSlider가 있는 경로를 확인하세요. 
 // 스크린샷 기준으로는 "@/components/ui/MainSlider" 가 맞습니다.
 import MainSlider from "@/components/templates/art-way/MainSlider"; 
@@ -11,26 +12,23 @@ export default async function HomePage() {
 
   // 1. 메인 슬라이더용 전시 데이터 가져오기
   // (테이블에 is_main_slider 컬럼이 없으면 에러가 날 수 있으니 꼭 추가해주세요!)
-  const { data: exhibitions, error: exError } = await supabase
-    .from("exhibitions")
-    .select("*")
-    .eq("is_main_slider", true) 
-    .order("created_at", { ascending: false });
-
-  if (exError) console.error("❌ 전시 데이터 에러:", exError.message);
-  else console.log(`✅ 전시 데이터: ${exhibitions?.length}개 로드됨`);
+  const qEx = query(
+    collection(db, "exhibitions"),
+    where("is_main_slider", "==", true),
+    orderBy("created_at", "desc")
+  );
+  const snapEx = await getDocs(qEx);
+  const exhibitions = snapEx.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
 
   // 2. 배경 유튜브 URL 가져오기
-  const { data: bannerData, error: bnError } = await supabase
-    .from("main_banner")
-    .select("youtube_url")
-    .eq("is_active", true) // 활성화된 것만
-    .limit(1)
-    .maybeSingle(); // 데이터가 없어도 에러내지 않고 null 반환
-
-  if (bnError) console.error("❌ 배너 데이터 에러:", bnError.message);
-  console.log("✅ 배너 데이터:", bannerData);
+  const qBn = query(
+    collection(db, "main_banner"),
+    where("is_active", "==", true),
+    limit(1)
+  );
+  const snapBn = await getDocs(qBn);
+  const bannerData = snapBn.empty ? null : snapBn.docs[0].data();
 
 
   // 3. 데이터 가공

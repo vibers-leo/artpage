@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Upload, Loader2, Trash2 } from "lucide-react";
@@ -8,18 +9,26 @@ import Image from "next/image";
 
 // Firebase
 import { db, storage } from "@/lib/firebase";
-import { 
-  collection, 
-  addDoc, 
-  updateDoc, 
-  doc, 
-  getDoc, 
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  getDoc,
   serverTimestamp,
   deleteDoc
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 export default function PortfolioWritePage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="animate-spin" /></div>}>
+      <PortfolioWriteContent />
+    </Suspense>
+  );
+}
+
+function PortfolioWriteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");

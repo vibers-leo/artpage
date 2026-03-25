@@ -1,40 +1,37 @@
-// src/app/archive/page.tsx
-import { supabase } from "@/lib/supabase";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import ArchiveClient from "@/components/ArchiveClient";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
-export const dynamic = "force-dynamic";
+export default function ArchivePage() {
+  const [exhibitions, setExhibitions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // Fix: Role check will be needed later
 
-export default async function ArchivePage() {
-  // 1. 전시 데이터 가져오기
-  const { data: exhibitions } = await supabase
-    .from("exhibitions")
-    .select("*")
-    .order("start_date", { ascending: false });
-
-  // 2. 관리자 로그인 여부 확인
-  const cookieStore = await cookies();
-  const supabaseServer = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll() {},
-      },
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const q = query(
+          collection(db, "exhibitions"), 
+          where("is_active", "==", true),
+          orderBy("start_date", "desc")
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setExhibitions(data);
+      } catch (error) {
+        console.error("Firebase fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-  );
-
-  const {
-    data: { user },
-  } = await supabaseServer.auth.getUser();
-  const isAdmin = !!user;
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +61,11 @@ export default async function ArchivePage() {
       {/* 전시 목록 */}
       <section className="py-20">
         <div className="max-w-screen-xl mx-auto px-6">
-          <ArchiveClient initialData={exhibitions || []} />
+          {loading ? (
+            <div className="py-20 text-center text-gray-400 font-light">Loading archive...</div>
+          ) : (
+            <ArchiveClient initialData={exhibitions} />
+          )}
         </div>
       </section>
     </div>

@@ -1,26 +1,60 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
-import DeleteExhibitionButton from "@/components/admin/DeleteExhibitionButton";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, deleteDoc, doc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Trash2, Edit, ExternalLink } from "lucide-react";
 
-// 캐싱 방지 (항상 최신 목록)
-export const dynamic = "force-dynamic";
+export default function AdminExhibitionList() {
+    const [exhibitions, setExhibitions] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
-export default async function AdminExhibitionList() {
-    const { data: exhibitions, error } = await supabase
-        .from("exhibitions")
-        .select("*")
-        .order("created_at", { ascending: false });
+    const fetchData = async () => {
+        try {
+            const q = query(collection(db, "exhibitions"), orderBy("created_at", "desc"));
+            const querySnapshot = await getDocs(q);
+            const data = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setExhibitions(data);
+        } catch (error) {
+            console.error("Fetch error:", error);
+            toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    if (error) {
-        return <div className="p-10 text-red-500">에러 발생: {error.message}</div>;
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("정말로 삭제하시겠습니까?")) return;
+        
+        try {
+            await deleteDoc(doc(db, "exhibitions", id));
+            toast.success("삭제되었습니다.");
+            fetchData();
+        } catch (error) {
+            console.error("Delete error:", error);
+            toast.error("삭제 중 오류가 발생했습니다.");
+        }
+    };
+
+    if (loading) {
+        return <div className="p-10 text-center text-gray-400">로딩 중...</div>;
     }
 
     return (
         <div className="max-w-screen-xl mx-auto py-20 px-6">
             <div className="flex items-center justify-between mb-10">
-                <h1 className="text-3xl font-serif font-bold">전시 관리</h1>
+                <h1 className="text-3xl font-serif font-bold">전시 관리 (Firebase)</h1>
                 <Link href="/admin/exhibition/write">
                     <Button className="bg-black text-white hover:bg-gray-800">
                         + 새 전시 등록
@@ -92,16 +126,28 @@ export default async function AdminExhibitionList() {
                                     </td>
                                     <td className="p-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
+                                            {item.youtube_url && (
+                                                <a href={item.youtube_url} target="_blank" className="p-2 text-gray-400 hover:text-red-600">
+                                                    <ExternalLink size={18} />
+                                                </a>
+                                            )}
                                             <Link href={`/admin/exhibition/edit/${item.id}`}>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    className="text-gray-600 border-gray-300 hover:text-black"
+                                                    className="text-gray-400 border-gray-200 hover:text-black hover:border-black"
                                                 >
-                                                    수정
+                                                    <Edit size={16} className="mr-1" /> 수정
                                                 </Button>
                                             </Link>
-                                            <DeleteExhibitionButton id={item.id} />
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => handleDelete(item.id)}
+                                                className="text-gray-400 border-gray-200 hover:text-red-600 hover:border-red-600"
+                                            >
+                                                <Trash2 size={16} className="mr-1" /> 삭제
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>

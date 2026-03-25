@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image, { ImageProps } from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@vibers/ui";
 
 // 1. ShadCN 스타일의 Aspect Ratio 래퍼 활용 (간편한 비율 조정)
 // 2. 로딩 상태 스켈레톤 (선택 사항)

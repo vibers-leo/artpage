@@ -74,7 +74,7 @@ export const HeroParallax = ({
             <ProductCard
               product={product}
               translate={translateX}
-              key={product.title}
+              key={product.thumbnail}
             />
           ))}
         </motion.div>
@@ -83,7 +83,7 @@ export const HeroParallax = ({
             <ProductCard
               product={product}
               translate={translateXReverse}
-              key={product.title}
+              key={product.thumbnail}
             />
           ))}
         </motion.div>
@@ -92,7 +92,7 @@ export const HeroParallax = ({
             <ProductCard
               product={product}
               translate={translateX}
-              key={product.title}
+              key={product.thumbnail}
             />
           ))}
         </motion.div>
@@ -134,7 +134,7 @@ export const ProductCard = ({
       whileHover={{
         y: -20,
       }}
-      key={product.title}
+      key={product.thumbnail}
       className="group/product h-96 w-[30rem] relative flex-shrink-0"
     >
       <Link
@@ -150,9 +150,6 @@ export const ProductCard = ({
         />
       </Link>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none transition-opacity duration-300"></div>
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white transition-opacity duration-300 font-serif text-2xl">
-        {product.title}
-      </h2>
     </motion.div>
   );
 };

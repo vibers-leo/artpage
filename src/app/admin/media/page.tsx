@@ -1,20 +1,56 @@
+"use client";
+
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
-import DeleteMediaButton from "@/components/admin/DeleteMediaButton";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query, deleteDoc, doc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Eye, Edit } from "lucide-react";
+import { ExternalLink, Eye, Edit, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-export const dynamic = "force-dynamic";
+export default function AdminMediaList() {
+  const [mediaList, setMediaList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function AdminMediaList() {
-  const { data: mediaList, error } = await supabase
-    .from("media_releases")
-    .select("*")
-    .order("published_date", { ascending: false, nullsFirst: false })
-    .order("created_at", { ascending: false });
+  const fetchData = async () => {
+    try {
+      const q = query(
+        collection(db, "media_releases"), 
+        orderBy("created_at", "desc")
+      );
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMediaList(data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (error) {
-    return <div className="p-10 text-red-500">에러 발생: {error.message}</div>;
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+    try {
+      await deleteDoc(doc(db, "media_releases", id));
+      toast.success("삭제되었습니다.");
+      fetchData();
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
+  if (loading) {
+    return <div className="p-10 text-center text-gray-400">로딩 중...</div>;
   }
 
   return (
@@ -92,7 +128,14 @@ export default async function AdminMediaList() {
                     </Link>
                   </td>
                   <td className="p-4 text-center">
-                    <DeleteMediaButton id={item.id} />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(item.id)}
+                      className="text-gray-400 border-gray-200 hover:text-red-600 hover:border-red-600 p-2"
+                    >
+                      <Trash2 size={18} />
+                    </Button>
                   </td>
                 </tr>
               ))

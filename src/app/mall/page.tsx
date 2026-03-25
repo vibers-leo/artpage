@@ -1,46 +1,31 @@
-// src/app/mall/page.tsx
+"use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
-
-// 예시 상품 데이터
-const products = [
-  {
-    id: 1,
-    title: "김민지 작가 '색의 여정' 포스터",
-    artist: "김민지",
-    price: "35,000",
-    image: "/gallery1.png",
-    category: "포스터"
-  },
-  {
-    id: 2,
-    title: "전통 도예 컬렉션 엽서 세트",
-    artist: "5인 작가",
-    price: "18,000",
-    image: "/gallery2.png",
-    category: "엽서"
-  },
-  {
-    id: 3,
-    title: "북촌 아트 스페이스 에코백",
-    artist: "갤러리 굿즈",
-    price: "25,000",
-    image: "/gallery1.png",
-    category: "굿즈"
-  },
-  {
-    id: 4,
-    title: "한국 현대미술 아트북",
-    artist: "큐레이터 선정",
-    price: "45,000",
-    image: "/gallery2.png",
-    category: "도서"
-  },
-];
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 export default function MallPage() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const q = query(collection(db, "products"), orderBy("created_at", "desc"));
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       {/* 통일된 페이지 헤더 */}
@@ -67,12 +52,16 @@ export default function MallPage() {
               >
                 {/* 상품 이미지 */}
                 <div className="relative aspect-[3/4] mb-4 overflow-hidden rounded-lg bg-muted border border-border">
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {product.image_url ? (
+                    <Image
+                      src={product.image_url}
+                      alt={product.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-300">NO IMAGE</div>
+                  )}
                   {/* 카테고리 뱃지 */}
                   <div className="absolute top-3 left-3">
                     <span className="px-3 py-1 bg-background/90 backdrop-blur-sm text-xs font-medium rounded-full border border-border">

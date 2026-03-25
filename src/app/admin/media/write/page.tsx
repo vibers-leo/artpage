@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { createMedia } from "@/actions/mediaActions";
+import { useRouter } from "next/navigation";
 import dynamicImport from "next/dynamic";
 import { Button } from "@/components/ui/button";
+import { db, storage } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { toast } from "sonner";
 
 // Editor를 동적으로 import (SSR 방지)
 const Editor = dynamicImport(() => import("@/components/Editor"), {
@@ -11,16 +15,64 @@ const Editor = dynamicImport(() => import("@/components/Editor"), {
     loading: () => <div className="min-h-[200px] border rounded-md p-4 flex items-center justify-center text-gray-400">에디터 로딩 중...</div>
 });
 
-// 정적 생성 방지 (클라이언트 전용 컴포넌트)
+// 정적 생성 방지
 export const dynamic = "force-dynamic";
 
 export default function AdminMediaWrite() {
+    const router = useRouter();
     const [contentHtml, setContentHtml] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (formData: FormData) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         setIsLoading(true);
-        await createMedia(formData);
+
+        try {
+            const formData = new FormData(e.currentTarget);
+            const title = formData.get("title") as string;
+            const press_name = formData.get("press_name") as string;
+            const link_url = formData.get("link_url") as string;
+            const published_date = formData.get("published_date") as string;
+            const imageFile = formData.get("image") as File;
+
+            if (!title || !link_url) {
+                toast.error("제목과 링크는 필수입니다.");
+                setIsLoading(false);
+                return;
+            }
+
+            let image_url = null;
+
+            // 1. 이미지 업로드 (만약 파일이 있다면)
+            if (imageFile && imageFile.size > 0) {
+                const fileExt = imageFile.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const storageRef = ref(storage, `media/${fileName}`);
+                
+                const uploadResult = await uploadBytes(storageRef, imageFile);
+                image_url = await getDownloadURL(uploadResult.ref);
+            }
+
+            // 2. Firestore 저장
+            await addDoc(collection(db, "media_releases"), {
+                title,
+                press_name,
+                link_url,
+                content: contentHtml,
+                image_url,
+                published_date: published_date || null,
+                created_at: serverTimestamp(),
+            });
+
+            toast.success("보도자료가 성공적으로 등록되었습니다.");
+            router.push("/admin/media");
+            router.refresh();
+        } catch (error: any) {
+            console.error("Error adding media:", error);
+            toast.error("등록 중 오류가 발생했습니다: " + error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -29,7 +81,7 @@ export default function AdminMediaWrite() {
                 보도자료 등록
             </h1>
 
-            <form action={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
                 {/* 1. 기본 정보 */}
                 <div className="grid grid-cols-1 gap-6">
                     <div>
