@@ -4,7 +4,7 @@
 
 ### 전략 핵심 요약
 - 실제 갤러리 운영 클라이언트 사이트 — 전시 관리 웹사이트
-- Supabase SSR 기반 경량 솔루션
+- Firebase Auth + Supabase DB/Storage 기반 경량 솔루션
 - 콘텐츠 기반 활성도 — 전시 일정 자동화 및 SNS 연동 필요
 
 ---
@@ -12,7 +12,7 @@
 # Artpage (북촌 아트 스페이스)
 
 ## 프로젝트 개요
-북촌 아트 스페이스 웹사이트. Supabase + Tiptap 에디터 기반.
+북촌 아트 스페이스 웹사이트. Firebase Auth + Supabase DB/Storage + Tiptap 에디터 기반.
 
 ## 기술 스택
 - Framework: Next.js 16

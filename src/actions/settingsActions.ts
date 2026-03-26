@@ -23,8 +23,7 @@ export async function getSiteSettings() {
 
 // 설정 업데이트
 export async function updateSiteSettings(formData: FormData) {
-  // 인증 확인 (현재 Supabase 로그인이므로 임시 주석 처리하거나 필요시 유지)
-  // const user = await someAuthCheck(); 
+  // 인증 확인 (Firebase Auth 세션 쿠키로 middleware에서 처리)
 
   try {
     const description = formData.get("description") as string;
