@@ -91,6 +91,15 @@ export default function AuthLoginPage() {
             </div>
           </div>
 
+          <div className="flex justify-end">
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              비밀번호를 잊으셨나요?
+            </Link>
+          </div>
+
           {error && (
             <p className="text-destructive text-sm text-center font-medium bg-destructive/10 py-2 rounded">
               {error}
