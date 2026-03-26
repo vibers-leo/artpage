@@ -1,3 +1,10 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 /**
  * HTML 콘텐츠에서 첫 번째 <img> 태그의 src를 추출합니다.
  * 이미지가 없으면 null을 반환합니다.
