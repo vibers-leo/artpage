@@ -5,7 +5,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useEffect } from "react";
 import "@blocknote/mantine/style.css"; 
-// import { supabase } from "@/lib/supabase"; // REMOVED
+// 이미지 업로드는 Firebase Storage 사용
 import { storage } from "@/lib/firebase"; // Added Firebase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 

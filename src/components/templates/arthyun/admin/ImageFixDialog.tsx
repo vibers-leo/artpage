@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { supabaseStorage } from "@/lib/supabase-storage";
 import { toast } from "sonner";
 import { updatePostContent } from "@/actions/fixActions";
 import { Loader2, Upload, RefreshCw } from "lucide-react";
@@ -36,36 +35,33 @@ export default function ImageFixDialog({ postId, content, onUpdate }: Props) {
         try {
             const fileExt = file.name.split('.').pop();
             const fileName = `manual_fix_${postId}_${Date.now()}.${fileExt}`;
-            const filePath = `editor/${fileName}`;
 
-            // Supabase Storage에 업로드
-            const { error: uploadError } = await supabaseStorage.storage
-                .from("images")
-                .upload(filePath, file);
+            // NCP 서버에 업로드 (API 프록시 경유)
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("bucket", "images");
+            formData.append("path", `editor/${fileName}`);
 
-            if (uploadError) throw uploadError;
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
 
-            const { data: { publicUrl } } = supabaseStorage.storage
-                .from("images")
-                .getPublicUrl(filePath);
+            if (!res.ok) throw new Error(`업로드 실패: ${res.statusText}`);
+
+            const data = await res.json();
+            const publicUrl = data.url || `http://49.50.138.93:8090/images/editor/${fileName}`;
 
             // Replace in Content
             const oldUrl = images[index];
-            // Safe Replace: content.replace(oldUrl, publicUrl)
-            // But if oldUrl appears multiple times? 
-            // Usually fine to replace global, or use specific regex.
-            // We'll replace ALL occurrences of this URL pattern.
             const newContent = content.split(oldUrl).join(publicUrl);
-            
+
             // Save to DB
             await updatePostContent(postId, newContent);
-            
+
             // Update Local
             onUpdate(newContent);
-            extractImages(); // Refresh list (technically content prop should update if parent updates)
-            // We'll just wait for parent update or force close?
-            // OnUpdate calls parent setter.
-            // We should update local images state too?
+            extractImages();
             const newImages = [...images];
             newImages[index] = publicUrl;
             setImages(newImages);
@@ -97,7 +93,7 @@ export default function ImageFixDialog({ postId, content, onUpdate }: Props) {
                     <p className="text-sm text-gray-500">
                         본문에서 발견된 이미지 링크 목록입니다. 깨진 이미지를 클릭하여 PC에 있는 원본 파일로 교체하세요.
                     </p>
-                    
+
                     {images.length === 0 ? (
                         <div className="text-center py-10 text-gray-400">이미지가 없는 게시물입니다.</div>
                     ) : (
@@ -105,7 +101,7 @@ export default function ImageFixDialog({ postId, content, onUpdate }: Props) {
                             {images.map((url, idx) => (
                                 <div key={idx} className="flex items-center gap-4 bg-gray-50 p-2 rounded border">
                                     <div className="w-16 h-16 bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden rounded relative border">
-                                        <img src={url} alt="preview" className="w-full h-full object-cover" 
+                                        <img src={url} alt="preview" className="w-full h-full object-cover"
                                              onError={(e) => {
                                                  e.currentTarget.style.display='none';
                                                  e.currentTarget.parentElement!.innerText = "Broken";
@@ -117,8 +113,8 @@ export default function ImageFixDialog({ postId, content, onUpdate }: Props) {
                                         <p className="text-xs text-gray-500 truncate" title={url}>{url}</p>
                                     </div>
                                     <div className="shrink-0 relative">
-                                        <input 
-                                            type="file" 
+                                        <input
+                                            type="file"
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                             accept="image/*"
                                             onChange={(e) => {

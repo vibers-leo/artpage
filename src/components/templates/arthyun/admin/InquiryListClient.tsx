@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-// import { createBrowserClient } from "@supabase/ssr";
+// DB는 Prisma 사용
 import { 
   Table, 
   TableBody, 
@@ -45,7 +45,7 @@ export default function InquiryListClient({ initialInquiries }: { initialInquiri
   const [filter, setFilter] = useState("all"); // all, new, exhibition, general
   const [updating, setUpdating] = useState(false);
 
-  // No Supabase Client needed
+  // DB 조작은 Server Action 사용
   // Instead use Server Actions or Client DB SDK? 
   // Since we are client-side only here for simplicity (though Server Action is better), 
   // let's use Firebase Client SDK (import db).

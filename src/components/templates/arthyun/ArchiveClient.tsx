@@ -5,7 +5,7 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { X, Search } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-// import { createBrowserClient } from "@supabase/ssr"; // REMOVED
+// Firebase Auth 사용
 import { auth } from "@/lib/firebase"; // ADDED Firebase Auth
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";

@@ -1,4 +1,4 @@
-// [DEPRECATED] 이전 Supabase 마이그레이션 라우트 — 자체 PostgreSQL로 이전 완료
+// [DEPRECATED] 이전 마이그레이션 라우트 — 자체 PostgreSQL로 이전 완료
 import { NextResponse } from "next/server";
 
 export async function GET() {
