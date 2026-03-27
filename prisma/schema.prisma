@@ -1,0 +1,91 @@
+// artpage Prisma 스키마
+// 자체 PostgreSQL (vibers_main) — art-way 마이그레이션 기반 테이블
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 전시 테이블
+model exhibitions {
+  id             Int       @id @default(autoincrement())
+  title          String
+  subtitle       String?
+  artist         String?
+  category       String?
+  categories     String[]  @default([])
+  poster_url     String?
+  description    String?
+  start_date     String?
+  end_date       String?
+  is_active      Boolean   @default(true)
+  is_visible     Boolean   @default(true)
+  is_main_slider Boolean   @default(false)
+  youtube_url    String?
+  sort_order     Int       @default(0)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @default(now()) @updatedAt
+}
+
+// 보도자료 테이블
+model media_releases {
+  id             Int       @id @default(autoincrement())
+  title          String
+  content        String?
+  press_name     String?
+  source         String?
+  source_url     String?
+  link_url       String?
+  image_url      String?
+  published_date String?
+  published_at   DateTime?
+  is_visible     Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @default(now()) @updatedAt
+}
+
+// 메인 배너 테이블
+model main_banner {
+  id          Int       @id @default(autoincrement())
+  title       String?
+  image_url   String?
+  link_url    String?
+  is_active   Boolean   @default(true)
+  sort_order  Int       @default(0)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now()) @updatedAt
+}
+
+// 문의 테이블
+model inquiries {
+  id          Int       @id @default(autoincrement())
+  type        String    @default("general")
+  name        String
+  phone       String?
+  email       String?
+  content     String?
+  status      String    @default("new")
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now()) @updatedAt
+}
+
+// 일별 통계 테이블
+model daily_stats {
+  id          Int       @id @default(autoincrement())
+  date        String    @unique
+  count       Int       @default(0)
+  visitors    Int       @default(0)
+  created_at  DateTime  @default(now())
+}
+
+// 사이트 설정 테이블
+model site_settings {
+  id              Int       @id @default(autoincrement())
+  og_description  String?
+  og_image_url    String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now()) @updatedAt
+}

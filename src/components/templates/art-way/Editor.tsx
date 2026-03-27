@@ -6,7 +6,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useEffect } from "react";
 import "@blocknote/mantine/style.css"; // 스타일 불러오기
-import { supabase } from "@/lib/supabase"; // Supabase 클라이언트 임포트
+import { supabaseStorage as supabase } from "@/lib/supabase-storage"; // Storage 전용 클라이언트
 
 interface EditorProps {
   onChange: (html: string) => void; // 부모에게 HTML을 전달할 함수

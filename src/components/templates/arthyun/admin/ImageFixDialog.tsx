@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { createBrowserClient } from "@supabase/ssr";
+import { supabaseStorage } from "@/lib/supabase-storage";
 import { toast } from "sonner";
 import { updatePostContent } from "@/actions/fixActions";
 import { Loader2, Upload, RefreshCw } from "lucide-react";
@@ -34,23 +34,18 @@ export default function ImageFixDialog({ postId, content, onUpdate }: Props) {
     const handleFileUpload = async (index: number, file: File) => {
         setIsLoading(true);
         try {
-            const supabase = createBrowserClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            );
-            
             const fileExt = file.name.split('.').pop();
             const fileName = `manual_fix_${postId}_${Date.now()}.${fileExt}`;
             const filePath = `editor/${fileName}`;
 
-            // Upload to images bucket
-            const { error: uploadError } = await supabase.storage
+            // Supabase Storage에 업로드
+            const { error: uploadError } = await supabaseStorage.storage
                 .from("images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
+            const { data: { publicUrl } } = supabaseStorage.storage
                 .from("images")
                 .getPublicUrl(filePath);
 

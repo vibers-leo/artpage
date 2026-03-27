@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { createBrowserClient } from "@supabase/ssr";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table";
 import { 
   Dialog, 
@@ -45,29 +44,29 @@ export default function InquiryListClient({ initialInquiries }: { initialInquiri
   const [filter, setFilter] = useState("all"); // all, new, exhibition, general
   const [updating, setUpdating] = useState(false);
 
-  // Supabase Client
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  // 상태 변경 함수
+  // 상태 변경 함수 (자체 PostgreSQL API)
   const updateStatus = async (id: string, newStatus: "new" | "read" | "done") => {
     setUpdating(true);
-    const { error } = await supabase
-      .from("inquiries")
-      .update({ status: newStatus })
-      .eq("id", id);
-    
-    if (!error) {
-      setInquiries((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
-      );
-      if (selectedInquiry?.id === id) {
-        setSelectedInquiry({ ...selectedInquiry, status: newStatus });
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setInquiries((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
+        );
+        if (selectedInquiry?.id === id) {
+          setSelectedInquiry({ ...selectedInquiry, status: newStatus });
+        }
+      } else {
+        alert("업데이트 실패: " + (data.error || "알 수 없는 오류"));
       }
-    } else {
-        alert("업데이트 실패: " + error.message);
+    } catch (error: any) {
+      alert("업데이트 실패: " + error.message);
     }
     setUpdating(false);
   };
