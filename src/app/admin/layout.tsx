@@ -42,6 +42,12 @@ export default function AdminLayout({
                                 언론보도 관리
                             </Link>
                             <Link
+                                href="/admin/artworks"
+                                className="hover:text-black transition-colors"
+                            >
+                                작품 판매
+                            </Link>
+                            <Link
                                 href="/admin/artists"
                                 className="hover:text-black transition-colors"
                             >
