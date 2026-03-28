@@ -59,14 +59,14 @@ export default function MobileMenu() {
               portfolio
             </Link>
             <Link 
-              href="/demo/media" 
+              href="/media" 
               onClick={closeMenu} 
               className="hover:text-primary transition-colors"
             >
               media
             </Link>
             <Link 
-              href="/demo/mall" 
+              href="/mall" 
               onClick={closeMenu} 
               className="hover:text-primary transition-colors"
             >

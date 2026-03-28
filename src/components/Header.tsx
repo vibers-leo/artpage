@@ -83,7 +83,7 @@ export default function Header() {
             </Link>
             
             <Link 
-              href="/demo/media" 
+              href="/media"
               className={`relative py-1 transition-all duration-300 lowercase ${
                 isHome && !isScrolled 
                   ? "text-white/90 hover:text-white" 
@@ -92,12 +92,12 @@ export default function Header() {
             >
               media
               <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
-                pathname === "/demo/media" ? "w-full" : ""
+                pathname === "/media" ? "w-full" : ""
               }`} />
             </Link>
             
             <Link 
-              href="/demo/mall" 
+              href="/mall"
               className={`relative py-1 transition-all duration-300 lowercase ${
                 isHome && !isScrolled 
                   ? "text-white/90 hover:text-white" 
@@ -106,7 +106,7 @@ export default function Header() {
             >
               shop
               <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
-                pathname === "/demo/mall" ? "w-full" : ""
+                pathname === "/mall" ? "w-full" : ""
               }`} />
             </Link>
             
