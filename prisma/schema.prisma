@@ -1,5 +1,5 @@
-// artpage Prisma 스키마
-// 자체 PostgreSQL (vibers_main) — art-way 마이그레이션 기반 테이블
+// artpage Prisma 스키마 — 멀티테넌트 플랫폼
+// 자체 PostgreSQL (vibers_main) — arthyun + art-way 통합
 
 generator client {
   provider = "prisma-client-js"
@@ -12,6 +12,7 @@ datasource db {
 // 전시 테이블
 model exhibitions {
   id             Int       @id @default(autoincrement())
+  site_slug      String    @default("arthyun")
   title          String
   subtitle       String?
   artist         String?
@@ -28,11 +29,14 @@ model exhibitions {
   sort_order     Int       @default(0)
   created_at     DateTime  @default(now())
   updated_at     DateTime  @default(now()) @updatedAt
+
+  @@index([site_slug])
 }
 
 // 보도자료 테이블
 model media_releases {
   id             Int       @id @default(autoincrement())
+  site_slug      String    @default("arthyun")
   title          String
   content        String?
   press_name     String?
@@ -45,11 +49,14 @@ model media_releases {
   is_visible     Boolean   @default(true)
   created_at     DateTime  @default(now())
   updated_at     DateTime  @default(now()) @updatedAt
+
+  @@index([site_slug])
 }
 
 // 메인 배너 테이블
 model main_banner {
   id          Int       @id @default(autoincrement())
+  site_slug   String    @default("arthyun")
   title       String?
   image_url   String?
   link_url    String?
@@ -57,11 +64,14 @@ model main_banner {
   sort_order  Int       @default(0)
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now()) @updatedAt
+
+  @@index([site_slug])
 }
 
 // 문의 테이블
 model inquiries {
   id          Int       @id @default(autoincrement())
+  site_slug   String    @default("arthyun")
   type        String    @default("general")
   name        String
   phone       String?
@@ -70,22 +80,58 @@ model inquiries {
   status      String    @default("new")
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now()) @updatedAt
+
+  @@index([site_slug])
 }
 
 // 일별 통계 테이블
 model daily_stats {
   id          Int       @id @default(autoincrement())
-  date        String    @unique
+  site_slug   String    @default("arthyun")
+  date        String
   count       Int       @default(0)
   visitors    Int       @default(0)
   created_at  DateTime  @default(now())
+
+  @@unique([site_slug, date])
 }
 
-// 사이트 설정 테이블
+// 사이트 설정 테이블 — site_slug를 고유키로 사용
 model site_settings {
   id              Int       @id @default(autoincrement())
+  site_slug       String    @unique
+  site_name       String?
+  site_title      String?
+  site_description String?
+  template        String    @default("arthyun")
   og_description  String?
   og_image_url    String?
+  domain          String?
+  logo_url        String?
+  footer_logo_url String?
+  address         String?
+  phone           String?
+  email           String?
+  instagram_url   String?
+  blog_url        String?
+  youtube_url     String?
+  is_active       Boolean   @default(true)
   created_at      DateTime  @default(now())
   updated_at      DateTime  @default(now()) @updatedAt
+}
+
+// 포트폴리오 테이블
+model Portfolio {
+  id          String   @id @default(uuid()) @db.Uuid
+  site_slug   String   @default("arthyun")
+  title       String
+  description String?
+  image_url   String?
+  category    String?
+  is_featured Boolean  @default(false)
+  sort_order  Int      @default(0)
+  created_at  DateTime @default(now()) @db.Timestamptz
+  updated_at  DateTime @updatedAt @db.Timestamptz
+
+  @@index([site_slug])
 }

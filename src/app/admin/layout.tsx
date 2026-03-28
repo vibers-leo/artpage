@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Script from "next/script";
 import VibersBanner from "@/components/VibersBanner";
+import { AdminSiteProvider } from "@/lib/admin-site-context";
+import SiteSelector from "@/components/admin/SiteSelector";
 
 export default function AdminLayout({
     children,
@@ -9,7 +11,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     return (
-        <>
+        <AdminSiteProvider>
         <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7704550771011130"
@@ -22,8 +24,10 @@ export default function AdminLayout({
                 <div className="max-w-screen-xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-8">
                         <Link href="/admin" className="font-serif font-bold text-xl">
-                            ARTWAY ADMIN
+                            ARTPAGE ADMIN
                         </Link>
+                        {/* 멀티사이트 선택 */}
+                        <SiteSelector />
                         <nav className="flex gap-6 text-sm font-medium text-gray-500">
                             <Link
                                 href="/admin/exhibition"
@@ -43,7 +47,12 @@ export default function AdminLayout({
                             >
                                 포트폴리오 관리
                             </Link>
-                            {/* 추가 메뉴 공간 */}
+                            <Link
+                                href="/admin/settings"
+                                className="hover:text-black transition-colors"
+                            >
+                                사이트 설정
+                            </Link>
                         </nav>
                     </div>
                     <div>
@@ -62,6 +71,6 @@ export default function AdminLayout({
                 <VibersBanner size="medium" currentProject="artpage" />
             </div>
         </div>
-        </>
+        </AdminSiteProvider>
     );
 }
