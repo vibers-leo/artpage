@@ -12,6 +12,19 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  openGraph: {
+    title: 'ArtPage - 아티스트를 위한 웹사이트 플랫폼',
+    description: '갤러리, 아티스트, 큐레이터를 위한 올인원 웹사이트 빌더',
+    url: 'https://artpage-ivory.vercel.app',
+    siteName: 'ArtPage',
+    type: 'website',
+    locale: 'ko_KR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ArtPage - 아티스트를 위한 웹사이트 플랫폼',
+    description: '갤러리, 아티스트, 큐레이터를 위한 올인원 웹사이트 빌더',
+  },
 };
 
 export default function RootLayout({
