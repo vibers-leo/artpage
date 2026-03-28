@@ -4,7 +4,7 @@
 export type TemplateConfig = {
   slug: string;
   name: string;
-  template: "arthyun" | "art-way";
+  template: "arthyun" | "art-way" | "modern-art" | "classic-gallery" | "minimal-portfolio";
   // 테마
   theme: {
     bodyClass: string;
@@ -30,6 +30,40 @@ export type TemplateConfig = {
     youtube?: string;
   };
 };
+
+// AI 사이트 생성용 템플릿 ID 타입
+export type GenerativeTemplateId = "modern-art" | "classic-gallery" | "minimal-portfolio";
+
+// AI 생성 가능 템플릿 목록
+export const GENERATIVE_TEMPLATES: {
+  id: GenerativeTemplateId;
+  name: string;
+  description: string;
+  goodFor: string[];
+  preview: string; // 프리뷰 이미지 경로 (추후 추가)
+}[] = [
+  {
+    id: "modern-art",
+    name: "모던 아트",
+    description: "깔끔한 흰색 배경, 대형 이미지 그리드, 산세리프 타이포그래피",
+    goodFor: ["현대미술", "디지털 아트", "설치미술"],
+    preview: "/templates/modern-art-preview.jpg",
+  },
+  {
+    id: "classic-gallery",
+    name: "클래식 갤러리",
+    description: "어두운 배경, 우아한 세리프 폰트, 단일 이미지 포커스",
+    goodFor: ["전통미술", "유화", "조각", "수채화"],
+    preview: "/templates/classic-gallery-preview.jpg",
+  },
+  {
+    id: "minimal-portfolio",
+    name: "미니멀 포트폴리오",
+    description: "울트라 미니멀, 메이슨리 그리드, 순수 작품 중심",
+    goodFor: ["사진", "일러스트", "그래픽 디자인", "판화"],
+    preview: "/templates/minimal-portfolio-preview.jpg",
+  },
+];
 
 // 템플릿 설정 맵
 export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
