@@ -24,7 +24,7 @@ const fallbackPortfolios: PortfolioItem[] = [
   {
     id: "fallback-2",
     title: "Art Way",
-    description: "아티스트를 위한 감각적인 포트폴리오 및 전시 아카이빙 템플릿입니다.",
+    description: "아티스트를 위한 감각적인 아카이빙 템플릿입니다.",
     thumbnail_url: "/images/gallery1.png",
     external_url: null,
     internal_path: "/art-way",
@@ -139,7 +139,7 @@ export default function PortfolioPage() {
 
             {portfolios.length === 0 && (
                 <div className="col-span-full text-center py-24 text-gray-300 font-light">
-                준비된 포트폴리오가 없습니다.
+                준비된 아티스트 동향이 없습니다.
                 </div>
             )}
             </div>

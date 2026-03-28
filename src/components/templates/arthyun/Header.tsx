@@ -59,7 +59,7 @@ export default function Header() {
         {/* 네비게이션 */}
         <nav className={`hidden md:flex gap-12 text-[16px] font-medium tracking-widest ${isHome && !isScrolled ? "text-white/80 hover:text-white" : "text-gray-500"}`}>
           <Link href="/about" className="hover:text-black hover:opacity-100 transition-colors">ABOUT</Link>
-          <Link href="/portfolio" className="hover:text-black hover:opacity-100 transition-colors">PORTFOLIO</Link>
+          <Link href="/artists" className="hover:text-black hover:opacity-100 transition-colors">ARTISTS</Link>
 {/* <Link href="/archive" className="hover:text-black hover:opacity-100 transition-colors">ARCHIVE</Link> */}
           <Link href="/media" className="hover:text-black hover:opacity-100 transition-colors">MEDIA</Link>
           <Link href="/mall" className="hover:text-black hover:opacity-100 transition-colors">SHOP</Link>

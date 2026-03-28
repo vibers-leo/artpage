@@ -96,7 +96,7 @@ export default async function PortfolioPage() {
                ART HYUN ARCHIVE
             </span>
             <h1 className="text-4xl md:text-6xl font-serif font-black tracking-tighter uppercase mb-4">
-              Portfolio
+              아티스트 동향
             </h1>
             <p className="max-w-xl text-gray-500 font-light leading-relaxed">
               아트현이 진행한 다양한 공공미술, 디자인, 벽화 프로젝트를 소개합니다.
@@ -124,7 +124,7 @@ export default async function PortfolioPage() {
             <ArchiveClient initialData={formattedData} />
         ) : (
             <div className="py-20 text-center text-gray-400">
-                <p>등록된 포트폴리오가 없습니다. (DB 연결 확인 필요)</p>
+                <p>등록된 아티스트 동향이 없습니다. (DB 연결 확인 필요)</p>
             </div>
         )}
         

@@ -121,7 +121,7 @@ export default function PortfolioListClient({ initialPortfolios }: { initialPort
                         {portfolios.length === 0 ? (
                             <tr>
                                 <td colSpan={5} className="p-10 text-center text-gray-400">
-                                    등록된 포트폴리오가 없습니다.
+                                    등록된 아티스트 동향이 없습니다.
                                 </td>
                             </tr>
                         ) : (
@@ -136,14 +136,14 @@ export default function PortfolioListClient({ initialPortfolios }: { initialPort
 
                                     {/* 2. 이미지 (Image) */}
                                     <td className="p-4 w-24">
-                                        <Link href={`/admin/portfolio/edit/${item.id}`} className="block w-full h-full cursor-pointer hover:opacity-80 transition-opacity">
+                                        <Link href={`/admin/artists/edit/${item.id}`} className="block w-full h-full cursor-pointer hover:opacity-80 transition-opacity">
                                             <AdminThumbnail src={item.thumbnail_url} alt={item.title} />
                                         </Link>
                                     </td>
 
                                     {/* 3. 프로젝트명 (Title) */}
                                     <td className="p-4">
-                                        <Link href={`/admin/portfolio/edit/${item.id}`} className="block group cursor-pointer">
+                                        <Link href={`/admin/artists/edit/${item.id}`} className="block group cursor-pointer">
                                             <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{item.title}</p>
                                         </Link>
                                     </td>
@@ -158,7 +158,7 @@ export default function PortfolioListClient({ initialPortfolios }: { initialPort
                                     {/* 5. 관리 (Manage) */}
                                     <td className="p-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
-                                            <Link href={`/admin/portfolio/edit/${item.id}`}>
+                                            <Link href={`/admin/artists/edit/${item.id}`}>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"

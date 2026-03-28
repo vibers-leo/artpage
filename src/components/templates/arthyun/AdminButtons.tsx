@@ -51,7 +51,7 @@ export function AdminMediaButton() {
   );
 }
 
-// 포트폴리오 관리 버튼
+// 아티스트 동향 관리 버튼
 export function AdminPortfolioButton() {
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -66,8 +66,8 @@ export function AdminPortfolioButton() {
 
   return (
     <Button asChild className="bg-black text-white hover:bg-gray-800 gap-2">
-      <Link href="/admin/portfolio">
-        <Plus size={16} /> 포트폴리오 등록 및 관리
+      <Link href="/admin/artists">
+        <Plus size={16} /> 아티스트 동향 등록 및 관리
       </Link>
     </Button>
   );

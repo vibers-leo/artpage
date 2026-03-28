@@ -20,7 +20,7 @@ export default function AdminPortfolioButtonClient() {
     if (!isAdmin) return null;
 
     return (
-        <Link href="/admin/portfolio">
+        <Link href="/admin/artists">
             <Button variant="outline" className="gap-2 border-black hover:bg-black hover:text-white transition-colors">
                 <Settings size={16} />
                 <span>관리자 모드</span>

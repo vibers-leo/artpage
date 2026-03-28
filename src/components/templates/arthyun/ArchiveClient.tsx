@@ -64,12 +64,12 @@ export default function ArchiveClient({ initialData }: { initialData: any[] }) {
     toast.info("마이그레이션 중이라 현재 사용할 수 없는 기능입니다.");
       
     //   if (!selectedExhibition || !isAdmin) return;
-    //   if (!confirm("이 항목을 포트폴리오로 복사하시겠습니까?\n이미지 파일도 함께 복사되며, 원본은 유지됩니다.")) return;
+    //   if (!confirm("이 항목을 아티스트 동향으로 복사하시겠습니까?\n이미지 파일도 함께 복사되며, 원본은 유지됩니다.")) return;
 
     //   setIsImporting(true);
     //   try {
     //       await importPortfolio(selectedExhibition.id);
-    //       toast.success("포트폴리오로 복사되었습니다. (관리자 페이지에서 확인)");
+    //       toast.success("아티스트 동향으로 복사되었습니다. (관리자 페이지에서 확인)");
     //       // setSelectedExhibition(null); // Keep open if user wants to see it? Or close.
     //       // router.refresh(); // Refresh list not needed if we don't delete. But good to sync.
     //   } catch (e: any) {
@@ -284,7 +284,7 @@ export default function ArchiveClient({ initialData }: { initialData: any[] }) {
                             disabled={isImporting}
                             className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8"
                           >
-                            {isImporting ? "복사..." : "포트폴리오 복사"}
+                            {isImporting ? "복사..." : "아티스트 동향 복사"}
                           </Button>
                       )}
                       <ImageFixDialog 

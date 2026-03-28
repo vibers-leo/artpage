@@ -22,7 +22,7 @@ export async function getPortfolios() {
 }
 
 export async function deletePortfolio(id: string | number) {
-  throw new Error("포트폴리오 삭제 기능이 아직 구현되지 않았습니다.");
+  throw new Error("아티스트 동향 삭제 기능이 아직 구현되지 않았습니다.");
 }
 
 // ── Prisma 기반 Portfolio CRUD (멀티테넌트) ──
@@ -63,8 +63,8 @@ export async function createPortfolioPrisma(
       },
     });
 
-    revalidatePath(`/${siteSlug}/portfolio`);
-    revalidatePath("/admin/portfolio");
+    revalidatePath(`/${siteSlug}/artists`);
+    revalidatePath("/admin/artists");
 
     return { success: true, data: result };
   } catch (error: any) {
@@ -94,8 +94,8 @@ export async function updatePortfolioPrisma(
       },
     });
 
-    revalidatePath(`/${siteSlug}/portfolio`);
-    revalidatePath("/admin/portfolio");
+    revalidatePath(`/${siteSlug}/artists`);
+    revalidatePath("/admin/artists");
 
     return { success: true, data: result };
   } catch (error: any) {
@@ -108,8 +108,8 @@ export async function deletePortfolioPrisma(id: string, siteSlug: string) {
   try {
     await prisma.portfolio.delete({ where: { id } });
 
-    revalidatePath(`/${siteSlug}/portfolio`);
-    revalidatePath("/admin/portfolio");
+    revalidatePath(`/${siteSlug}/artists`);
+    revalidatePath("/admin/artists");
 
     return { success: true };
   } catch (error: any) {

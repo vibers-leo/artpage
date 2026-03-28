@@ -67,18 +67,18 @@ export default function Header() {
               }`} />
             </Link>
 
-            {/* Portfolio 메뉴 */}
-             <Link 
-              href="/portfolio" 
+            {/* 아티스트 동향 메뉴 */}
+             <Link
+              href="/artists"
               className={`relative py-1 transition-all duration-300 lowercase ${
-                isHome && !isScrolled 
-                  ? "text-white/90 hover:text-white" 
+                isHome && !isScrolled
+                  ? "text-white/90 hover:text-white"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              portfolio
+              artists
               <span className={`absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-300 ${
-                pathname === "/portfolio" ? "w-full" : ""
+                pathname === "/artists" ? "w-full" : ""
               }`} />
             </Link>
             

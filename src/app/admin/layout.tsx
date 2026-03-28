@@ -42,10 +42,10 @@ export default function AdminLayout({
                                 언론보도 관리
                             </Link>
                             <Link
-                                href="/admin/portfolio"
+                                href="/admin/artists"
                                 className="hover:text-black transition-colors"
                             >
-                                포트폴리오 관리
+                                아티스트 동향 관리
                             </Link>
                             <Link
                                 href="/admin/settings"

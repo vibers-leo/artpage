@@ -70,7 +70,7 @@ export default function ContactForm() {
         <p className="text-xs text-gray-500">
             {tab === "general" 
                 ? "작품 구매, 대관료, 관람 시간 등 궁금한 점을 자유롭게 문의해주세요." 
-                : "전시 기획서나 포트폴리오 링크를 내용에 포함해주시면 더욱 좋습니다."}
+                : "전시 기획서나 아티스트 동향 링크를 내용에 포함해주시면 더욱 좋습니다."}
         </p>
       </div>
 
@@ -118,7 +118,7 @@ export default function ContactForm() {
             name="content"
             value={form.content}
             onChange={handleChange}
-            placeholder={tab === "general" ? "문의 내용을 입력해주세요." : "간단한 자기소개 및 전시 희망 일정, 포트폴리오 URL 등을 입력해주세요."}
+            placeholder={tab === "general" ? "문의 내용을 입력해주세요." : "간단한 자기소개 및 전시 희망 일정, 아티스트 동향 URL 등을 입력해주세요."}
             rows={5}
             className="w-full border border-gray-200 px-4 py-3 rounded-md focus:outline-none focus:border-black transition resize-none"
           />

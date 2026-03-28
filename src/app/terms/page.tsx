@@ -27,7 +27,7 @@ export default function TermsPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">제2조 (정의)</h2>
           <div className="space-y-3 text-base text-gray-700 leading-relaxed">
             <ul className="list-decimal list-inside space-y-2 ml-4">
-              <li>&quot;서비스&quot;라 함은 회사가 제공하는 전시 정보, 아티스트 포트폴리오 관리 등 제반 서비스를 의미합니다.</li>
+              <li>&quot;서비스&quot;라 함은 회사가 제공하는 전시 정보, 아티스트 동향 관리 등 제반 서비스를 의미합니다.</li>
               <li>&quot;이용자&quot;라 함은 사이트에 접속하여 본 약관에 따라 회사가 제공하는 서비스를 이용하는 고객을 말합니다.</li>
             </ul>
           </div>
@@ -48,7 +48,7 @@ export default function TermsPage() {
             <p>① 회사는 다음과 같은 서비스를 제공합니다.</p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>전시 정보 안내 서비스</li>
-              <li>아티스트 포트폴리오 관리 서비스</li>
+              <li>아티스트 동향 관리 서비스</li>
               <li>웹사이트 빌더 서비스</li>
               <li>문의 및 상담 서비스</li>
             </ul>

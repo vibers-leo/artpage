@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
     { label: "전시 관리", href: "/admin/exhibition", icon: Palette, color: "bg-primary" },
     { label: "미디어 관리", href: "/admin/media", icon: ImageIcon, color: "bg-secondary" },
     { label: "문의 관리", href: "/admin/inquiries", icon: FileText, color: "bg-accent" },
-    { label: "포트폴리오", href: "/admin/portfolio", icon: Folder, color: "bg-black" },
+    { label: "아티스트 동향", href: "/admin/artists", icon: Folder, color: "bg-black" },
     { label: "전문가 승인", href: "/admin/users", icon: Users, color: "bg-blue-600" },
   ];
 

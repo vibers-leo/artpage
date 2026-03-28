@@ -39,11 +39,11 @@ export default function AdminPortfolioPage() {
     <div className="max-w-screen-xl mx-auto px-6 py-12">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-serif font-bold mb-2">Portfolio Management (Firebase)</h1>
-          <p className="text-gray-500">포트폴리오 프로젝트를 관리합니다.</p>
+          <h1 className="text-3xl font-serif font-bold mb-2">아티스트 동향 관리 (Firebase)</h1>
+          <p className="text-gray-500">아티스트 동향 프로젝트를 관리합니다.</p>
         </div>
         <Link 
-          href="/admin/portfolio/write" 
+          href="/admin/artists/write" 
           className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition flex items-center gap-2"
         >
           <Plus size={18} /> 새 프로젝트 등록
@@ -101,7 +101,7 @@ export default function AdminPortfolioPage() {
 
               <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
                  <Link 
-                   href={`/admin/portfolio/write?id=${item.id}`}
+                   href={`/admin/artists/write?id=${item.id}`}
                    className="text-sm px-3 py-1.5 border border-gray-200 rounded hover:bg-gray-50"
                  >
                    수정 (View)
@@ -114,9 +114,9 @@ export default function AdminPortfolioPage() {
 
         {portfolios.length === 0 && (
           <div className="col-span-full py-12 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-            <p className="text-gray-400 mb-4">등록된 포트폴리오가 없습니다.</p>
+            <p className="text-gray-400 mb-4">등록된 아티스트 동향이 없습니다.</p>
             <Link 
-              href="/admin/portfolio/write" 
+              href="/admin/artists/write" 
               className="text-blue-600 hover:underline"
             >
               첫 프로젝트를 등록해보세요

@@ -192,7 +192,7 @@ export default function SettingsFormClient({ settings }: { settings: Settings | 
 
                 {isInstagramActive && (
                     <div className="bg-yellow-50 border border-yellow-200 p-4 rounded text-sm text-yellow-800">
-                        ⚠ <strong>주의사항:</strong> 연동 활성화 시 포트폴리오 목록이 인스타그램 피드로 대체됩니다.
+                        ⚠ <strong>주의사항:</strong> 연동 활성화 시 아티스트 동향 목록이 인스타그램 피드로 대체됩니다.
                         (60일마다 토큰 갱신이 필요할 수 있습니다.)
                     </div>
                 )}

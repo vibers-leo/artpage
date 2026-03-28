@@ -10,12 +10,12 @@ export default function DeletePortfolioButton({ id }: { id: string | number }) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
-    if (!confirm("정말로 이 포트폴리오를 삭제하시겠습니까? (복구 불가)")) return;
+    if (!confirm("정말로 이 아티스트 동향을 삭제하시겠습니까? (복구 불가)")) return;
 
     startTransition(async () => {
       try {
         await deletePortfolio(id);
-        toast.success("포트폴리오가 삭제되었습니다.");
+        toast.success("아티스트 동향이 삭제되었습니다.");
       } catch (error: any) {
         toast.error(error.message);
       }

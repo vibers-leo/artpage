@@ -124,7 +124,7 @@ function PortfolioWriteContent() {
         alert("등록되었습니다.");
       }
       
-      router.push("/admin/portfolio");
+      router.push("/admin/artists");
       router.refresh(); // 리스트 갱신을 위해
 
     } catch (error) {
@@ -150,7 +150,7 @@ function PortfolioWriteContent() {
       }
 
       alert("삭제되었습니다.");
-      router.push("/admin/portfolio");
+      router.push("/admin/artists");
       router.refresh();
     } catch (error) {
       console.error("Delete error:", error);
@@ -167,7 +167,7 @@ function PortfolioWriteContent() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="flex justify-between items-center mb-6">
-        <Link href="/admin/portfolio" className="inline-flex items-center text-gray-500 hover:text-black">
+        <Link href="/admin/artists" className="inline-flex items-center text-gray-500 hover:text-black">
           <ArrowLeft size={16} className="mr-1" /> 돌아가기
         </Link>
         {id && (

@@ -30,7 +30,7 @@ export default function PrivacyPage() {
               <h3 className="text-lg font-bold text-gray-900 mb-2">1. 서비스 제공</h3>
               <ul className="list-disc list-inside space-y-1 ml-4">
                 <li>북촌 아트 스페이스 전시 정보 서비스 제공</li>
-                <li>아티스트 포트폴리오 관리 서비스</li>
+                <li>아티스트 동향 관리 서비스</li>
                 <li>고객 상담 및 문의 응대</li>
               </ul>
             </div>
