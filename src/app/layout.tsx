@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="font-sans antialiased text-foreground bg-background">
+      <body className="font-sans antialiased text-foreground bg-background" style={{ fontFamily: "'Pretendard Variable', Pretendard, var(--font-inter), system-ui, -apple-system, sans-serif" }}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-CGK1BSBM63"
           strategy="afterInteractive"

@@ -63,7 +63,7 @@ export default function RootLayout({
 
   return (
     <html lang="ko" className={`${serif.variable} ${sans.variable} ${heading.variable}`}>
-      <body className="font-sans text-gray-800 bg-white selection:bg-gray-900 selection:text-white">
+      <body className="font-sans text-gray-800 bg-white selection:bg-gray-900 selection:text-white" style={{ fontFamily: "'Pretendard Variable', Pretendard, var(--font-sans), system-ui, -apple-system, sans-serif" }}>
         
         {/* Toast Notifications */}
         <Toaster position="top-center" richColors />

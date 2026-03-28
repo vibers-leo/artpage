@@ -8,7 +8,7 @@ export default function PlatformLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen theme-platform">
+    <div className="flex flex-col min-h-[100dvh] theme-platform">
       <PlatformHeader />
       <main className="flex-grow">
         {children}

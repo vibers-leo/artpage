@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className={`${serif.variable} ${sans.variable}`}>
-      <body className="font-sans text-gray-900 bg-white selection:bg-black selection:text-white">
+      <body className="font-sans text-gray-900 bg-white selection:bg-black selection:text-white" style={{ fontFamily: "'Pretendard Variable', Pretendard, var(--font-sans), system-ui, -apple-system, sans-serif" }}>
         
         {/* 방문자 추적기 (관리자 통계용) */}
         <VisitorTracker />

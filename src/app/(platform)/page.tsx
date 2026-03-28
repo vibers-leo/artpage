@@ -54,7 +54,7 @@ export default function PlatformHomePage() {
 
         <div className="max-w-screen-xl mx-auto w-full z-10 relative">
           <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-medium leading-tight tracking-tight mb-8 drop-shadow-lg text-white">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-medium leading-snug tracking-tight mb-8 drop-shadow-lg text-white">
               {p.hero.title1}<br />
               {locale === 'ko' ? <span className="italic">{p.hero.title2}</span> : p.hero.title2}<br />
               {locale === 'ko' ? p.hero.title3 : <span className="italic">{p.hero.title3}</span>}
@@ -67,7 +67,7 @@ export default function PlatformHomePage() {
             <div className="flex flex-col sm:flex-row gap-6 items-start">
               <Link
                 href="/auth/signup"
-                className="group relative px-8 py-4 bg-white text-black text-lg font-medium overflow-hidden transition-all hover:bg-white/90 shadow-lg hover:shadow-xl rounded-sm"
+                className="group relative px-8 py-4 bg-white text-black text-lg font-medium overflow-hidden transition-all hover:bg-white/90 shadow-lg hover:shadow-xl rounded-full"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   {p.hero.cta_start}
@@ -77,7 +77,7 @@ export default function PlatformHomePage() {
               
               <Link
                 href="#"
-                className="group px-8 py-4 text-lg font-medium border border-white/30 hover:border-white hover:bg-white/10 text-white transition-all flex items-center gap-2 backdrop-blur-sm rounded-sm"
+                className="group px-8 py-4 text-lg font-medium border border-white/30 hover:border-white hover:bg-white/10 text-white transition-all flex items-center gap-2 backdrop-blur-sm rounded-full"
               >
                 <span>{p.hero.cta_demo}</span>
                 <ArrowUpRight size={20} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
@@ -105,7 +105,7 @@ export default function PlatformHomePage() {
           <div className="space-y-32">
             {/* Reason 1: Archiving */}
             <div className="grid md:grid-cols-2 gap-16 items-center group">
-              <div className="order-2 md:order-1 relative aspect-[4/3] overflow-hidden rounded-sm bg-muted">
+              <div className="order-2 md:order-1 relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted ring-1 ring-black/5 shadow-xl shadow-black/5">
                  <Image
                   src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2971&auto=format&fit=crop" // Gallery Space
                   alt="Curated Gallery Space"
@@ -118,7 +118,7 @@ export default function PlatformHomePage() {
                   <Layout size={24} />
                 </div>
                 <div>
-                  <h3 className="text-4xl font-serif mb-4">
+                  <h3 className="text-4xl font-serif mb-4 leading-snug">
                     {p.why.reason1_title.split('\n').map((line: string, i: number) => (
                       <span key={i} className={`block ${i === 0 ? 'font-light' : 'font-bold'}`}>
                         {line}
@@ -140,7 +140,7 @@ export default function PlatformHomePage() {
                   <Database size={24} />
                 </div>
                 <div>
-                  <h3 className="text-4xl font-serif mb-4">
+                  <h3 className="text-4xl font-serif mb-4 leading-snug">
                     {p.why.reason2_title.split('\n').map((line: string, i: number) => (
                       <span key={i} className={`block ${i === 0 ? 'font-light' : 'font-bold'}`}>
                         {line}
@@ -153,7 +153,7 @@ export default function PlatformHomePage() {
                   </p>
                 </div>
               </div>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-muted">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted ring-1 ring-black/5 shadow-xl shadow-black/5">
                 <Image
                   src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2968&auto=format&fit=crop" // People Connecting / Meeting
                   alt="Artist and Fans"
@@ -165,7 +165,7 @@ export default function PlatformHomePage() {
 
             {/* Reason 3: Studio */}
             <div className="grid md:grid-cols-2 gap-16 items-center group">
-              <div className="order-2 md:order-1 relative aspect-[4/3] overflow-hidden rounded-sm bg-muted">
+              <div className="order-2 md:order-1 relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted ring-1 ring-black/5 shadow-xl shadow-black/5">
                 <Image
                   src="https://images.unsplash.com/photo-1520423465871-0866049020b7?q=80&w=2800&auto=format&fit=crop" // Professional Artist Studio
                   alt="Artist Studio"
@@ -178,7 +178,7 @@ export default function PlatformHomePage() {
                   <Palette size={24} />
                 </div>
                 <div>
-                  <h3 className="text-4xl font-serif mb-4">
+                  <h3 className="text-4xl font-serif mb-4 leading-snug">
                     {p.why.reason3_title.split('\n').map((line: string, i: number) => (
                       <span key={i} className={`block ${i === 0 ? 'font-light' : 'font-bold'}`}>
                         {line}
@@ -226,7 +226,7 @@ export default function PlatformHomePage() {
               </p>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 md:p-14 backdrop-blur-md">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 md:p-14 backdrop-blur-md ring-1 ring-white/5 shadow-2xl shadow-black/20">
               <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-white text-black rounded-full">
                   <Coffee size={32} />
@@ -272,15 +272,15 @@ export default function PlatformHomePage() {
 
       {/* 4. CTA Section */}
       <section className="py-40 px-6 md:px-12 border-t border-border text-center bg-background text-foreground">
-        <h2 className="text-4xl md:text-6xl font-serif font-medium mb-12 tracking-tighter whitespace-pre-line">
+        <h2 className="text-4xl md:text-6xl font-serif font-medium mb-12 tracking-tighter leading-snug whitespace-pre-line">
           {p.cta.title}
         </h2>
         <Link
           href="/auth/signup"
-          className="inline-flex items-center gap-4 text-xl md:text-2xl border-b-2 border-foreground pb-2 hover:opacity-50 transition-opacity"
+          className="inline-flex items-center gap-4 px-10 py-5 text-xl md:text-2xl bg-foreground text-background rounded-full hover:opacity-90 transition-opacity shadow-xl shadow-black/10"
         >
           <span>{p.cta.button}</span>
-          <ArrowRight size={32} />
+          <ArrowRight size={28} />
         </Link>
       </section>
     </div>

@@ -11,7 +11,7 @@ export default function PricingPage() {
   const { locale } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-neutral-50 selection:bg-black selection:text-white">
+    <div className="min-h-[100dvh] bg-neutral-50 selection:bg-black selection:text-white">
       <PlatformHeader />
       
       <main className="pb-24">
@@ -30,7 +30,7 @@ export default function PricingPage() {
 
           <div className="relative z-10 max-w-3xl mx-auto animate-fade-in-up">
             <span className="text-xs font-bold tracking-widest text-blue-300 uppercase mb-4 block">Pricing Plans</span>
-            <h1 className="text-3xl md:text-4xl font-serif font-medium mb-4 text-white leading-tight">
+            <h1 className="text-3xl md:text-4xl font-serif font-medium mb-4 text-white leading-snug">
               {locale === 'ko' ? "활동 규모와 목적에 맞춘\n유연한 플랜" : "Flexible plans tailored to your needs."}
             </h1>
             <p className="text-base text-gray-200 leading-relaxed font-light">
@@ -48,7 +48,7 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
           {/* 1. FREE PLAN */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-gray-200/50 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white rounded-3xl p-8 border border-gray-100 ring-1 ring-black/5 shadow-xl shadow-black/5 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <Coffee size={120} />
              </div>
@@ -83,7 +83,7 @@ export default function PricingPage() {
                     </li>
                 </div>
 
-                <Link href="/auth/signup" className="block w-full py-4 text-center rounded-xl bg-black text-white font-medium hover:bg-gray-800 transition-colors">
+                <Link href="/auth/signup" className="block w-full py-4 text-center rounded-full bg-black text-white font-medium hover:bg-gray-800 transition-colors">
                     무료로 시작하기
                 </Link>
              </div>
@@ -135,14 +135,14 @@ export default function PricingPage() {
                     </li>
                 </div>
 
-                <Link href="/contact" className="block w-full py-4 text-center rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-500 transition-colors">
+                <Link href="/contact" className="block w-full py-4 text-center rounded-full bg-blue-600 text-white font-medium hover:bg-blue-500 transition-colors">
                     도입 문의하기
                 </Link>
              </div>
           </div>
 
           {/* 3. MASTER PLAN */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-gray-200/50 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white rounded-3xl p-8 border border-gray-100 ring-1 ring-black/5 shadow-xl shadow-black/5 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                 <Gem size={120} />
              </div>
@@ -180,7 +180,7 @@ export default function PricingPage() {
                     </li>
                 </div>
 
-                <Link href="/contact" className="block w-full py-4 text-center rounded-xl border border-gray-200 text-gray-900 font-medium hover:bg-gray-50 transition-colors">
+                <Link href="/contact" className="block w-full py-4 text-center rounded-full border border-gray-200 text-gray-900 font-medium hover:bg-gray-50 transition-colors">
                     상담 신청하기
                 </Link>
              </div>

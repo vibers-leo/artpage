@@ -43,7 +43,7 @@ export default function TemplatesPage() {
   const { locale } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-neutral-50 selection:bg-black selection:text-white">
+    <div className="min-h-[100dvh] bg-neutral-50 selection:bg-black selection:text-white">
       <PlatformHeader />
       
       <main className="pb-24">
@@ -61,7 +61,7 @@ export default function TemplatesPage() {
              </div>
 
              <div className="relative z-10 max-w-2xl mx-auto animate-fade-in-up">
-                <h1 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-white">
+                <h1 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-white leading-snug">
                     Choose Your <span className="italic">Canvas</span>
                 </h1>
                 <p className="text-lg text-gray-200 leading-relaxed">
@@ -81,7 +81,7 @@ export default function TemplatesPage() {
             <Link 
               key={template.id} 
               href={template.link}
-              className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+              className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 ring-1 ring-black/5 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:-translate-y-2 transition-all duration-300"
             >
               {/* Thumbnail */}
               <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">

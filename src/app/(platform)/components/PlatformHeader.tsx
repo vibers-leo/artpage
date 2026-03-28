@@ -106,7 +106,7 @@ export default function PlatformHeader() {
 
       {/* 모바일 메뉴 */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-20 left-0 right-0 bg-background border-b border-border p-6 shadow-xl h-screen">
+        <div className="md:hidden absolute top-20 left-0 right-0 bg-background border-b border-border p-6 shadow-xl h-[100dvh]">
           <nav className="flex flex-col gap-6">
             <Link
               href="/features"

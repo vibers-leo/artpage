@@ -39,12 +39,12 @@ export default function FeaturesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
+    <div className="min-h-[100dvh] bg-white text-black selection:bg-black selection:text-white">
       <PlatformHeader />
       
       <main>
         {/* 1. Hero Section (Emotional & Cinematic) */}
-        <section className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden text-white">
+        <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-6 overflow-hidden text-white">
              <div className="absolute inset-0 z-0">
                 <Image
                   src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2800&auto=format&fit=crop" // Dynamic Event/Space
@@ -57,7 +57,7 @@ export default function FeaturesPage() {
              </div>
 
              <div className="relative z-10 max-w-4xl animate-fade-in-up">
-                <h1 className="text-3xl md:text-5xl font-serif font-light mb-8 leading-tight tracking-tight text-white">
+                <h1 className="text-3xl md:text-5xl font-serif font-light mb-8 leading-snug tracking-tight text-white">
                     {locale === 'ko' ? "기술이 아닌,\n예술을 담았습니다." : "Not Features,\nBut Essence."}
                 </h1>
                 <p className="text-lg md:text-xl text-white/80 font-light max-w-2xl mx-auto leading-relaxed">
@@ -79,7 +79,7 @@ export default function FeaturesPage() {
                     {/* Text Area */}
                     <div className="flex-1 space-y-8">
                         <span className="text-xs font-bold tracking-[0.3em] text-gray-500">{feature.subtitle}</span>
-                        <h2 className="text-3xl md:text-5xl font-serif leading-tight whitespace-pre-line text-black">
+                        <h2 className="text-3xl md:text-5xl font-serif leading-snug whitespace-pre-line text-black">
                             {feature.title}
                         </h2>
                         <p className="text-lg text-gray-600 leading-relaxed font-light">
@@ -88,7 +88,7 @@ export default function FeaturesPage() {
                     </div>
 
                     {/* Image Area */}
-                    <div className="flex-1 relative aspect-[4/5] w-full bg-gray-100 overflow-hidden group">
+                    <div className="flex-1 relative aspect-[4/5] w-full bg-gray-100 overflow-hidden group rounded-2xl ring-1 ring-black/5 shadow-xl shadow-black/5">
                         <Image
                             src={feature.image}
                             alt={feature.title}
@@ -103,7 +103,7 @@ export default function FeaturesPage() {
 
         {/* 3. Closing Statement */}
         <section className="py-40 text-center px-6 border-t border-gray-100">
-            <h2 className="text-4xl md:text-6xl font-serif mb-12 text-black">
+            <h2 className="text-4xl md:text-6xl font-serif mb-12 text-black leading-snug">
                 {locale === 'ko' ? "당신의 이야기는\n이제 시작입니다." : "Your story begins here."}
             </h2>
              <p className="text-gray-600 mb-12 max-w-xl mx-auto leading-relaxed">
