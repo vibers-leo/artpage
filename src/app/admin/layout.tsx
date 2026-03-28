@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import VibersBanner from "@/components/VibersBanner";
 
 export default function AdminLayout({
     children,
@@ -48,6 +49,10 @@ export default function AdminLayout({
             </div>
 
             {children}
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 24px 16px' }}>
+                <p style={{ fontSize: 12, fontWeight: 600, color: '#888', marginBottom: 8 }}>계발자들 프로젝트</p>
+                <VibersBanner size="medium" currentProject="artpage" />
+            </div>
         </div>
     );
 }
