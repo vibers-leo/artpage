@@ -24,7 +24,7 @@ const settings: any = null;
   
   const title = "Art Hyun | 예술로 여는 도시재생";
   const description = settings?.og_description || "공공미술, 공공디자인, 벽화 전문 청년 사회적기업입니다.";
-  const ogImage = settings?.og_image_url ? [settings.og_image_url] : [];
+  const ogImage = settings?.og_image_url ? [settings.og_image_url] : ["https://images.unsplash.com/photo-1578301978693-85fa9fd0c9c4?q=80&w=1200&auto=format&fit=crop"];
 
   return {
     metadataBase: new URL("https://arthyun.co.kr"),

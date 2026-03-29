@@ -244,8 +244,8 @@ export default function FeaturesPage() {
               <div className="md:col-span-2 md:row-span-2 relative p-8 md:p-10 rounded-2xl border border-gray-100 bg-white ring-1 ring-black/5 overflow-hidden group hover:shadow-lg hover:shadow-black/5 hover:border-gray-200 transition-all">
                 <div className="absolute top-0 right-0 w-2/3 h-full opacity-10">
                   <Image
-                    src="https://picsum.photos/seed/artpage-ai-gen/800/600"
-                    alt="AI 자동 생성"
+                    src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800&auto=format&fit=crop"
+                    alt="AI 자동 생성 — 아티스트 작품 분석"
                     fill
                     className="object-cover object-right"
                   />

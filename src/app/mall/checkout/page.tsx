@@ -14,7 +14,7 @@ const orderItems = [
     artist: "김민지",
     price: 35000,
     quantity: 1,
-    image: "/gallery1.png",
+    image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=200&auto=format&fit=crop",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const orderItems = [
     artist: "5인 작가",
     price: 18000,
     quantity: 2,
-    image: "/gallery2.png",
+    image: "https://images.unsplash.com/photo-1610495392873-1386266209bb?q=80&w=200&auto=format&fit=crop",
   },
 ];
 

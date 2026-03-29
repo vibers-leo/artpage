@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   
   const title = "Artway Gallery";
   const description = settings?.og_description || "부산 동구 문화 예술 공간";
-  const ogImage = settings?.og_image_url ? [settings.og_image_url] : [];
+  const ogImage = settings?.og_image_url ? [settings.og_image_url] : ["https://images.unsplash.com/photo-1544413164-5f1b361f5bfa?q=80&w=1200&auto=format&fit=crop"];
 
   return {
     title,

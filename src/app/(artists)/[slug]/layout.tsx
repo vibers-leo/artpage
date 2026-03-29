@@ -46,6 +46,14 @@ export async function generateMetadata({
       title: config.meta.title,
       description: config.meta.description,
       type: "website",
+      images: [
+        {
+          url: "https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?q=80&w=1200&auto=format&fit=crop",
+          width: 1200,
+          height: 630,
+          alt: config.meta.title,
+        },
+      ],
     },
   };
 }

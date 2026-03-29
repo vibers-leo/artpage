@@ -81,8 +81,8 @@ export default function HomePage() {
              {/* 비디오 없을 때 보여줄 기본 히어로 이미지 */}
              <div className="absolute inset-0 w-full h-full">
                <Image 
-                 src="/hero.png" 
-                 alt="Hero Background" 
+                 src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1600&auto=format&fit=crop"
+                 alt="아트 갤러리 배경" 
                  fill 
                  className="object-cover opacity-60"
                  priority

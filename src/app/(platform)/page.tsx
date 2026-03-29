@@ -103,8 +103,8 @@ export default function PlatformHomePage() {
             <div className="relative hidden lg:block">
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-gray-100 bg-white ring-1 ring-black/5 shadow-2xl shadow-black/10">
                 <Image
-                  src="https://picsum.photos/seed/artpage-hero/800/1000"
-                  alt="ArtPage 미리보기"
+                  src="https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?q=80&w=800&auto=format&fit=crop"
+                  alt="ArtPage 아티스트 갤러리 미리보기"
                   fill
                   className="object-cover"
                   priority
@@ -309,7 +309,7 @@ export default function PlatformHomePage() {
                 name: "Art Hyun",
                 slug: "arthyun",
                 desc: "예술로 여는 도시재생 — 공공미술 전문",
-                image: "https://picsum.photos/seed/arthyun-showcase/800/500",
+                image: "https://images.unsplash.com/photo-1578301978693-85fa9fd0c9c4?q=80&w=800&auto=format&fit=crop",
                 domain: "arthyun.co.kr",
                 tag: "공공미술",
               },
@@ -317,7 +317,7 @@ export default function PlatformHomePage() {
                 name: "Artway Gallery",
                 slug: "art-way",
                 desc: "부산 동구 문화 예술 공간",
-                image: "https://picsum.photos/seed/artway-showcase/800/500",
+                image: "https://images.unsplash.com/photo-1544413164-5f1b361f5bfa?q=80&w=800&auto=format&fit=crop",
                 domain: "artway.vibers.co.kr",
                 tag: "갤러리",
               },

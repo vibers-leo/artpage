@@ -14,14 +14,14 @@ export default function TenantLayout({
       </main>
       <footer className="py-12 border-t border-border bg-background">
         <div className="max-w-screen-xl mx-auto px-6 text-center text-muted-foreground text-sm">
-          <p className="mb-4">© 2024 Brand Name. All rights reserved.</p>
+          <p className="mb-4">© 2026 ArtPage. All rights reserved.</p>
           <div className="flex justify-center gap-6">
             <Link href="#" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-foreground transition-colors">Terms of Service</Link>
             <Link href="#" className="hover:text-foreground transition-colors">Instagram</Link>
           </div>
           <p className="mt-8 text-xs opacity-50">
-            Powered by <Link href="/" className="hover:underline">Platform Name</Link>
+            Powered by <Link href="/" className="hover:underline">ArtPage</Link>
           </p>
         </div>
       </footer>

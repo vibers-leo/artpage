@@ -14,8 +14,8 @@ export default function AboutPage() {
         {/* 배경 이미지 */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/view.jpg"
-            alt="북촌 아트 스페이스"
+            src="https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?q=80&w=1200&auto=format&fit=crop"
+            alt="북촌 아트 스페이스 전경"
             fill
             className="object-cover opacity-20"
             priority
@@ -73,8 +73,8 @@ export default function AboutPage() {
             {/* 오른쪽: 이미지 */}
             <div className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-lg animate-fade-in">
               <Image
-                src="/gallery1.png"
-                alt="갤러리 내부"
+                src="https://images.unsplash.com/photo-1544413164-5f1b361f5bfa?q=80&w=800&auto=format&fit=crop"
+                alt="갤러리 내부 전시 공간"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 768px) 100vw, 50vw"
