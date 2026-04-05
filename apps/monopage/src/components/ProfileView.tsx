@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { LinkCard } from '@/components/LinkCard';
 import { SnsGallery } from '@/components/SnsGallery';
+import { getPublicProfile } from '@/lib/api';
 
 interface ProfileViewProps {
   username: string;
@@ -12,30 +13,13 @@ interface ProfileViewProps {
 export function ProfileView({ username }: ProfileViewProps) {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    // Mocking the response with Dynamic Theme & AI Bio:
-    setTimeout(() => {
-      setProfile({
-        username: username,
-        bio: 'Creating digital experiences at the intersection of art and code. 🚀', // AI Generated
-        avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
-        theme_config: {
-          neon_color: '#00ffcc', // Extracted from photo
-          bg_tone: '#ffffff'
-        },
-        links: [
-          { id: 1, title: 'My Portfolio', url: 'https://example.com' },
-          { id: 2, title: 'Shop My Prints', url: 'https://example.com/shop' }
-        ],
-        posts: [
-          { id: '1', media_url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113', permalink: '#', media_type: 'IMAGE' },
-          { id: '2', media_url: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0', permalink: '#', media_type: 'IMAGE' },
-          { id: '3', media_url: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb', permalink: '#', media_type: 'VIDEO' }
-        ]
-      });
-      setLoading(false);
-    }, 800);
+    getPublicProfile(username)
+      .then(setProfile)
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
   }, [username]);
 
   if (loading) return (
@@ -44,33 +28,44 @@ export function ProfileView({ username }: ProfileViewProps) {
     </div>
   );
 
+  if (notFound) return (
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+      <p className="text-4xl font-black">404</p>
+      <p className="text-gray-400 text-sm font-medium">@{username} 페이지를 찾을 수 없어요</p>
+    </div>
+  );
+
+  const neonColor = profile.theme_config?.neon_color || '#000000';
+  const bgTone = profile.theme_config?.bg_tone || '#ffffff';
+  const posts = profile.social_accounts?.flatMap((sa: any) => sa.posts || []) || [];
+
   return (
-    <div 
+    <div
       className="min-h-screen transition-colors duration-1000"
-      style={{ 
-        backgroundColor: profile.theme_config.bg_tone,
-        '--accent-neon': profile.theme_config.neon_color 
+      style={{
+        backgroundColor: bgTone,
+        '--accent-neon': neonColor,
       } as React.CSSProperties}
     >
       <div className="max-w-xl mx-auto px-6 py-24 flex flex-col items-center">
-        <ProfileHeader 
-          username={profile.username as string} 
-          bio={profile.bio} 
-          avatarUrl={profile.avatar_url} 
+        <ProfileHeader
+          username={profile.username}
+          bio={profile.bio || ''}
+          avatarUrl={profile.avatar_url}
         />
 
         <div className="w-full space-y-3">
-          {profile.links.map((link: any) => (
-            <LinkCard 
-              key={link.id} 
-              title={link.title} 
-              url={link.url} 
+          {(profile.links || []).map((link: any) => (
+            <LinkCard
+              key={link.id}
+              title={link.title}
+              url={link.url}
               className="hover:border-[var(--accent-neon)] group transition-all"
             />
           ))}
         </div>
 
-        <SnsGallery posts={profile.posts} />
+        {posts.length > 0 && <SnsGallery posts={posts} />}
 
         <div className="mt-20 opacity-20 text-center text-[10px] font-black uppercase tracking-widest">
           Created with Monopage
