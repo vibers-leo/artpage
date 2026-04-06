@@ -10,6 +10,19 @@ const KAKAO_REST_KEY = '3a4930ab39652ad5f387496697bf66ba';
 const KAKAO_REDIRECT = 'https://monopage.kr/auth/kakao/callback';
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_KEY}&redirect_uri=${KAKAO_REDIRECT}&response_type=code`;
 
+const NAVER_CLIENT_ID = 'Dfa1NH9TT4BY22rcjdv1';
+const NAVER_REDIRECT = 'https://monopage.kr/auth/naver/callback';
+const NAVER_STATE = 'monopage_login';
+const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${NAVER_REDIRECT}&state=${NAVER_STATE}`;
+
+function NaverIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+      <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/>
+    </svg>
+  );
+}
+
 function KakaoIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#3C1E1E]">
@@ -27,6 +40,8 @@ export default function LoginPage() {
     const e = searchParams.get('error');
     if (e === 'kakao_cancelled') return '카카오 로그인이 취소되었습니다.';
     if (e === 'kakao_failed') return '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
+    if (e === 'naver_cancelled') return '네이버 로그인이 취소되었습니다.';
+    if (e === 'naver_failed') return '네이버 로그인에 실패했습니다. 다시 시도해주세요.';
     return null;
   });
 
@@ -45,9 +60,8 @@ export default function LoginPage() {
     }
   };
 
-  const handleKakao = () => {
-    window.location.href = KAKAO_AUTH_URL;
-  };
+  const handleKakao = () => { window.location.href = KAKAO_AUTH_URL; };
+  const handleNaver = () => { window.location.href = NAVER_AUTH_URL; };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
@@ -69,7 +83,13 @@ export default function LoginPage() {
             <KakaoIcon />
             카카오로 시작하기
           </button>
-          {/* 네이버·구글은 키 받은 후 추가 */}
+          <button
+            onClick={handleNaver}
+            className="w-full py-4 bg-[#03C75A] rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all"
+          >
+            <NaverIcon />
+            네이버로 시작하기
+          </button>
         </div>
 
         {/* 구분선 */}

@@ -39,7 +39,37 @@ class Api::V1::SocialAuthController < ApplicationController
     }
   end
 
-  # POST /api/v1/auth/naver  (추후)
+  # POST /api/v1/auth/naver
+  def naver
+    code         = params[:code]
+    state        = params[:state]
+    redirect_uri = params[:redirect_uri] || "#{ENV['FRONTEND_URL']}/auth/naver/callback"
+
+    token_res = naver_exchange_token(code, state, redirect_uri)
+    return render json: { error: '네이버 토큰 교환 실패' }, status: :unprocessable_entity unless token_res['access_token']
+
+    naver_user = naver_fetch_user(token_res['access_token'])
+    response_data = naver_user['response']
+    return render json: { error: '네이버 사용자 정보 조회 실패' }, status: :unprocessable_entity unless response_data&.dig('id')
+
+    uid        = response_data['id']
+    email      = response_data['email']
+    name       = response_data['name'] || response_data['nickname'] || email&.split('@')&.first || "user_#{uid[0..5]}"
+    avatar_url = response_data['profile_image']
+
+    user = find_or_create_social_user(
+      provider: 'naver', uid: uid,
+      email: email, name: name, avatar_url: avatar_url
+    )
+
+    jwt = encode_token({ user_id: user.id })
+    render json: {
+      token: jwt,
+      user: user.as_json(only: [:id, :email, :name, :avatar_url, :provider]),
+      profile: user.profile.as_json(only: [:username, :bio, :avatar_url, :display_name])
+    }
+  end
+
   # POST /api/v1/auth/google (추후)
 
   private
@@ -87,6 +117,33 @@ class Api::V1::SocialAuthController < ApplicationController
       i += 1
     end
     candidate
+  end
+
+  def naver_exchange_token(code, state, redirect_uri)
+    uri = URI('https://nid.naver.com/oauth2.0/token')
+    res = Net::HTTP.post_form(uri, {
+      grant_type:    'authorization_code',
+      client_id:     ENV['NAVER_CLIENT_ID'],
+      client_secret: ENV['NAVER_CLIENT_SECRET'],
+      redirect_uri:  redirect_uri,
+      code:          code,
+      state:         state
+    })
+    JSON.parse(res.body)
+  rescue => e
+    Rails.logger.error "Naver token exchange error: #{e}"
+    {}
+  end
+
+  def naver_fetch_user(access_token)
+    uri = URI('https://openapi.naver.com/v1/nid/me')
+    req = Net::HTTP::Get.new(uri)
+    req['Authorization'] = "Bearer #{access_token}"
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+    JSON.parse(res.body)
+  rescue => e
+    Rails.logger.error "Naver user fetch error: #{e}"
+    {}
   end
 
   def kakao_exchange_token(code, redirect_uri)
