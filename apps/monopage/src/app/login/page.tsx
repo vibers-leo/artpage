@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, ArrowRight } from 'lucide-react';
@@ -46,7 +46,7 @@ function KakaoIcon() {
   );
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -82,81 +82,58 @@ export default function LoginPage() {
   const handleGoogle = () => { window.location.href = GOOGLE_AUTH_URL; };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
-      <div className="max-w-md w-full flex flex-col gap-8">
-        <div>
-          <Link href="/" className="font-extrabold text-xl tracking-tighter">
-            Monopage<span className="text-gray-300">.</span>
-          </Link>
-          <h1 className="text-3xl font-black tracking-tightest mt-6">다시 돌아오셨군요.</h1>
-          <p className="text-gray-400 text-sm font-medium mt-2">로그인하고 내 페이지를 관리하세요.</p>
-        </div>
-
-        {/* 소셜 로그인 */}
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={handleKakao}
-            className="w-full py-4 bg-[#FEE500] rounded-2xl font-black text-sm text-[#3C1E1E] flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all"
-          >
-            <KakaoIcon />
-            카카오로 시작하기
-          </button>
-          <button
-            onClick={handleNaver}
-            className="w-full py-4 bg-[#03C75A] rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all"
-          >
-            <NaverIcon />
-            네이버로 시작하기
-          </button>
-          <button
-            onClick={handleGoogle}
-            className="w-full py-4 bg-white border border-gray-200 rounded-2xl font-black text-sm text-gray-700 flex items-center justify-center gap-2.5 hover:bg-gray-50 active:scale-95 transition-all"
-          >
-            <GoogleIcon />
-            구글로 시작하기
-          </button>
-        </div>
-
-        {/* 구분선 */}
-        <div className="flex items-center gap-4">
-          <div className="flex-1 h-px bg-gray-100" />
-          <span className="text-xs text-gray-300 font-bold">또는 이메일로 로그인</span>
-          <div className="flex-1 h-px bg-gray-100" />
-        </div>
-
-        <div className="flex flex-col gap-3 -mt-4">
-          <input
-            type="email"
-            placeholder="이메일"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="w-full p-4 border border-gray-100 rounded-2xl text-sm font-bold outline-none focus:border-black transition-colors"
-          />
-          <input
-            type="password"
-            placeholder="비밀번호"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-            className="w-full p-4 border border-gray-100 rounded-2xl text-sm font-bold outline-none focus:border-black transition-colors"
-          />
-        </div>
-
-        {error && <p className="text-red-500 text-xs font-bold text-center -mt-4">{error}</p>}
-
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="w-full py-5 bg-black text-white rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
-        >
-          {loading ? <Loader2 size={18} className="animate-spin" /> : <>로그인 <ArrowRight size={18} /></>}
-        </button>
-
-        <p className="text-center text-sm text-gray-400">
-          계정이 없으신가요?{' '}
-          <Link href="/onboard" className="font-black text-black hover:underline">무료로 시작하기</Link>
-        </p>
+    <div className="max-w-md w-full flex flex-col gap-8">
+      <div>
+        <Link href="/" className="font-extrabold text-xl tracking-tighter">
+          Monopage<span className="text-gray-300">.</span>
+        </Link>
+        <h1 className="text-3xl font-black tracking-tightest mt-6">다시 돌아오셨군요.</h1>
+        <p className="text-gray-400 text-sm font-medium mt-2">로그인하고 내 페이지를 관리하세요.</p>
       </div>
+
+      <div className="flex flex-col gap-3">
+        <button onClick={handleKakao} className="w-full py-4 bg-[#FEE500] rounded-2xl font-black text-sm text-[#3C1E1E] flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all">
+          <KakaoIcon />카카오로 시작하기
+        </button>
+        <button onClick={handleNaver} className="w-full py-4 bg-[#03C75A] rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all">
+          <NaverIcon />네이버로 시작하기
+        </button>
+        <button onClick={handleGoogle} className="w-full py-4 bg-white border border-gray-200 rounded-2xl font-black text-sm text-gray-700 flex items-center justify-center gap-2.5 hover:bg-gray-50 active:scale-95 transition-all">
+          <GoogleIcon />구글로 시작하기
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="flex-1 h-px bg-gray-100" />
+        <span className="text-xs text-gray-300 font-bold">또는 이메일로 로그인</span>
+        <div className="flex-1 h-px bg-gray-100" />
+      </div>
+
+      <div className="flex flex-col gap-3 -mt-4">
+        <input type="email" placeholder="이메일" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full p-4 border border-gray-100 rounded-2xl text-sm font-bold outline-none focus:border-black transition-colors" />
+        <input type="password" placeholder="비밀번호" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} className="w-full p-4 border border-gray-100 rounded-2xl text-sm font-bold outline-none focus:border-black transition-colors" />
+      </div>
+
+      {error && <p className="text-red-500 text-xs font-bold text-center -mt-4">{error}</p>}
+
+      <button onClick={handleLogin} disabled={loading} className="w-full py-5 bg-black text-white rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50">
+        {loading ? <Loader2 size={18} className="animate-spin" /> : <>로그인 <ArrowRight size={18} /></>}
+      </button>
+
+      <p className="text-center text-sm text-gray-400">
+        계정이 없으신가요?{' '}
+        <Link href="/onboard" className="font-black text-black hover:underline">무료로 시작하기</Link>
+      </p>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
+      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin text-gray-300" />}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }

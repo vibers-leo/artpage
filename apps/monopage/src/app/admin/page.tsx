@@ -6,12 +6,14 @@ import { LinkCard } from '@/components/LinkCard';
 import {
   Plus, Save, Settings, Link as LinkIcon,
   ChevronLeft, Trash2, GripVertical, Check, X, Loader2, LogOut, Camera,
+  Shield, AlertTriangle, Unlink,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   getMyProfile, updateProfile,
   getLinks, createLink, updateLink, deleteLink,
+  changePassword, deleteAccount, getSocialConnections, disconnectSocial,
   clearToken, getToken,
 } from '@/lib/api';
 
@@ -31,12 +33,22 @@ export default function AdminDashboard() {
   const [editingLink, setEditingLink] = useState<number | null>(null);
   const [newLink, setNewLink] = useState<{ title: string; url: string } | null>(null);
 
+  // account section
+  const [connections, setConnections] = useState<{ provider: string | null; uid: string | null; has_password: boolean; email: string | null } | null>(null);
+  const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' });
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwMsg, setPwMsg] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
+
   const loadData = useCallback(async () => {
     if (!getToken()) { router.push('/login'); return; }
     try {
-      const [p, l] = await Promise.all([getMyProfile(), getLinks()]);
+      const [p, l, c] = await Promise.all([getMyProfile(), getLinks(), getSocialConnections()]);
       setProfile({ username: p.username || '', bio: p.bio || '', avatar_url: p.avatar_url || '' });
       setLinks(l);
+      setConnections(c);
     } catch {
       router.push('/login');
     } finally {
@@ -284,6 +296,132 @@ export default function AdminDashboard() {
             <button className="w-full py-4 border border-dashed border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-black transition-colors">
               Connect New Account
             </button>
+          </section>
+
+          {/* Account */}
+          <section className="border-t border-gray-50 pt-6">
+            <label className="block text-[10px] font-black text-gray-300 uppercase mb-4 tracking-widest flex items-center gap-1.5">
+              <Shield size={10} /> Account
+            </label>
+
+            {/* 소셜 연동 현황 */}
+            {connections && (
+              <div className="mb-4 p-3 bg-gray-50 rounded-2xl">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">소셜 로그인 연동</p>
+                {connections.provider ? (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold capitalize">
+                      {connections.provider === 'kakao' ? '🟡 카카오' : connections.provider === 'naver' ? '🟢 네이버' : '🔵 구글'} 연동됨
+                    </span>
+                    {connections.has_password && (
+                      <button
+                        onClick={async () => {
+                          if (!confirm('소셜 연동을 해제할까요?')) return;
+                          setDisconnecting(true);
+                          try {
+                            await disconnectSocial();
+                            setConnections({ ...connections, provider: null, uid: null });
+                          } catch (e: any) { setError(e.message); }
+                          finally { setDisconnecting(false); }
+                        }}
+                        disabled={disconnecting}
+                        className="flex items-center gap-1 text-[10px] font-black text-red-400 hover:text-red-600 transition-colors"
+                      >
+                        {disconnecting ? <Loader2 size={10} className="animate-spin" /> : <Unlink size={10} />} 해제
+                      </button>
+                    )}
+                    {!connections.has_password && (
+                      <span className="text-[9px] text-gray-400">(비밀번호 설정 후 해제 가능)</span>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400">연동된 소셜 계정 없음</p>
+                )}
+              </div>
+            )}
+
+            {/* 비밀번호 변경 — 소셜 전용 계정 숨김 */}
+            {connections && (connections.has_password || !connections.provider) && (
+              <div className="mb-4">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">비밀번호 변경</p>
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="password"
+                    placeholder="현재 비밀번호"
+                    value={pwForm.current}
+                    onChange={e => setPwForm({ ...pwForm, current: e.target.value })}
+                    className="w-full px-3 py-2.5 text-xs font-medium border border-gray-100 rounded-xl outline-none focus:border-black transition-colors"
+                  />
+                  <input
+                    type="password"
+                    placeholder="새 비밀번호 (6자 이상)"
+                    value={pwForm.next}
+                    onChange={e => setPwForm({ ...pwForm, next: e.target.value })}
+                    className="w-full px-3 py-2.5 text-xs font-medium border border-gray-100 rounded-xl outline-none focus:border-black transition-colors"
+                  />
+                  <input
+                    type="password"
+                    placeholder="새 비밀번호 확인"
+                    value={pwForm.confirm}
+                    onChange={e => setPwForm({ ...pwForm, confirm: e.target.value })}
+                    className="w-full px-3 py-2.5 text-xs font-medium border border-gray-100 rounded-xl outline-none focus:border-black transition-colors"
+                  />
+                  {pwMsg && <p className={`text-[10px] font-bold ${pwMsg.includes('변경') ? 'text-green-500' : 'text-red-500'}`}>{pwMsg}</p>}
+                  <button
+                    onClick={async () => {
+                      if (pwForm.next !== pwForm.confirm) { setPwMsg('새 비밀번호가 일치하지 않습니다'); return; }
+                      setPwSaving(true); setPwMsg(null);
+                      try {
+                        await changePassword(pwForm.current, pwForm.next);
+                        setPwMsg('비밀번호가 변경되었습니다');
+                        setPwForm({ current: '', next: '', confirm: '' });
+                      } catch (e: any) { setPwMsg(e.message); }
+                      finally { setPwSaving(false); }
+                    }}
+                    disabled={pwSaving || !pwForm.current || !pwForm.next || !pwForm.confirm}
+                    className="w-full py-2.5 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl disabled:opacity-30 flex items-center justify-center gap-1"
+                  >
+                    {pwSaving ? <Loader2 size={10} className="animate-spin" /> : '변경하기'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 계정 삭제 */}
+            <div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+                <AlertTriangle size={10} /> 위험 구역
+              </p>
+              {!deleteConfirm ? (
+                <button
+                  onClick={() => setDeleteConfirm(true)}
+                  className="w-full py-2.5 border border-red-200 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:border-red-400 hover:text-red-600 transition-colors"
+                >
+                  계정 삭제
+                </button>
+              ) : (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-xs font-bold text-red-600 mb-3">정말 계정을 삭제할까요? 모든 데이터가 삭제되며 복구할 수 없습니다.</p>
+                  <div className="flex gap-2">
+                    <button onClick={() => setDeleteConfirm(false)} className="flex-1 py-2 border border-gray-200 text-[10px] font-black rounded-xl hover:border-black transition-colors">취소</button>
+                    <button
+                      onClick={async () => {
+                        setDeleting(true);
+                        try {
+                          await deleteAccount();
+                          clearToken();
+                          router.push('/');
+                        } catch (e: any) { setError(e.message); setDeleting(false); }
+                      }}
+                      disabled={deleting}
+                      className="flex-1 py-2 bg-red-500 text-white text-[10px] font-black rounded-xl hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
+                    >
+                      {deleting ? <Loader2 size={10} className="animate-spin" /> : '삭제 확인'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </section>
         </div>
 

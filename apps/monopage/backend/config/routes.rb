@@ -8,8 +8,12 @@ Rails.application.routes.draw do
       post 'auth/kakao', to: 'social_auth#kakao'
       post 'auth/naver', to: 'social_auth#naver'
       post 'auth/google', to: 'social_auth#google'
-      
-      resource :profile, only: [:show, :update]
+      get  'auth/connections', to: 'social_auth#connections'
+      delete 'auth/connections', to: 'social_auth#disconnect'
+
+      resource :profile, only: [:show, :update, :destroy] do
+        put 'password', to: 'profiles#change_password'
+      end
       get 'profiles/:username', to: 'profiles#public_show'
       resources :links, only: [:index, :create, :update, :destroy]
       resources :social_accounts, only: [:index, :create, :destroy] do

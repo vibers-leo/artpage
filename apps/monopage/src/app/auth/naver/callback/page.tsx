@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setToken } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://49.50.138.93:4110';
 
-export default function NaverCallbackPage() {
+function NaverCallbackInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const called = useRef(false);
@@ -47,11 +47,19 @@ export default function NaverCallbackPage() {
   }, []);
 
   return (
+    <div className="flex flex-col items-center gap-3 text-gray-400">
+      <Loader2 className="w-7 h-7 animate-spin" />
+      <p className="text-sm font-medium">네이버 로그인 처리 중...</p>
+    </div>
+  );
+}
+
+export default function NaverCallbackPage() {
+  return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex flex-col items-center gap-3 text-gray-400">
-        <Loader2 className="w-7 h-7 animate-spin" />
-        <p className="text-sm font-medium">네이버 로그인 처리 중...</p>
-      </div>
+      <Suspense fallback={<Loader2 className="w-7 h-7 animate-spin text-gray-300" />}>
+        <NaverCallbackInner />
+      </Suspense>
     </div>
   );
 }

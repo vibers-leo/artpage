@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 
 class Api::V1::SocialAuthController < ApplicationController
-  skip_before_action :authorized
+  skip_before_action :authorized, only: [:kakao, :naver, :google]
 
   # POST /api/v1/auth/kakao
   # body: { code: "...", redirect_uri: "..." }
@@ -97,6 +97,27 @@ class Api::V1::SocialAuthController < ApplicationController
       user: user.as_json(only: [:id, :email, :name, :avatar_url, :provider]),
       profile: user.profile.as_json(only: [:username, :bio, :avatar_url, :display_name])
     }
+  end
+
+  # GET /api/v1/auth/connections
+  def connections
+    user = current_user
+    render json: {
+      provider: user.provider,
+      uid: user.uid,
+      has_password: user.password_digest.present?,
+      email: user.email,
+    }
+  end
+
+  # DELETE /api/v1/auth/connections
+  def disconnect
+    user = current_user
+    if user.password_digest.blank?
+      return render json: { error: '비밀번호를 먼저 설정해야 소셜 연동을 해제할 수 있습니다' }, status: :unprocessable_entity
+    end
+    user.update!(provider: nil, uid: nil)
+    render json: { message: '소셜 연동이 해제되었습니다' }
   end
 
   private

@@ -78,3 +78,19 @@ export const updateLink = (id: number, data: { title?: string; url?: string }) =
 
 export const deleteLink = (id: number) =>
   request<void>(`/api/v1/links/${id}`, { method: 'DELETE' });
+
+// ---------- account ----------
+export const changePassword = (currentPassword: string, newPassword: string) =>
+  request<{ message: string }>('/api/v1/profile/password', {
+    method: 'PUT',
+    body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+  });
+
+export const deleteAccount = () =>
+  request<{ message: string }>('/api/v1/profile', { method: 'DELETE' });
+
+export const getSocialConnections = () =>
+  request<{ provider: string | null; uid: string | null; has_password: boolean; email: string | null }>('/api/v1/auth/connections');
+
+export const disconnectSocial = () =>
+  request<{ message: string }>('/api/v1/auth/connections', { method: 'DELETE' });
