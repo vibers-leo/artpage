@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'signup', to: 'auth#signup'
       post 'login', to: 'auth#login'
+      post 'auth/kakao', to: 'social_auth#kakao'
+      post 'auth/naver', to: 'social_auth#naver'
+      post 'auth/google', to: 'social_auth#google'
       
       resource :profile, only: [:show, :update]
       get 'profiles/:username', to: 'profiles#public_show'
