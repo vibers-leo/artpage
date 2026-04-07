@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: "모노페이지 | 1페이지 웹사이트 빌더",
   description: "누구나 1페이지 웹사이트를 쉽게 만들고 공유할 수 있는 빌더 서비스. 템플릿 선택부터 도메인 연결까지 논코딩으로 완성.",
   metadataBase: new URL("https://monopage.kr"),
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "모노페이지 | 1페이지 웹사이트 빌더",
     description: "누구나 1페이지 웹사이트를 쉽게 만들고 공유할 수 있는 빌더 서비스.",
