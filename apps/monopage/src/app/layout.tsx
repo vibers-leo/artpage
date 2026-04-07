@@ -8,16 +8,16 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "모노페이지 | 1페이지 웹사이트 빌더",
-  description: "누구나 1페이지 웹사이트를 쉽게 만들고 공유할 수 있는 빌더 서비스. 템플릿 선택부터 도메인 연결까지 논코딩으로 완성.",
+  title: "모노페이지 — 나를 위한 단 하나의 페이지",
+  description: "나를 위한 단 하나의 페이지. 링크, 프로필, 소개까지 하나의 URL로 완성하는 가장 심플한 웹 페이지 빌더.",
   metadataBase: new URL("https://monopage.kr"),
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "모노페이지 | 1페이지 웹사이트 빌더",
-    description: "누구나 1페이지 웹사이트를 쉽게 만들고 공유할 수 있는 빌더 서비스.",
+    title: "모노페이지 — 나를 위한 단 하나의 페이지",
+    description: "나를 위한 단 하나의 페이지. 링크, 프로필, 소개까지 하나의 URL로 완성하는 가장 심플한 웹 페이지 빌더.",
     url: "https://monopage.kr",
     siteName: "모노페이지",
     locale: "ko_KR",
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "모노페이지 | 1페이지 웹사이트 빌더",
-    description: "누구나 1페이지 웹사이트를 쉽게 만들고 공유할 수 있는 빌더 서비스.",
+    title: "모노페이지 — 나를 위한 단 하나의 페이지",
+    description: "나를 위한 단 하나의 페이지. 링크, 프로필, 소개까지 하나의 URL로 완성하는 가장 심플한 웹 페이지 빌더.",
     images: ["/og-image.png"],
   },
 };
