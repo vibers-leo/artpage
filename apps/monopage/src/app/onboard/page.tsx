@@ -10,7 +10,7 @@ async function uploadPhoto(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
   const res = await fetch('/api/upload', { method: 'POST', body: formData });
-  if (!res.ok) throw new Error('사진 업로드 실패');
+  if (!res.ok) throw new Error('사진 올리기 실패');
   const data = await res.json();
   return data.url;
 }
@@ -47,7 +47,7 @@ export default function Onboarding() {
       const res = await signup(form.email, form.password, form.username);
       setToken(res.token);
 
-      // 사진이 있으면 업로드 후 avatar_url 저장
+      // 사진이 있으면 올리기 후 avatar_url 저장
       if (photoFile) {
         const avatarUrl = await uploadPhoto(photoFile);
         await updateProfile({ avatar_url: avatarUrl });
@@ -113,7 +113,7 @@ export default function Onboarding() {
                 ) : (
                   <>
                     <Camera className="w-8 h-8 text-gray-200 group-hover:text-black transition-colors" />
-                    <span className="text-xs font-bold text-gray-400">프로필 사진 업로드</span>
+                    <span className="text-xs font-bold text-gray-400">프로필 사진 올리기</span>
                     <span className="text-[10px] text-gray-300">선택사항 — 나중에 설정 가능</span>
                   </>
                 )}

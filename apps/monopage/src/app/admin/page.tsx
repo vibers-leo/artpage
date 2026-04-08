@@ -112,7 +112,7 @@ export default function AdminDashboard() {
       const formData = new FormData();
       formData.append('file', file);
       const res = await fetch('/api/upload', { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('업로드 실패');
+      if (!res.ok) throw new Error('올리기 실패');
       const { url } = await res.json();
       await updateProfile({ avatar_url: url });
       setProfile(p => ({ ...p, avatar_url: url }));
@@ -228,14 +228,13 @@ export default function AdminDashboard() {
                           onClick={() => handleDeleteLink(link.id)}
                           className="flex items-center gap-1 text-[10px] font-black text-red-400 hover:text-red-600 transition-colors"
                         >
-                          <Trash2 size={10} /> 삭제
+                          <Trash2 size={10} /> 없애기
                         </button>
                         <button
                           onClick={() => handleUpdateLink(link.id)}
                           className="flex items-center gap-1 text-[10px] font-black text-black hover:opacity-50 transition-opacity"
                         >
-                          <Check size={10} /> 완료
-                        </button>
+                          <Check size={10} /> 완료했어요                         </button>
                       </div>
                     </div>
                   ) : (
@@ -361,7 +360,7 @@ export default function AdminDashboard() {
                   />
                   <input
                     type="password"
-                    placeholder="새 비밀번호 확인"
+                    placeholder="새 비밀번호 확인해요"
                     value={pwForm.confirm}
                     onChange={e => setPwForm({ ...pwForm, confirm: e.target.value })}
                     className="w-full px-3 py-2.5 text-xs font-medium border border-gray-100 rounded-xl outline-none focus:border-black transition-colors"
@@ -387,7 +386,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* 계정 삭제 */}
+            {/* 계정 없애기 */}
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
                 <AlertTriangle size={10} /> 위험 구역
@@ -397,11 +396,11 @@ export default function AdminDashboard() {
                   onClick={() => setDeleteConfirm(true)}
                   className="w-full py-2.5 border border-red-200 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:border-red-400 hover:text-red-600 transition-colors"
                 >
-                  계정 삭제
+                  계정 없애기
                 </button>
               ) : (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
-                  <p className="text-xs font-bold text-red-600 mb-3">정말 계정을 삭제할까요? 모든 데이터가 삭제되며 복구할 수 없습니다.</p>
+                  <p className="text-xs font-bold text-red-600 mb-3">정말 계정을 없애기할까요? 모든 데이터가 없애기되며 복구할 수 없습니다.</p>
                   <div className="flex gap-2">
                     <button onClick={() => setDeleteConfirm(false)} className="flex-1 py-2 border border-gray-200 text-[10px] font-black rounded-xl hover:border-black transition-colors">취소</button>
                     <button
@@ -416,7 +415,7 @@ export default function AdminDashboard() {
                       disabled={deleting}
                       className="flex-1 py-2 bg-red-500 text-white text-[10px] font-black rounded-xl hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
                     >
-                      {deleting ? <Loader2 size={10} className="animate-spin" /> : '삭제 확인'}
+                      {deleting ? <Loader2 size={10} className="animate-spin" /> : '없애기 확인해요'}
                     </button>
                   </div>
                 </div>
