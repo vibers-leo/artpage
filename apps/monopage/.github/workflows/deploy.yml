@@ -20,6 +20,7 @@ jobs:
             cd /root/projects/monopage
             git stash 2>/dev/null || true
             git pull origin main
+            cd apps/monopage
             docker compose up -d --build
             sleep 15
             curl -sf http://localhost:4110 || (echo "❌ 헬스체크 실패" && exit 1)
