@@ -15,3 +15,5 @@ session-logs/
 package-lock.json
 *.tsbuildinfo
 next-env.d.ts
+out/
+.next/
