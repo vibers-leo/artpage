@@ -31,7 +31,7 @@ export default function Home() {
           <Link href="/login" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors">
             로그인
           </Link>
-          <Link href="/onboard" className="px-5 py-2 bg-[var(--accent)] text-white rounded-lg text-sm font-semibold hover:shadow-lg hover:shadow-[var(--accent)]/20 transition-all hover:scale-105 active:scale-95">
+          <Link href="/onboard" className="px-5 py-2 bg-[var(--btn-primary)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--btn-primary-hover)] hover:shadow-lg transition-all hover:scale-105 active:scale-95">
             시작하기
           </Link>
         </div>
@@ -55,7 +55,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-20">
-          <Link href="/onboard" className="group px-8 py-4 bg-[var(--accent)] text-white rounded-lg text-base font-semibold flex items-center gap-2 hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all hover:scale-105 active:scale-95">
+          <Link href="/onboard" className="group px-8 py-4 bg-[var(--btn-primary)] text-white rounded-lg text-base font-semibold flex items-center gap-2 hover:bg-[var(--btn-primary-hover)] hover:shadow-lg transition-all hover:scale-105 active:scale-95">
             무료로 시작 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link href="/" className="px-8 py-4 bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] rounded-lg text-base font-semibold hover:bg-[var(--background)] transition-colors">
