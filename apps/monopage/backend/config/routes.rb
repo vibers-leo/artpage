@@ -15,7 +15,9 @@ Rails.application.routes.draw do
         put 'password', to: 'profiles#change_password'
       end
       get 'profiles/:username', to: 'profiles#public_show'
-      resources :links, only: [:index, :create, :update, :destroy]
+      resources :links, only: [:index, :create, :update, :destroy] do
+        post 'reorder', on: :collection
+      end
       resources :portfolio_items, only: [:index, :create, :update, :destroy] do
         post 'reorder', on: :collection
       end

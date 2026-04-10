@@ -79,6 +79,12 @@ export const updateLink = (id: number, data: { title?: string; url?: string }) =
 export const deleteLink = (id: number) =>
   request<void>(`/api/v1/links/${id}`, { method: 'DELETE' });
 
+export const reorderLinks = (ids: number[]) =>
+  request<any[]>('/api/v1/links/reorder', {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
+  });
+
 // ---------- account ----------
 export const changePassword = (currentPassword: string, newPassword: string) =>
   request<{ message: string }>('/api/v1/profile/password', {

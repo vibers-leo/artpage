@@ -13,8 +13,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   getMyProfile, updateProfile,
-  getLinks, createLink, updateLink, deleteLink,
-  getPortfolioItems, createPortfolioItem, updatePortfolioItem, deletePortfolioItem,
+  getLinks, createLink, updateLink, deleteLink, reorderLinks,
+  getPortfolioItems, createPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolioItems,
   changePassword, deleteAccount, getSocialConnections, disconnectSocial,
   clearToken, getToken,
 } from '@/lib/api';
@@ -181,6 +181,35 @@ export default function AdminDashboard() {
     setPortfolioItems(portfolioItems.map(i => i.id === id ? { ...i, [field]: value } : i));
   };
 
+  // --- Drag reorder ---
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
+
+  const handleDragStart = (index: number) => { dragItem.current = index; };
+  const handleDragOver = (e: React.DragEvent, index: number) => { e.preventDefault(); dragOverItem.current = index; };
+
+  const handleLinkDrop = async () => {
+    if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) return;
+    const reordered = [...links];
+    const [moved] = reordered.splice(dragItem.current, 1);
+    reordered.splice(dragOverItem.current, 0, moved);
+    setLinks(reordered);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    try { await reorderLinks(reordered.map(l => l.id)); } catch { /* silent */ }
+  };
+
+  const handlePortfolioDrop = async () => {
+    if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) return;
+    const reordered = [...portfolioItems];
+    const [moved] = reordered.splice(dragItem.current, 1);
+    reordered.splice(dragOverItem.current, 0, moved);
+    setPortfolioItems(reordered);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    try { await reorderPortfolioItems(reordered.map(i => i.id)); } catch { /* silent */ }
+  };
+
   const logout = () => { clearToken(); router.push('/'); };
 
   if (loading) return (
@@ -305,8 +334,15 @@ export default function AdminDashboard() {
               </div>
 
               <div className="flex flex-col gap-2">
-                {links.map(link => (
-                  <div key={link.id}>
+                {links.map((link, index) => (
+                  <div
+                    key={link.id}
+                    draggable={editingLink !== link.id}
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDrop={handleLinkDrop}
+                    className="transition-opacity"
+                  >
                     {editingLink === link.id ? (
                       <div className="flex flex-col gap-2 p-3 border border-black rounded-2xl bg-gray-50">
                         <input
@@ -414,8 +450,15 @@ export default function AdminDashboard() {
               )}
 
               <div className="flex flex-col gap-2">
-                {portfolioItems.map(item => (
-                  <div key={item.id}>
+                {portfolioItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    draggable={editingPortfolio !== item.id}
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDrop={handlePortfolioDrop}
+                    className="transition-opacity"
+                  >
                     {editingPortfolio === item.id ? (
                       <div className="flex flex-col gap-2 p-3 border border-black rounded-2xl bg-gray-50">
                         <div className="w-full h-32 rounded-xl overflow-hidden bg-gray-100">

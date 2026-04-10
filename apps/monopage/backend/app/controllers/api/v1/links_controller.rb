@@ -27,6 +27,14 @@ class Api::V1::LinksController < ApplicationController
     head :no_content
   end
 
+  def reorder
+    ids = params[:ids]
+    ids.each_with_index do |id, index|
+      current_user.profile.links.where(id: id).update_all(position: index)
+    end
+    render json: current_user.profile.links.order(:position)
+  end
+
   private
 
   def link_params

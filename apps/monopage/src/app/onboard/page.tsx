@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Sparkles, ArrowRight, Loader2, X, User, Plus, Trash2, Link as LinkIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -23,6 +23,17 @@ export default function Onboarding() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [links, setLinks] = useState<DetectedLink[]>([]);
   const [linkInput, setLinkInput] = useState('');
+
+  // 랜딩에서 입력한 draft 링크 불러오기
+  useEffect(() => {
+    try {
+      const draft = sessionStorage.getItem('monopage_draft_links');
+      if (draft) {
+        setLinks(JSON.parse(draft));
+        sessionStorage.removeItem('monopage_draft_links');
+      }
+    } catch { /* ignore */ }
+  }, []);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
