@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       end
       get 'profiles/:username', to: 'profiles#public_show'
       resources :links, only: [:index, :create, :update, :destroy]
+      resources :portfolio_items, only: [:index, :create, :update, :destroy] do
+        post 'reorder', on: :collection
+      end
       resources :social_accounts, only: [:index, :create, :destroy] do
         get 'sync', on: :member
       end

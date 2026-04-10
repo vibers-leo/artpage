@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { LinkCard } from '@/components/LinkCard';
 import { SnsGallery } from '@/components/SnsGallery';
+import { PortfolioGallery } from '@/components/PortfolioGallery';
 import { getPublicProfile } from '@/lib/api';
 
 interface ProfileViewProps {
@@ -38,6 +39,7 @@ export function ProfileView({ username }: ProfileViewProps) {
   const neonColor = profile.theme_config?.neon_color || '#000000';
   const bgTone = profile.theme_config?.bg_tone || '#ffffff';
   const posts = profile.social_accounts?.flatMap((sa: any) => sa.posts || []) || [];
+  const portfolioItems = profile.portfolio_items || [];
 
   return (
     <div
@@ -64,6 +66,8 @@ export function ProfileView({ username }: ProfileViewProps) {
             />
           ))}
         </div>
+
+        {portfolioItems.length > 0 && <PortfolioGallery items={portfolioItems} />}
 
         {posts.length > 0 && <SnsGallery posts={posts} />}
 

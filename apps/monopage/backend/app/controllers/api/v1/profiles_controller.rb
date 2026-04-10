@@ -36,7 +36,7 @@ class Api::V1::ProfilesController < ApplicationController
 
   def public_show
     profile = Profile.find_by!(username: params[:username])
-    render json: profile, include: [:links, { social_accounts: { include: :posts } }]
+    render json: profile, include: [:links, :portfolio_items, { social_accounts: { include: :posts } }]
   end
 
   private

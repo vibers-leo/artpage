@@ -1,6 +1,7 @@
 class Profile < ApplicationRecord
   belongs_to :user
   has_many :links, dependent: :destroy
+  has_many :portfolio_items, dependent: :destroy
   has_many :social_accounts, dependent: :destroy
   has_many :posts, through: :social_accounts
 

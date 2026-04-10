@@ -94,3 +94,28 @@ export const getSocialConnections = () =>
 
 export const disconnectSocial = () =>
   request<{ message: string }>('/api/v1/auth/connections', { method: 'DELETE' });
+
+// ---------- portfolio ----------
+export const getPortfolioItems = () =>
+  request<any[]>('/api/v1/portfolio_items');
+
+export const createPortfolioItem = (data: { image_url: string; title?: string; description?: string; category?: string }) =>
+  request<any>('/api/v1/portfolio_items', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+
+export const updatePortfolioItem = (id: number, data: { title?: string; description?: string; category?: string; position?: number }) =>
+  request<any>(`/api/v1/portfolio_items/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+
+export const deletePortfolioItem = (id: number) =>
+  request<void>(`/api/v1/portfolio_items/${id}`, { method: 'DELETE' });
+
+export const reorderPortfolioItems = (ids: number[]) =>
+  request<any[]>('/api/v1/portfolio_items/reorder', {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
+  });
