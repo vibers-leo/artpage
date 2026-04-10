@@ -7,7 +7,7 @@ import { PortfolioGallery } from '@/components/PortfolioGallery';
 import {
   Plus, Save, Link as LinkIcon,
   ChevronLeft, Trash2, GripVertical, Check, X, Loader2, LogOut, Camera,
-  Shield, AlertTriangle, Unlink, Image, User, Settings,
+  Shield, AlertTriangle, Unlink, Image, User, Settings, Eye, EyeOff,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,6 +42,7 @@ export default function AdminDashboard() {
   const [newLink, setNewLink] = useState<{ title: string; url: string } | null>(null);
   const [editingPortfolio, setEditingPortfolio] = useState<number | null>(null);
   const [uploadingPortfolio, setUploadingPortfolio] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   // account section
   const [connections, setConnections] = useState<{ provider: string | null; uid: string | null; has_password: boolean; email: string | null } | null>(null);
@@ -198,15 +199,20 @@ export default function AdminDashboard() {
   return (
     <div className="flex h-screen bg-white text-black overflow-hidden font-sans">
       {/* Editor Sidebar */}
-      <aside className="w-[400px] border-r border-gray-100 flex flex-col p-8 bg-white z-10">
+      <aside className={`w-full lg:w-[400px] border-r border-gray-100 flex flex-col p-6 lg:p-8 bg-white z-10 ${showPreview ? 'hidden lg:flex' : 'flex'}`}>
         <div className="flex items-center justify-between mb-6">
           <Link href="/" className="text-gray-300 hover:text-black transition-colors">
             <ChevronLeft size={20} />
           </Link>
           <h1 className="font-black text-xs uppercase tracking-[0.3em]">Editor</h1>
-          <button onClick={logout} className="text-gray-200 hover:text-black transition-colors">
-            <LogOut size={18} />
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowPreview(true)} className="text-gray-200 hover:text-black transition-colors lg:hidden">
+              <Eye size={18} />
+            </button>
+            <button onClick={logout} className="text-gray-200 hover:text-black transition-colors">
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -613,8 +619,17 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Live Preview */}
-      <main className="flex-1 bg-gray-50 flex items-center justify-center p-12 overflow-y-auto">
-        <div className="w-[375px] h-[768px] bg-white border-[8px] border-black rounded-[50px] shadow-2xl relative overflow-y-auto scrollbar-hide">
+      <main className={`flex-1 bg-gray-50 flex flex-col items-center justify-center p-6 lg:p-12 overflow-y-auto ${showPreview ? 'flex' : 'hidden lg:flex'}`}>
+        {/* Mobile: back button */}
+        {showPreview && (
+          <button
+            onClick={() => setShowPreview(false)}
+            className="lg:hidden self-start mb-4 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors"
+          >
+            <EyeOff size={14} /> 에디터로 돌아가기
+          </button>
+        )}
+        <div className="w-[375px] max-w-full h-[668px] lg:h-[768px] bg-white border-[8px] border-black rounded-[50px] shadow-2xl relative overflow-y-auto scrollbar-hide">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-20"></div>
           <div className="px-8 py-20 flex flex-col items-center">
             <div className="inline-block px-3 py-1 bg-black text-white rounded-full text-[8px] font-black uppercase tracking-widest mb-10">

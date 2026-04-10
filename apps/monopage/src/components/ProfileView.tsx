@@ -5,6 +5,7 @@ import { ProfileHeader } from '@/components/ProfileHeader';
 import { LinkCard } from '@/components/LinkCard';
 import { SnsGallery } from '@/components/SnsGallery';
 import { PortfolioGallery } from '@/components/PortfolioGallery';
+import { ShareButton } from '@/components/ShareButton';
 import { getPublicProfile } from '@/lib/api';
 
 interface ProfileViewProps {
@@ -71,7 +72,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 
         {posts.length > 0 && <SnsGallery posts={posts} />}
 
-        <div className="mt-20 opacity-20 text-center text-[10px] font-black uppercase tracking-widest">
+        <ShareButton username={profile.username} />
+
+        <div className="mt-12 opacity-20 text-center text-[10px] font-black uppercase tracking-widest">
           Created with Monopage
         </div>
       </div>
