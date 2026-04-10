@@ -125,3 +125,25 @@ export const reorderPortfolioItems = (ids: number[]) =>
     method: 'POST',
     body: JSON.stringify({ ids }),
   });
+
+// ---------- analytics ----------
+export const getAnalytics = () =>
+  request<{
+    total_views: number;
+    today_views: number;
+    total_clicks: number;
+    daily: Record<string, number>;
+    link_clicks: { link_id: number; clicks: number; title: string }[];
+  }>('/api/v1/analytics');
+
+export const trackView = (profileId: number) =>
+  request<void>('/api/v1/analytics/view', {
+    method: 'POST',
+    body: JSON.stringify({ profile_id: profileId }),
+  });
+
+export const trackClick = (profileId: number, linkId: number) =>
+  request<void>('/api/v1/analytics/click', {
+    method: 'POST',
+    body: JSON.stringify({ profile_id: profileId, link_id: linkId }),
+  });

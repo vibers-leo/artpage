@@ -7,7 +7,7 @@ import { PortfolioGallery } from '@/components/PortfolioGallery';
 import {
   Plus, Save, Link as LinkIcon,
   ChevronLeft, Trash2, GripVertical, Check, X, Loader2, LogOut, Camera,
-  Shield, AlertTriangle, Unlink, Image, User, Settings, Eye, EyeOff,
+  Shield, AlertTriangle, Unlink, Image, User, Settings, Eye, EyeOff, BarChart3, MousePointerClick,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,6 +16,7 @@ import {
   getLinks, createLink, updateLink, deleteLink, reorderLinks,
   getPortfolioItems, createPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolioItems,
   changePassword, deleteAccount, getSocialConnections, disconnectSocial,
+  getAnalytics,
   clearToken, getToken,
 } from '@/lib/api';
 
@@ -23,7 +24,15 @@ interface LinkItem { id: number; title: string; url: string; }
 interface ProfileData { username: string; bio: string; avatar_url: string; }
 interface PortfolioItemData { id: number; image_url: string; title: string; description: string; category: string; }
 
-type Tab = 'profile' | 'links' | 'portfolio' | 'settings';
+type Tab = 'profile' | 'links' | 'portfolio' | 'analytics' | 'settings';
+
+interface AnalyticsData {
+  total_views: number;
+  today_views: number;
+  total_clicks: number;
+  daily: Record<string, number>;
+  link_clicks: { link_id: number; clicks: number; title: string }[];
+}
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -43,6 +52,8 @@ export default function AdminDashboard() {
   const [editingPortfolio, setEditingPortfolio] = useState<number | null>(null);
   const [uploadingPortfolio, setUploadingPortfolio] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
   // account section
   const [connections, setConnections] = useState<{ provider: string | null; uid: string | null; has_password: boolean; email: string | null } | null>(null);
@@ -69,6 +80,13 @@ export default function AdminDashboard() {
   }, [router]);
 
   useEffect(() => { loadData(); }, [loadData]);
+
+  useEffect(() => {
+    if (activeTab === 'analytics' && !analytics) {
+      setAnalyticsLoading(true);
+      getAnalytics().then(setAnalytics).catch(() => {}).finally(() => setAnalyticsLoading(false));
+    }
+  }, [activeTab, analytics]);
 
   const save = async () => {
     setSaving(true);
@@ -222,6 +240,7 @@ export default function AdminDashboard() {
     { key: 'profile', label: 'Profile', icon: <User size={14} /> },
     { key: 'links', label: 'Links', icon: <LinkIcon size={14} /> },
     { key: 'portfolio', label: 'Portfolio', icon: <Image size={14} /> },
+    { key: 'analytics', label: 'Stats', icon: <BarChart3 size={14} /> },
     { key: 'settings', label: 'Settings', icon: <Settings size={14} /> },
   ];
 
@@ -512,6 +531,91 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* ===== ANALYTICS TAB ===== */}
+          {activeTab === 'analytics' && (
+            <section>
+              {analyticsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-6 h-6 animate-spin text-gray-300" />
+                </div>
+              ) : analytics ? (
+                <div className="flex flex-col gap-6">
+                  {/* Stats Cards */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="p-4 bg-gray-50 rounded-2xl text-center">
+                      <p className="text-2xl font-black">{analytics.total_views}</p>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">총 조회</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-2xl text-center">
+                      <p className="text-2xl font-black">{analytics.today_views}</p>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">오늘</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-2xl text-center">
+                      <p className="text-2xl font-black">{analytics.total_clicks}</p>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">클릭</p>
+                    </div>
+                  </div>
+
+                  {/* Daily Chart (7 days) */}
+                  <div>
+                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-3">최근 7일</p>
+                    <div className="flex items-end gap-1 h-24">
+                      {(() => {
+                        const days = [];
+                        for (let i = 6; i >= 0; i--) {
+                          const d = new Date();
+                          d.setDate(d.getDate() - i);
+                          const key = d.toISOString().split('T')[0];
+                          days.push({ date: key, count: analytics.daily[key] || 0 });
+                        }
+                        const max = Math.max(...days.map(d => d.count), 1);
+                        return days.map(day => (
+                          <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
+                            <div
+                              className="w-full bg-black rounded-t-lg transition-all"
+                              style={{ height: `${(day.count / max) * 80}px`, minHeight: day.count > 0 ? '4px' : '1px' }}
+                            ></div>
+                            <span className="text-[8px] text-gray-400 font-bold">
+                              {new Date(day.date).toLocaleDateString('ko', { weekday: 'narrow' })}
+                            </span>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </div>
+
+                  {/* Link Clicks Ranking */}
+                  {analytics.link_clicks.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-3">
+                        <MousePointerClick size={10} className="inline mr-1" />
+                        링크별 클릭
+                      </p>
+                      <div className="flex flex-col gap-1.5">
+                        {analytics.link_clicks.map((lc, i) => (
+                          <div key={lc.link_id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                            <span className="text-xs font-black text-gray-300 w-5">{i + 1}</span>
+                            <span className="text-xs font-bold flex-1 truncate">{lc.title || '(제목 없음)'}</span>
+                            <span className="text-xs font-black">{lc.clicks}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {analytics.total_views === 0 && analytics.total_clicks === 0 && (
+                    <div className="text-center py-8">
+                      <p className="text-sm text-gray-300 font-bold">아직 방문자가 없어요</p>
+                      <p className="text-[10px] text-gray-200 mt-1">페이지를 공유하면 여기에 통계가 나타나요</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400 text-center py-8">통계를 불러올 수 없어요</p>
+              )}
             </section>
           )}
 

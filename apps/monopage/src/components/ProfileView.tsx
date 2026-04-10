@@ -6,7 +6,7 @@ import { LinkCard } from '@/components/LinkCard';
 import { SnsGallery } from '@/components/SnsGallery';
 import { PortfolioGallery } from '@/components/PortfolioGallery';
 import { ShareButton } from '@/components/ShareButton';
-import { getPublicProfile } from '@/lib/api';
+import { getPublicProfile, trackView, trackClick } from '@/lib/api';
 
 interface ProfileViewProps {
   username: string;
@@ -19,7 +19,11 @@ export function ProfileView({ username }: ProfileViewProps) {
 
   useEffect(() => {
     getPublicProfile(username)
-      .then(setProfile)
+      .then((p) => {
+        setProfile(p);
+        // Track page view
+        trackView(p.id).catch(() => {});
+      })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [username]);
@@ -64,6 +68,7 @@ export function ProfileView({ username }: ProfileViewProps) {
               title={link.title}
               url={link.url}
               className="hover:border-[var(--accent-neon)] group transition-all"
+              onClick={() => trackClick(profile.id, link.id).catch(() => {})}
             />
           ))}
         </div>

@@ -24,6 +24,12 @@ Rails.application.routes.draw do
       resources :social_accounts, only: [:index, :create, :destroy] do
         get 'sync', on: :member
       end
+
+      # Analytics (authenticated)
+      get 'analytics', to: 'analytics#index'
+      # Analytics (public - no auth)
+      post 'analytics/view', to: 'analytics#track_view'
+      post 'analytics/click', to: 'analytics#track_click'
     end
   end
 end

@@ -7,16 +7,18 @@ interface LinkCardProps {
   url: string;
   iconType?: string;
   className?: string;
+  onClick?: () => void;
 }
 
-export const LinkCard: React.FC<LinkCardProps> = ({ title, url, className }) => {
+export const LinkCard: React.FC<LinkCardProps> = ({ title, url, className, onClick }) => {
   const isCoffee = url.includes('buymeacoffee.com');
 
   return (
-    <a 
-      href={url} 
-      target="_blank" 
+    <a
+      href={url}
+      target="_blank"
       rel="noopener noreferrer"
+      onClick={onClick}
       className={cn(
         "flex items-center justify-between p-5 bw-border rounded-3xl bg-white hover:scale-[1.02] active:scale-[0.98] transition-all group relative overflow-hidden",
         isCoffee && "border-[var(--accent-neon)] shadow-[0_0_20px_rgba(0,0,0,0.05)]",
