@@ -55,11 +55,17 @@ export default function Onboarding() {
     setStep(2);
   };
 
+  const addSingleLink = (raw: string) => {
+    if (!raw.trim()) return false;
+    const detected = detectLink(raw.trim());
+    if (links.some(l => l.url === detected.url)) return false;
+    return detected;
+  };
+
   const handleAddLink = () => {
     if (!linkInput.trim()) return;
-    const detected = detectLink(linkInput);
-    // Prevent duplicate URLs
-    if (links.some(l => l.url === detected.url)) {
+    const detected = addSingleLink(linkInput);
+    if (!detected) {
       setError('이미 추가된 링크예요');
       return;
     }
@@ -67,6 +73,27 @@ export default function Onboarding() {
     setLinkInput('');
     setError(null);
     linkInputRef.current?.focus();
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const text = e.clipboardData.getData('text');
+    const lines = text.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+    if (lines.length <= 1) return; // 한 줄이면 기본 동작
+    e.preventDefault();
+    const newLinks: DetectedLink[] = [];
+    const existingUrls = new Set(links.map(l => l.url));
+    for (const line of lines) {
+      const detected = detectLink(line);
+      if (!existingUrls.has(detected.url)) {
+        newLinks.push(detected);
+        existingUrls.add(detected.url);
+      }
+    }
+    if (newLinks.length > 0) {
+      setLinks([...links, ...newLinks]);
+      setLinkInput('');
+      setError(null);
+    }
   };
 
   const handleRemoveLink = (index: number) => {
@@ -233,11 +260,12 @@ export default function Onboarding() {
                   <input
                     ref={linkInputRef}
                     type="text"
-                    placeholder="링크 또는 @username 붙여넣기"
+                    placeholder="링크 붙여넣기 (여러 개도 OK)"
                     className="bg-transparent outline-none font-bold text-sm flex-1"
                     value={linkInput}
                     onChange={(e) => setLinkInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
+                    onPaste={handlePaste}
                   />
                 </div>
                 <button

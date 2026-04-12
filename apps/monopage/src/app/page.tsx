@@ -19,6 +19,26 @@ export default function Home() {
     inputRef.current?.focus();
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const text = e.clipboardData.getData('text');
+    const lines = text.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+    if (lines.length <= 1) return;
+    e.preventDefault();
+    const existingUrls = new Set(links.map(l => l.url));
+    const newLinks: DetectedLink[] = [];
+    for (const line of lines) {
+      const detected = detectLink(line);
+      if (!existingUrls.has(detected.url)) {
+        newLinks.push(detected);
+        existingUrls.add(detected.url);
+      }
+    }
+    if (newLinks.length > 0) {
+      setLinks([...links, ...newLinks]);
+      setInput('');
+    }
+  };
+
   const handleRemove = (index: number) => {
     setLinks(links.filter((_, i) => i !== index));
   };
@@ -71,11 +91,12 @@ export default function Home() {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="instagram.com/username"
+                placeholder="링크 붙여넣기 (여러 개도 OK)"
                 className="flex-1 text-sm font-bold outline-none bg-transparent"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+                onPaste={handlePaste}
               />
             </div>
             <button
