@@ -1,23 +1,43 @@
 'use client';
 
 import Link from "next/link";
-import { useState, useRef } from "react";
-import { ArrowRight, Sparkles, Plus, Trash2, Link as LinkIcon } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ArrowRight, Sparkles, Plus, Trash2, Link as LinkIcon, Loader2 } from "lucide-react";
 import { detectLink, getLinkIcon, type DetectedLink } from "@/lib/link-detector";
 import ChatWidget from "@/components/ChatWidget";
 
 export default function Home() {
   const [links, setLinks] = useState<DetectedLink[]>([]);
   const [input, setInput] = useState('');
+  const [aiComment, setAiComment] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const analyzeLinks = async (allLinks: DetectedLink[]) => {
+    if (allLinks.length === 0) { setAiComment(''); return; }
+    setAiLoading(true);
+    try {
+      const summary = allLinks.map(l => l.handle ? `${l.label} @${l.handle}` : `${l.label}: ${l.url}`).join(', ');
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `사용자가 다음 링크를 입력했어: ${summary}. 이 링크들을 보고 "~~ 관련 웹사이트네요! 멋진 페이지가 될 것 같아요." 형태로 한 문장만 답변해. 절대 다른 말 하지마.` }),
+      });
+      const data = await res.json();
+      setAiComment(data.response || '');
+    } catch { setAiComment(''); }
+    setAiLoading(false);
+  };
 
   const handleAdd = () => {
     if (!input.trim()) return;
     const detected = detectLink(input);
     if (links.some(l => l.url === detected.url)) { setInput(''); return; }
-    setLinks([...links, detected]);
+    const newLinks = [...links, detected];
+    setLinks(newLinks);
     setInput('');
     inputRef.current?.focus();
+    analyzeLinks(newLinks);
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -35,8 +55,10 @@ export default function Home() {
       }
     }
     if (newLinks.length > 0) {
-      setLinks([...links, ...newLinks]);
+      const all = [...links, ...newLinks];
+      setLinks(all);
       setInput('');
+      analyzeLinks(all);
     }
   };
 
@@ -123,6 +145,23 @@ export default function Home() {
                   </button>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* AI Comment */}
+          {links.length > 0 && (
+            <div className="mb-6 p-4 bg-gray-50 rounded-2xl">
+              {aiLoading ? (
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Loader2 size={14} className="animate-spin" />
+                  <span className="text-xs font-bold">링크를 분석하고 있어요...</span>
+                </div>
+              ) : aiComment ? (
+                <div>
+                  <p className="text-sm font-bold text-gray-700">{aiComment}</p>
+                  <p className="text-[11px] text-gray-400 font-medium mt-1.5">페이지를 만들려면 간단한 가입이 필요해요 (30초면 끝!)</p>
+                </div>
+              ) : null}
             </div>
           )}
 
