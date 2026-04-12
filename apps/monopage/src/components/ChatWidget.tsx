@@ -111,7 +111,7 @@ export default function ChatWidget() {
                     {mode === 'chat' ? '모노페이지 AI 도우미' : '관리자 문의'}
                   </p>
                   <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-0.5">
-                    {mode === 'chat' ? 'Powered by ZeroClaw' : '확인 후 연락드릴게요'}
+                    {mode === 'chat' ? <a href="https://vibers.co.kr" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">by Vibers Developers</a> : '확인 후 연락드릴게요'}
                   </p>
                 </div>
               </div>
