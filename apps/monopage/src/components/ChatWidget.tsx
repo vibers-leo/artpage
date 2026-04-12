@@ -166,11 +166,19 @@ export default function ChatWidget() {
                   )}
                 </div>
 
-                {/* Contact link */}
-                <div className="px-4 pb-2">
+                {/* Bottom actions */}
+                <div className="px-4 pb-2 flex items-center justify-between">
+                  {messages.length > 0 ? (
+                    <button
+                      onClick={() => setMessages([])}
+                      className="text-[10px] font-black uppercase tracking-widest text-gray-300 hover:text-black transition-colors py-1"
+                    >
+                      &larr; 처음으로
+                    </button>
+                  ) : <span />}
                   <button
                     onClick={() => setMode('contact')}
-                    className="w-full text-center text-[10px] font-black uppercase tracking-widest text-gray-300 hover:text-black transition-colors py-1"
+                    className="text-[10px] font-black uppercase tracking-widest text-gray-300 hover:text-black transition-colors py-1"
                   >
                     관리자에게 직접 문의 &rarr;
                   </button>
