@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://49.50.138.93:4110';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api/proxy';
 
 // ---------- token ----------
 export const getToken = () =>
