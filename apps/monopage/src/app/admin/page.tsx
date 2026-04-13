@@ -318,7 +318,7 @@ export default function AdminDashboard() {
                   onClick={() => setShowUserMenu(v => !v)}
                   className="flex items-center gap-2 text-[10px] font-bold text-gray-300 hover:text-black transition-colors"
                 >
-                  <span>@{profile.username}</span>
+                  <span>monopage.kr/{profile.username}</span>
                   <ChevronDown size={12} />
                 </button>
                 {showUserMenu && (
@@ -444,16 +444,21 @@ export default function AdminDashboard() {
               </section>
 
               <section>
-                <label className="block text-[10px] font-black text-gray-300 uppercase mb-3 tracking-widest">Username</label>
-                <div className="flex items-center gap-2 p-4 border border-gray-100 rounded-2xl focus-within:border-black transition-colors">
-                  <span className="text-sm text-gray-300 font-bold">@</span>
+                <label className="block text-[10px] font-black text-gray-300 uppercase mb-3 tracking-widest">내 페이지 주소</label>
+                <div className="flex items-center border border-gray-100 rounded-2xl focus-within:border-black transition-colors overflow-hidden">
+                  <span className="px-3 py-4 text-xs text-gray-300 font-bold bg-gray-50 border-r border-gray-100 shrink-0">monopage.kr/</span>
                   <input
                     value={profile.username}
-                    onChange={(e) => setProfile({ ...profile, username: e.target.value })}
-                    className="flex-1 text-sm font-bold outline-none"
-                    placeholder="your_handle"
+                    onChange={(e) => {
+                      const val = e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+                      setProfile({ ...profile, username: val });
+                    }}
+                    className="flex-1 px-3 py-4 text-sm font-bold outline-none"
+                    placeholder="your-handle"
+                    maxLength={30}
                   />
                 </div>
+                <p className="text-[10px] text-gray-300 font-medium mt-1.5">영문, 숫자, -, _ 만 사용 가능</p>
               </section>
 
               <section>
