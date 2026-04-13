@@ -8,7 +8,7 @@ import { PortfolioGallery } from '@/components/PortfolioGallery';
 import { SectionRenderer, DEFAULT_SECTIONS, type Section } from '@/components/SectionRenderer';
 import { ToastContainer, useToast } from '@/components/Toast';
 import {
-  Plus, Save, Link as LinkIcon,
+  Plus, Save, Link as LinkIcon, ArrowRight,
   ChevronLeft, Trash2, GripVertical, Check, X, Loader2, LogOut, Camera,
   Shield, AlertTriangle, Unlink, Image, User, Settings, Eye, EyeOff, BarChart3, MousePointerClick,
   Layout, Type, ChevronUp, ChevronDown,
@@ -20,6 +20,7 @@ import {
   getLinks, createLink, updateLink, deleteLink, reorderLinks,
   getPortfolioItems, createPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolioItems,
   changePassword, deleteAccount, getSocialConnections, disconnectSocial,
+  getSocialAccounts, deleteSocialAccount,
   getAnalytics,
   clearToken, getToken,
 } from '@/lib/api';
@@ -68,6 +69,7 @@ export default function AdminDashboard() {
   const [view, setView] = useState<'list' | 'editor'>('list');
   const [showSupportModal, setShowSupportModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [socialAccounts, setSocialAccounts] = useState<{ id: number; provider: string; uid: string; metadata: any }[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [sections, setSections] = useState<Section[]>(DEFAULT_SECTIONS);
@@ -84,7 +86,8 @@ export default function AdminDashboard() {
   const loadData = useCallback(async () => {
     if (!getToken()) { router.push('/login'); return; }
     try {
-      const [p, l, pi, c] = await Promise.all([getMyProfile(), getLinks(), getPortfolioItems(), getSocialConnections()]);
+      const [p, l, pi, c, sa] = await Promise.all([getMyProfile(), getLinks(), getPortfolioItems(), getSocialConnections(), getSocialAccounts().catch(() => [])]);
+      setSocialAccounts(sa as any);
       setProfile({ username: p.username || '', bio: p.bio || '', avatar_url: p.avatar_url || '', email: p.email || '' });
       setSections(p.theme_config?.sections || DEFAULT_SECTIONS);
       setLinks(l);
@@ -472,25 +475,54 @@ export default function AdminDashboard() {
               </section>
 
               <section>
-                <label className="block text-[10px] font-black text-gray-300 uppercase mb-3 tracking-widest">SNS Accounts</label>
+                <label className="block text-[10px] font-black text-gray-300 uppercase mb-3 tracking-widest">SNS 연결</label>
                 <div className="flex flex-col gap-2">
-                  <a
-                    href={`/api/instagram/login?token=${getToken() || ''}`}
-                    className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-pink-300 transition-colors group"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white">
-                      <Camera size={18} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-black">Instagram 연결</p>
-                      <p className="text-[10px] text-gray-400">게시물이 자동으로 페이지에 표시돼요</p>
-                    </div>
-                  </a>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <p className="text-[9px] text-gray-400 leading-relaxed">
-                      연결하면 Instagram 앱에서 승인 요청 화면이 나타나요. "허용"을 눌러주세요. 최근 게시물 20개가 자동으로 동기화됩니다.
-                    </p>
-                  </div>
+                  {(() => {
+                    const igAccount = socialAccounts.find(a => a.provider === 'instagram');
+                    if (igAccount) {
+                      return (
+                        <div className="flex items-center gap-3 p-4 border border-pink-200 rounded-2xl bg-pink-50/50">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white shrink-0">
+                            <Camera size={18} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-black">Instagram 연결됨</p>
+                            <p className="text-[10px] text-pink-500 font-bold">@{igAccount.metadata?.username || igAccount.uid}</p>
+                          </div>
+                          <button
+                            onClick={async () => {
+                              if (!confirm('Instagram 연결을 해제할까요?')) return;
+                              await deleteSocialAccount(igAccount.id);
+                              setSocialAccounts(sa => sa.filter(a => a.id !== igAccount.id));
+                            }}
+                            className="text-[10px] font-bold text-gray-300 hover:text-red-500 transition-colors"
+                          >
+                            해제
+                          </button>
+                        </div>
+                      );
+                    }
+                    return (
+                      <>
+                        <a
+                          href={`/api/instagram/login?token=${getToken() || ''}`}
+                          className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-pink-300 transition-colors group"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white shrink-0">
+                            <Camera size={18} />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-xs font-black">Instagram 연결하기</p>
+                            <p className="text-[10px] text-gray-400">게시물이 자동으로 페이지에 표시돼요</p>
+                          </div>
+                          <ArrowRight size={14} className="text-gray-300 group-hover:text-pink-400 transition-colors" />
+                        </a>
+                        <p className="text-[9px] text-gray-300 px-1">
+                          Instagram 앱에서 "허용"을 누르면 최근 게시물 20개가 자동으로 동기화됩니다.
+                        </p>
+                      </>
+                    );
+                  })()}
                 </div>
               </section>
             </>

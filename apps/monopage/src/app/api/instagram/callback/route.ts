@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://49.50.138.93:4110';
+const API_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://49.50.138.93:4110';
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');

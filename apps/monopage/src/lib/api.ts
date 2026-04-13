@@ -127,6 +127,13 @@ export const reorderPortfolioItems = (ids: number[]) =>
     body: JSON.stringify({ ids }),
   });
 
+// ---------- social accounts (SNS 피드용) ----------
+export const getSocialAccounts = () =>
+  request<{ id: number; provider: string; uid: string; metadata: any }[]>('/api/v1/social_accounts');
+
+export const deleteSocialAccount = (id: number) =>
+  request<void>(`/api/v1/social_accounts/${id}`, { method: 'DELETE' });
+
 // ---------- analytics ----------
 export const getAnalytics = () =>
   request<{
