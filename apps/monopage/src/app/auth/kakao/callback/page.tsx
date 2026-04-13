@@ -5,8 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { setToken } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://49.50.138.93:4110';
-
 function KakaoCallbackInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,7 +22,7 @@ function KakaoCallbackInner() {
       return;
     }
 
-    fetch(`${API_URL}/api/v1/auth/kakao`, {
+    fetch('/api/proxy/api/v1/auth/kakao', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

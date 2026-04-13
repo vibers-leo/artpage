@@ -95,9 +95,6 @@ function LoginForm() {
         <button onClick={handleKakao} className="w-full py-4 bg-[#FEE500] rounded-2xl font-black text-sm text-[#3C1E1E] flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all">
           <KakaoIcon />카카오로 시작하기
         </button>
-        <button onClick={handleNaver} className="w-full py-4 bg-[#03C75A] rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2.5 hover:brightness-95 active:scale-95 transition-all">
-          <NaverIcon />네이버로 시작하기
-        </button>
         <button onClick={handleGoogle} className="w-full py-4 bg-white border border-gray-200 rounded-2xl font-black text-sm text-gray-700 flex items-center justify-center gap-2.5 hover:bg-gray-50 active:scale-95 transition-all">
           <GoogleIcon />구글로 시작하기
         </button>
