@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Camera, Sparkles, Loader2, X, Plus, Trash2, Link as LinkIcon } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Camera, Sparkles, Loader2, X, Plus, Trash2, Link as LinkIcon, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signup, setToken, updateProfile, createLink } from '@/lib/api';
 import { detectLink, getLinkIcon, isSnsLink, type DetectedLink } from '@/lib/link-detector';
@@ -22,6 +22,7 @@ export default function Onboarding() {
   const [links, setLinks] = useState<DetectedLink[]>([]);
   const [linkInput, setLinkInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [progressStep, setProgressStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const linkInputRef = useRef<HTMLInputElement>(null);
@@ -99,10 +100,13 @@ export default function Onboarding() {
     if (form.password.length < 6) { setError('비밀번호는 6자 이상이어야 해요'); return; }
 
     setIsGenerating(true);
+    setProgressStep(0);
     setError(null);
     try {
+      setProgressStep(1);
       const res = await signup(form.email, form.password, form.username);
       setToken(res.token);
+      setProgressStep(2);
 
       if (photoFile) {
         try {
@@ -111,11 +115,16 @@ export default function Onboarding() {
         } catch { /* 스킵 */ }
       }
 
-      for (const link of links) {
-        const title = link.handle ? `${link.label} @${link.handle}` : link.label;
-        await createLink(title, link.url);
+      if (links.length > 0) {
+        setProgressStep(3);
+        for (const link of links) {
+          const title = link.handle ? `${link.label} @${link.handle}` : link.label;
+          await createLink(title, link.url);
+        }
       }
 
+      setProgressStep(4);
+      await new Promise(r => setTimeout(r, 600));
       router.push('/admin');
     } catch (e: any) {
       setIsGenerating(false);
@@ -133,18 +142,33 @@ export default function Onboarding() {
     <div className="min-h-screen bg-white text-black flex items-center justify-center p-6 font-sans">
       <div className="max-w-md w-full">
           {isGenerating ? (
-            <div className="flex flex-col items-center gap-6 text-center animate-in fade-in zoom-in-95 duration-300">
-              <div className="relative">
-                <div className="absolute inset-0 bg-black/5 animate-ping rounded-full"></div>
-                <Loader2 className="w-12 h-12 animate-spin text-black" />
-              </div>
+            <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-300">
               <div>
-                <h2 className="text-xl font-black uppercase tracking-widest mb-2">페이지 만드는 중...</h2>
-                <p className="text-gray-400 text-sm font-medium">
-                  {links.length > 0
-                    ? `${links.length}개 링크로 페이지를 만들고 있어요`
-                    : '페이지를 준비하고 있어요'}
-                </p>
+                <h2 className="text-3xl font-black tracking-tight leading-tight mb-1">페이지 만드는 중<span className="animate-pulse">...</span></h2>
+                <p className="text-gray-400 text-sm font-medium">잠깐만요, 금방 돼요</p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {[
+                  { step: 1, label: '계정 만들기', sub: '이메일 · 비밀번호 등록 중' },
+                  { step: 2, label: '프로필 설정', sub: '기본 정보 저장 중' },
+                  ...(links.length > 0 ? [{ step: 3, label: `링크 ${links.length}개 추가`, sub: '링크 카드 생성 중' }] : []),
+                  { step: links.length > 0 ? 4 : 3, label: '페이지 완성!', sub: '어드민으로 이동 중' },
+                ].map(({ step, label, sub }) => {
+                  const done = progressStep > step;
+                  const active = progressStep === step;
+                  return (
+                    <div key={step} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 ${active ? 'bg-black text-white' : done ? 'bg-gray-50' : 'opacity-30'}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-black ${active ? 'bg-white text-black' : done ? 'bg-black text-white' : 'bg-gray-200 text-gray-400'}`}>
+                        {done ? <Check size={13} /> : active ? <Loader2 size={13} className="animate-spin" /> : step}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`text-sm font-black ${active ? 'text-white' : done ? 'text-black' : 'text-gray-400'}`}>{label}</p>
+                        {active && <p className="text-[11px] text-gray-300 font-medium mt-0.5">{sub}</p>}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : (
