@@ -50,8 +50,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({ title, url, favicon, domain,
       )}
     >
       {/* 아이콘 */}
-      <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 flex items-center justify-center text-sm font-black"
-        style={sns ? { backgroundColor: sns.color + '15' } : { backgroundColor: '#f3f4f6' }}>
+      <div className="w-10 h-10 shrink-0 flex items-center justify-center text-sm font-black overflow-hidden"
+        style={{
+          backgroundColor: sns ? sns.color + '15' : '#f3f4f6',
+          borderRadius: '28%',
+        }}>
         {sns ? (
           <span style={{ color: sns.color }}>{sns.emoji}</span>
         ) : favicon && !faviconError ? (

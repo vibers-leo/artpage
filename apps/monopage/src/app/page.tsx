@@ -265,7 +265,7 @@ export default function Home() {
                           key={`preview-${link.url}-${i}`}
                           className="w-full flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-xl border border-gray-100"
                         >
-                          <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                          <div className="w-7 h-7 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden" style={{ borderRadius: '28%' }}>
                             {link.favicon ? (
                               <img src={link.favicon} alt="" className="w-4 h-4 object-contain" />
                             ) : (
