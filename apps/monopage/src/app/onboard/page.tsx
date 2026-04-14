@@ -281,17 +281,23 @@ export default function Onboarding() {
               {/* 페이지 주소 + 계정 정보 */}
               <div className="flex flex-col gap-3">
                 <div>
-                  <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">페이지 주소</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">페이지 주소</p>
+                    <p className="text-[10px] font-bold text-blue-400">영문·숫자·_ 만 가능</p>
+                  </div>
                   <div className="flex items-center gap-0 border border-gray-200 rounded-2xl bg-gray-50 focus-within:border-black transition-colors overflow-hidden">
                     <span className="text-[11px] font-bold text-gray-300 pl-4 shrink-0">monopage.kr/</span>
                     <input
                       type="text"
-                      placeholder="내사용자명"
+                      placeholder="my_page"
                       className="bg-transparent outline-none font-black text-sm flex-1 py-4 pr-4"
                       value={form.username}
                       onChange={(e) => setForm({ ...form, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })}
                     />
                   </div>
+                  <p className="text-[10px] text-gray-300 font-medium mt-2">
+                    💡 나중에 <span className="font-black text-gray-400">내 도메인</span>으로도 연결할 수 있어요 (예: mybrand.com)
+                  </p>
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">저장할 이메일</p>
