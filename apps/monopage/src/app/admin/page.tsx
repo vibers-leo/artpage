@@ -177,7 +177,7 @@ export default function AdminDashboard() {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const res = await fetch('/api/upload', { method: 'POST', body: formData, headers: { Authorization: `Bearer ${getToken() || ''}` } });
       if (!res.ok) throw new Error('올리기 실패');
       const { url } = await res.json();
       await updateProfile({ avatar_url: url });
@@ -198,7 +198,7 @@ export default function AdminDashboard() {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const res = await fetch('/api/upload', { method: 'POST', body: formData, headers: { Authorization: `Bearer ${getToken() || ''}` } });
       if (!res.ok) throw new Error('올리기 실패');
       const { url } = await res.json();
       const item = await createPortfolioItem({ image_url: url });

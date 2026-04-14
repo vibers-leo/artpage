@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const UPLOAD_SERVER = process.env.UPLOAD_SERVER_URL || 'http://49.50.138.93:8091';
+const API_URL = process.env.BACKEND_URL || 'http://49.50.138.93:4110';
 
 export async function POST(request: NextRequest) {
   try {
+    const token = request.headers.get('authorization') || '';
     const formData = await request.formData();
-    const res = await fetch(`${UPLOAD_SERVER}/upload`, {
+    const res = await fetch(`${API_URL}/api/v1/upload`, {
       method: 'POST',
+      headers: { Authorization: token },
       body: formData,
     });
 

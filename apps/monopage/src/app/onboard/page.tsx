@@ -6,10 +6,14 @@ import { useRouter } from 'next/navigation';
 import { signup, setToken, updateProfile, createLink, getToken, getMyProfile } from '@/lib/api';
 import { detectLink, getLinkIcon, isSnsLink, type DetectedLink } from '@/lib/link-detector';
 
-async function uploadPhoto(file: File): Promise<string> {
+async function uploadPhoto(file: File, token?: string): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
-  const res = await fetch('/api/upload', { method: 'POST', body: formData });
+  const res = await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
   if (!res.ok) throw new Error('사진 올리기 실패');
   const data = await res.json();
   return data.url;
