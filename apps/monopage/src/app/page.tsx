@@ -26,7 +26,15 @@ export default function Home() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: `사용자가 다음 링크를 입력했어: ${summary}. 이 링크들을 분석해서 "~~ 관련 웹사이트네요! 멋진 페이지가 될 것 같아요. 계속 진행하려면 간단한 회원가입이 필요해요 — 30초면 끝나요!" 형태로 두 문장으로 답변해. 첫 문장은 링크 분석, 두 번째 문장은 반드시 회원가입 유도. 절대 다른 말 하지마.` }),
+        body: JSON.stringify({ message: `사용자가 이런 링크들을 입력했어: ${summary}
+
+이 링크들을 보고 이 사람이 어떤 사람인지 구체적으로 분석해줘. 예를 들어 "인스타 팔로워가 많은 뷰티 크리에이터네요", "GitHub에 프로젝트가 많은 개발자시군요", "유튜브와 인스타 둘 다 운영하는 콘텐츠 크리에이터네요" 처럼 링크에서 유추한 직업/활동을 구체적으로 언급해.
+
+두 문장으로 답변해:
+1번 문장: 링크 분석 (구체적인 직업/활동 언급, "관련 웹사이트네요" 같은 뻔한 표현 절대 금지)
+2번 문장: 이 분야에 맞는 개인화된 회원가입 유도 (예: "크리에이터들이 많이 쓰는 바로 지금 페이지 만들어봐요!", "개발자라면 포트폴리오 페이지 하나쯤은 필수죠!")
+
+반드시 한국어로. 이모지 1-2개 포함. 반드시 두 문장만.` }),
       });
       const data = await res.json();
       setAiComment(data.response || '');
@@ -174,15 +182,18 @@ export default function Home() {
           )}
 
           {/* AI Comment */}
-          {links.length > 0 && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-2xl">
+          {links.length > 0 && (aiLoading || aiComment) && (
+            <div className="mb-6 p-4 bg-black rounded-2xl">
               {aiLoading ? (
                 <div className="flex items-center gap-2 text-gray-400">
-                  <Loader2 size={14} className="animate-spin" />
-                  <span className="text-xs font-bold">링크를 분석하고 있어요...</span>
+                  <Loader2 size={14} className="animate-spin text-white" />
+                  <span className="text-xs font-bold text-gray-300">링크 분석 중...</span>
                 </div>
               ) : aiComment ? (
-                <p className="text-sm font-bold text-gray-700">{aiComment}</p>
+                <div className="flex items-start gap-3">
+                  <span className="text-base shrink-0 mt-0.5">✨</span>
+                  <p className="text-sm font-bold text-white leading-relaxed">{aiComment}</p>
+                </div>
               ) : null}
             </div>
           )}
