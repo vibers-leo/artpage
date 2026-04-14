@@ -44,14 +44,25 @@ export default function Onboarding() {
     setPhoto(URL.createObjectURL(file));
   };
 
-  const handleAddLink = () => {
+  const enrichLink = async (link: DetectedLink): Promise<DetectedLink> => {
+    if (link.type !== 'website') return link;
+    try {
+      const res = await fetch(`/api/og?url=${encodeURIComponent(link.url)}`);
+      const og = await res.json();
+      if (og.title) return { ...link, label: og.title };
+    } catch { /* keep original */ }
+    return link;
+  };
+
+  const handleAddLink = async () => {
     if (!linkInput.trim()) return;
     const detected = detectLink(linkInput.trim());
     if (links.some(l => l.url === detected.url)) {
       setError('이미 추가된 링크예요');
       return;
     }
-    setLinks([...links, detected]);
+    const enriched = await enrichLink(detected);
+    setLinks([...links, enriched]);
     setLinkInput('');
     setError(null);
     linkInputRef.current?.focus();

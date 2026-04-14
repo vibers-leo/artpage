@@ -34,18 +34,29 @@ export default function Home() {
     setAiLoading(false);
   };
 
-  const handleAdd = () => {
+  const enrichLink = async (link: DetectedLink): Promise<DetectedLink> => {
+    if (link.type !== 'website') return link;
+    try {
+      const res = await fetch(`/api/og?url=${encodeURIComponent(link.url)}`);
+      const og = await res.json();
+      if (og.title) return { ...link, label: og.title };
+    } catch { /* keep original */ }
+    return link;
+  };
+
+  const handleAdd = async () => {
     if (!input.trim()) return;
     const detected = detectLink(input);
     if (links.some(l => l.url === detected.url)) { setInput(''); return; }
-    const newLinks = [...links, detected];
-    setLinks(newLinks);
     setInput('');
     inputRef.current?.focus();
+    const enriched = await enrichLink(detected);
+    const newLinks = [...links, enriched];
+    setLinks(newLinks);
     analyzeLinks(newLinks);
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = async (e: React.ClipboardEvent<HTMLInputElement>) => {
     const text = e.clipboardData.getData('text');
     const lines = text.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
     if (lines.length <= 1) return;
@@ -60,9 +71,10 @@ export default function Home() {
       }
     }
     if (newLinks.length > 0) {
-      const all = [...links, ...newLinks];
-      setLinks(all);
       setInput('');
+      const enriched = await Promise.all(newLinks.map(enrichLink));
+      const all = [...links, ...enriched];
+      setLinks(all);
       analyzeLinks(all);
     }
   };

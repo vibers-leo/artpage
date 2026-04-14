@@ -108,7 +108,12 @@ export function detectLink(input: string): DetectedLink {
     }
   }
 
-  return { type: 'website', label: '웹사이트', url };
+  // 호스트명을 label로 사용 (https://myratingis.kr → myratingis.kr)
+  let hostname = url;
+  try {
+    hostname = new URL(url).hostname.replace(/^www\./, '');
+  } catch { /* keep original */ }
+  return { type: 'website', label: hostname, url };
 }
 
 export function getLinkIcon(type: LinkType): string {
