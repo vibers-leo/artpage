@@ -1,0 +1,34 @@
+name: 소식 자동 수집
+
+on:
+  schedule:
+    - cron: '0 22 * * *'   # KST 07:00 매일 아침
+    - cron: '0 5 * * *'    # KST 14:00 매일 오후
+  workflow_dispatch:
+    inputs:
+      source:
+        description: '수집 소스 (all / geeknews / hackernews / openai-blog / anthropic-blog)'
+        required: false
+        default: 'all'
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: RSS 소식 수집 트리거
+        run: |
+          SOURCE="${{ github.event.inputs.source || 'all' }}"
+          echo "수집 소스: $SOURCE"
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            -H "x-vibers-secret: ${{ secrets.VIBERS_ADMIN_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"source\":\"$SOURCE\"}" \
+            https://vibers.co.kr/api/news/collect)
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -1)
+          echo "응답 코드: $HTTP_CODE"
+          echo "응답 내용: $BODY"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "수집 실패: $HTTP_CODE"
+            exit 1
+          fi
