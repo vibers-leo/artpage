@@ -105,8 +105,8 @@ export default function AboutPage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -top-6 -right-6 w-24 h-24 rounded-2xl bg-emerald-50 border border-emerald-100 animate-[float_6s_ease-in-out_infinite]" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-gray-50 border border-gray-100 animate-[float_8s_ease-in-out_infinite_1s]" />
+              <div className="absolute -top-6 -right-6 w-24 h-24 rounded-2xl bg-emerald-50 border border-emerald-100 animate-bounce" />
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-gray-50 border border-gray-100 animate-pulse" />
             </div>
           </div>
         </div>
@@ -274,12 +274,6 @@ export default function AboutPage() {
         </div>
       </footer>
 
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </div>
   );
 }
