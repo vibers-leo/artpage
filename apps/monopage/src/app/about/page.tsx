@@ -1,15 +1,11 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ArrowRight, ArrowUpRight, Instagram, Youtube,
-  Globe, ShoppingBag, Heart, Sparkles, BarChart3, Palette,
+  ArrowRight, ArrowUpRight,
+  Globe, Palette, Share2, BarChart3,
 } from 'lucide-react';
 
 export default function AboutPage() {
-  const [instagramId, setInstagramId] = useState('');
 
   return (
     <div className="bg-white text-gray-900 relative overflow-hidden" style={{ fontFamily: "'Pretendard', system-ui, sans-serif" }}>
@@ -161,7 +157,7 @@ export default function AboutPage() {
             {[
               { icon: Globe, title: '링크 모음', desc: 'SNS, 유튜브, 블로그, 쇼핑몰 — 모든 링크를 한 곳에. 파비콘과 함께 앱 아이콘처럼 깔끔하게.' },
               { icon: Palette, title: '5가지 테마', desc: 'Minimal, Dark, Warm, Forest, Sky — 내 분위기에 맞는 테마를 골라 나만의 공간으로 꾸미세요.' },
-              { icon: Instagram, title: 'SNS 연동', desc: '인스타그램 계정을 연결하면 최신 피드가 페이지에 자동 반영됩니다.' },
+              { icon: Share2, title: 'SNS 연동', desc: '인스타그램 계정을 연결하면 최신 피드가 페이지에 자동 반영됩니다.' },
               { icon: BarChart3, title: '방문 통계', desc: '내 페이지를 누가 얼마나 봤는지, 어떤 링크를 클릭했는지 한눈에 확인하세요.' },
             ].map((feature) => (
               <div
