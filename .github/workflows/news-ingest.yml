@@ -1,0 +1,50 @@
+name: 소식 자동 등록 (news-drafts → DB)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'news-drafts/**.md'
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 이전 커밋과 비교하기 위해
+
+      - name: 새로 추가된 news-drafts 파일 감지
+        id: detect
+        run: |
+          # 이번 커밋에서 추가/수정된 news-drafts/*.md 파일 목록
+          FILES=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'news-drafts/*.md' | grep -v '_template\|README' || true)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "감지된 파일: $FILES"
+
+      - name: 각 파일을 ingest API에 POST
+        if: steps.detect.outputs.files != ''
+        env:
+          VIBERS_ADMIN_SECRET: ${{ secrets.VIBERS_ADMIN_SECRET }}
+        run: |
+          SUCCESS=0
+          FAIL=0
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            FILENAME=$(basename "$FILE")
+            CONTENT=$(cat "$FILE")
+            echo "등록 중: $FILENAME"
+            RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+              -H "x-vibers-secret: $VIBERS_ADMIN_SECRET" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg fn "$FILENAME" --arg ct "$CONTENT" '{filename: $fn, content: $ct}')" \
+              https://vibers.co.kr/api/news/ingest)
+            HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+            BODY=$(echo "$RESPONSE" | head -1)
+            echo "  → $HTTP_CODE: $BODY"
+            if [ "$HTTP_CODE" = "200" ]; then SUCCESS=$((SUCCESS+1)); else FAIL=$((FAIL+1)); fi
+          done <<< "${{ steps.detect.outputs.files }}"
+          echo "완료: 성공 $SUCCESS, 실패 $FAIL"
+          [ $FAIL -eq 0 ] || exit 1
