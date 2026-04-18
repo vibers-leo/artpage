@@ -49,6 +49,7 @@ export function SectionRenderer({ sections, profile, links, portfolioItems, post
                 key={section.id}
                 links={links}
                 style={section.content?.style || 'circle'}
+                theme={theme}
               />
             );
 

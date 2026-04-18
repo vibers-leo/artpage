@@ -346,7 +346,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col h-full p-6 lg:p-8 animate-in fade-in duration-200">
             {/* 목록 헤더 */}
             <div className="flex items-center justify-between mb-8">
-              <Link href="/" className="font-black text-base tracking-tight">Monopage<span className="text-gray-300">.</span></Link>
+              <Link href="/" className="font-bold text-[14px] tracking-tight">Monopage<span className="text-gray-300">.</span></Link>
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(v => !v)}

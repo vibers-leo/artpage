@@ -180,7 +180,7 @@ export default function Onboarding() {
           {isGenerating ? (
             <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-300">
               <div>
-                <h2 className="text-3xl font-black tracking-tight leading-tight mb-1">페이지 만드는 중<span className="animate-pulse">...</span></h2>
+                <h2 className="text-[22px] font-bold tracking-tight leading-tight mb-1">페이지 만드는 중<span className="animate-pulse">...</span></h2>
                 <p className="text-gray-400 text-sm font-medium">잠깐만요, 금방 돼요</p>
               </div>
 
@@ -211,10 +211,10 @@ export default function Onboarding() {
             <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
               {/* 헤더 */}
               <div className="flex flex-col gap-2">
-                <h1 className="text-4xl font-black tracking-tightest leading-[1.1]">
-                  내 페이지<br />만들기.
+                <h1 className="text-[24px] font-bold tracking-tight leading-snug">
+                  내 페이지 만들기
                 </h1>
-                <p className="text-sm text-gray-400 font-medium">링크 추가하고, 주소만 정하면 바로 완성돼요.</p>
+                <p className="text-[13px] text-gray-400">링크 추가하고, 주소만 정하면 바로 완성돼요.</p>
               </div>
 
               {/* 링크 입력 */}

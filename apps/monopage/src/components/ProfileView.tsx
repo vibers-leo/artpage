@@ -67,7 +67,7 @@ export function ProfileView({ username }: ProfileViewProps) {
         <div className="fixed inset-0 pointer-events-none" style={{ background: t.bgGradient }} />
       )}
 
-      <div className="relative max-w-[390px] mx-auto px-5 pt-14 pb-20 flex flex-col items-center">
+      <div className="relative max-w-[390px] mx-auto px-5 pt-10 pb-16 flex flex-col items-center">
         <SectionRenderer
           sections={sections}
           profile={profile}
@@ -78,7 +78,7 @@ export function ProfileView({ username }: ProfileViewProps) {
         />
 
         <div className="mt-8 w-full">
-          <ShareButton username={profile.username} />
+          <ShareButton username={profile.username} theme={theme} />
         </div>
 
         <a

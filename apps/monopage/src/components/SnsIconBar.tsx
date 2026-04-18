@@ -1,26 +1,27 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import type { Theme } from '@/lib/themes';
 
 interface SnsIconBarProps {
   links: { id: number; title: string; url: string }[];
   style?: 'circle' | 'pill';
+  theme?: Theme;
 }
 
-const SNS_ICONS: Record<string, { icon: string; color: string }> = {
-  instagram: { icon: '📸', color: '#E4405F' },
-  youtube: { icon: '▶️', color: '#FF0000' },
-  tiktok: { icon: '🎵', color: '#000000' },
-  twitter: { icon: '𝕏', color: '#000000' },
-  x: { icon: '𝕏', color: '#000000' },
-  facebook: { icon: '👤', color: '#1877F2' },
-  threads: { icon: '🧵', color: '#000000' },
-  github: { icon: '💻', color: '#333333' },
-  linkedin: { icon: '💼', color: '#0A66C2' },
-  naver: { icon: '📝', color: '#03C75A' },
-  blog: { icon: '📝', color: '#03C75A' },
-  kakao: { icon: '💬', color: '#FEE500' },
+const SNS_ICONS: Record<string, { icon: string }> = {
+  instagram: { icon: '📸' },
+  youtube: { icon: '▶️' },
+  tiktok: { icon: '🎵' },
+  twitter: { icon: '𝕏' },
+  x: { icon: '𝕏' },
+  facebook: { icon: 'f' },
+  threads: { icon: '🧵' },
+  github: { icon: '⌨️' },
+  linkedin: { icon: '💼' },
+  naver: { icon: 'N' },
+  blog: { icon: 'N' },
+  kakao: { icon: '💬' },
 };
 
 function detectSnsType(url: string): string | null {
@@ -31,7 +32,8 @@ function detectSnsType(url: string): string | null {
   return null;
 }
 
-export function SnsIconBar({ links, style = 'circle' }: SnsIconBarProps) {
+export function SnsIconBar({ links, style = 'circle', theme }: SnsIconBarProps) {
+  const t = theme?.vars;
   const snsLinks = links
     .map(link => ({ ...link, snsType: detectSnsType(link.url) }))
     .filter(link => link.snsType !== null);
@@ -39,30 +41,31 @@ export function SnsIconBar({ links, style = 'circle' }: SnsIconBarProps) {
   if (snsLinks.length === 0) return null;
 
   return (
-    <div className="flex items-center justify-center gap-3 w-full my-4">
-      {snsLinks.map((link, i) => {
+    <div className="flex items-center justify-center gap-2 w-full my-3">
+      {snsLinks.map((link) => {
         const sns = SNS_ICONS[link.snsType!];
         return (
-          <motion.a
+          <a
             key={link.id}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.05 }}
-            className={`flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${
-              style === 'pill'
-                ? 'px-4 py-2 rounded-full bg-gray-50 border border-gray-100 gap-2'
-                : 'w-11 h-11 rounded-full bg-gray-50 border border-gray-100'
-            }`}
             title={link.title}
+            className={`flex items-center justify-center hover:scale-110 active:scale-95 transition-transform ${
+              style === 'pill' ? 'gap-1.5 px-3 py-1.5 rounded-full' : 'w-9 h-9 rounded-full'
+            }`}
+            style={{
+              backgroundColor: t?.cardBg || '#f9fafb',
+              border: `1px solid ${t?.cardBorder || '#f3f4f6'}`,
+            }}
           >
-            <span className="text-lg">{sns.icon}</span>
+            <span className="text-[14px] leading-none">{sns.icon}</span>
             {style === 'pill' && (
-              <span className="text-[10px] font-black uppercase tracking-wider">{link.snsType}</span>
+              <span className="text-[9px] font-bold uppercase tracking-wide" style={{ color: t?.textMuted || '#9ca3af' }}>
+                {link.snsType}
+              </span>
             )}
-          </motion.a>
+          </a>
         );
       })}
     </div>

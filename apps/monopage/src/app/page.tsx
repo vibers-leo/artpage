@@ -108,7 +108,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-white text-black font-sans">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="font-black text-xl tracking-tight">
+        <Link href="/" className="font-bold text-[15px] tracking-tight">
           Monopage<span className="text-gray-300">.</span>
         </Link>
         <div className="flex items-center gap-4">
@@ -148,12 +148,12 @@ export default function Home() {
             )}
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1] mb-4">
+          <h1 className="text-[26px] md:text-[32px] font-bold tracking-tight leading-[1.2] mb-4" style={{ wordBreak: 'keep-all' }}>
             링크만 붙여넣으면<br />
             <span className="text-gray-300">페이지가 완성돼요.</span>
           </h1>
 
-          <p className="text-base text-gray-400 font-medium mb-8 leading-relaxed">
+          <p className="text-[14px] text-gray-400 font-normal mb-8 leading-relaxed" style={{ wordBreak: 'keep-all' }}>
             SNS, 홈페이지, 네이버 플레이스 — 어떤 링크든 넣어보세요.<br />
             오른쪽에서 내 페이지가 어떻게 보이는지 바로 확인할 수 있어요.
           </p>
@@ -306,29 +306,35 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-20 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-black mb-12 text-center">왜 Monopage인가요?</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+      <section className="py-16 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-6">
+          <p className="text-[10px] font-bold text-gray-300 uppercase tracking-[0.3em] text-center mb-3">Why Monopage</p>
+          <h2 className="text-[20px] font-bold text-center mb-10 tracking-tight">한 페이지로 충분한 이유</h2>
+          <div className="grid md:grid-cols-3 gap-4">
             {[
-              { icon: '🔗', title: '링크만 넣으면 끝', desc: 'SNS, 블로그, 네이버 플레이스까지 자동 감지' },
-              { icon: '📱', title: '모바일에서도 완벽', desc: '어디서든 쉽게 편집하고 공유할 수 있어요' },
-              { icon: '📊', title: '방문자 분석', desc: '누가, 언제, 어떤 링크를 클릭했는지 한눈에' },
-            ].map((f, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div className="text-2xl mb-3">{f.icon}</div>
-                <h3 className="font-black text-base mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-400 font-medium">{f.desc}</p>
+              { num: '01', title: '링크만 넣으면 끝', desc: 'SNS, 블로그, 네이버 플레이스까지 자동 감지해서 정리해줘요.' },
+              { num: '02', title: '어디서든 수정 가능', desc: '스마트폰에서도 쉽게 편집하고 바로 공유할 수 있어요.' },
+              { num: '03', title: '방문자 통계 제공', desc: '누가 언제 어떤 링크를 눌렀는지 한눈에 확인하세요.' },
+            ].map((f) => (
+              <div key={f.num} className="p-5 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all">
+                <p className="text-[10px] font-bold text-gray-200 mb-3 tracking-widest">{f.num}</p>
+                <h3 className="text-[13px] font-semibold mb-1.5 text-gray-900">{f.title}</h3>
+                <p className="text-[12px] text-gray-400 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <footer className="py-10 border-t border-gray-100 text-center">
-        <p className="text-gray-300 text-[10px] font-black uppercase tracking-widest">
-          © 2026 Monopage. All rights reserved.
-        </p>
+      <footer className="py-8 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] text-gray-300">© 2026 Monopage by Vibers</p>
+          <div className="flex items-center gap-4">
+            <Link href="/about" className="text-[11px] text-gray-300 hover:text-black transition-colors">서비스 소개</Link>
+            <Link href="/privacy" className="text-[11px] text-gray-300 hover:text-black transition-colors">개인정보처리방침</Link>
+            <Link href="/terms" className="text-[11px] text-gray-300 hover:text-black transition-colors">이용약관</Link>
+          </div>
+        </div>
       </footer>
 
       <ChatWidget />
