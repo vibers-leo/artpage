@@ -43,13 +43,13 @@ export default function AboutPage() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 text-gray-900"
                 style={{ wordBreak: 'keep-all' }}
               >
-                이미지 홍수의 시대에,
+                누구에게나
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-500">
-                  누구에게나
+                  단 하나의 페이지가
                 </span>
                 <br />
-                단 하나의 페이지
+                필요하다면? 모노페이지!
               </h1>
 
               <p
