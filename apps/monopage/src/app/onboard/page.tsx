@@ -34,10 +34,8 @@ export default function Onboarding() {
   const router = useRouter();
 
   useEffect(() => {
-    // 이미 로그인한 경우 회원가입 폼 숨김
     const token = getToken();
     if (token) setIsLoggedIn(true);
-
     try {
       const draft = sessionStorage.getItem('monopage_draft_links');
       if (draft) {
@@ -108,7 +106,6 @@ export default function Onboarding() {
   };
 
   const handleCreate = async () => {
-    // 이미 로그인한 경우: 링크만 추가
     if (isLoggedIn) {
       if (links.length === 0) { router.push('/admin'); return; }
       setIsGenerating(true);
@@ -175,13 +172,13 @@ export default function Onboarding() {
   const hasNaverPlace = links.some(l => l.type === 'naver_place');
 
   return (
-    <div className="min-h-screen bg-white text-black flex items-center justify-center p-6 font-sans">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-white text-[#0a0a0a] flex items-center justify-center p-5 sm:p-8">
+      <div className="max-w-[440px] w-full">
           {isGenerating ? (
             <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-300">
               <div>
-                <h2 className="text-[22px] font-bold tracking-tight leading-tight mb-1">페이지 만드는 중<span className="animate-pulse">...</span></h2>
-                <p className="text-gray-400 text-sm font-medium">잠깐만요, 금방 돼요</p>
+                <h2 className="font-paperlogy text-[22px] font-extrabold tracking-tight leading-tight mb-1">페이지 만드는 중<span className="animate-pulse">...</span></h2>
+                <p className="text-[#a3a3a3] text-[14px] font-medium">잠깐만요, 금방 돼요</p>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -194,13 +191,13 @@ export default function Onboarding() {
                   const done = progressStep > step;
                   const active = progressStep === step;
                   return (
-                    <div key={step} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 ${active ? 'bg-black text-white' : done ? 'bg-gray-50' : 'opacity-30'}`}>
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-black ${active ? 'bg-white text-black' : done ? 'bg-black text-white' : 'bg-gray-200 text-gray-400'}`}>
+                    <div key={step} className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 ${active ? 'bg-[#0a0a0a] text-white' : done ? 'bg-[#f5f5f5]' : 'opacity-30'}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${active ? 'bg-white text-[#0a0a0a]' : done ? 'bg-[#0a0a0a] text-white' : 'bg-[#e5e5e5] text-[#a3a3a3]'}`}>
                         {done ? <Check size={13} /> : active ? <Loader2 size={13} className="animate-spin" /> : step}
                       </div>
                       <div className="flex-1">
-                        <p className={`text-sm font-black ${active ? 'text-white' : done ? 'text-black' : 'text-gray-400'}`}>{label}</p>
-                        {active && <p className="text-[11px] text-gray-300 font-medium mt-0.5">{sub}</p>}
+                        <p className={`text-[13px] font-semibold ${active ? 'text-white' : done ? 'text-[#0a0a0a]' : 'text-[#a3a3a3]'}`}>{label}</p>
+                        {active && <p className="text-[11px] text-[#525252] font-medium mt-0.5">{sub}</p>}
                       </div>
                     </div>
                   );
@@ -209,25 +206,25 @@ export default function Onboarding() {
             </div>
           ) : (
             <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-              {/* 헤더 */}
+              {/* Header */}
               <div className="flex flex-col gap-2">
-                <h1 className="text-[24px] font-bold tracking-tight leading-snug">
+                <h1 className="font-paperlogy text-[26px] font-extrabold tracking-tight leading-snug">
                   내 페이지 만들기
                 </h1>
-                <p className="text-[13px] text-gray-400">링크 추가하고, 주소만 정하면 바로 완성돼요.</p>
+                <p className="text-[14px] text-[#a3a3a3]">링크 추가하고, 주소만 정하면 바로 완성돼요.</p>
               </div>
 
-              {/* 링크 입력 */}
+              {/* Link input */}
               <div>
-                <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">링크 추가</p>
-                <div className="flex gap-2">
-                  <div className="flex-1 flex items-center gap-3 p-4 border border-gray-200 rounded-2xl bg-gray-50 focus-within:border-black transition-colors">
-                    <LinkIcon size={16} className="text-gray-300 shrink-0" />
+                <p className="text-[11px] font-semibold text-[#a3a3a3] uppercase tracking-[0.15em] mb-2">링크 추가</p>
+                <div className="flex gap-2.5">
+                  <div className="flex-1 flex items-center gap-3 p-4 border border-[#e5e5e5] rounded-xl bg-[#f5f5f5] focus-within:border-[#0a0a0a] focus-within:bg-white transition-all">
+                    <LinkIcon size={16} className="text-[#a3a3a3] shrink-0" />
                     <input
                       ref={linkInputRef}
                       type="text"
                       placeholder="링크 붙여넣기 (여러 개도 OK)"
-                      className="bg-transparent outline-none font-bold text-sm flex-1"
+                      className="bg-transparent outline-none font-medium text-[14px] flex-1 placeholder:text-[#a3a3a3]"
                       value={linkInput}
                       onChange={(e) => setLinkInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
@@ -237,34 +234,32 @@ export default function Onboarding() {
                   <button
                     onClick={handleAddLink}
                     disabled={!linkInput.trim()}
-                    className="w-12 h-12 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 disabled:opacity-20 hover:scale-105 active:scale-95 transition-all"
+                    className="w-12 h-12 bg-[#0a0a0a] text-white rounded-xl flex items-center justify-center shrink-0 disabled:opacity-20 hover:bg-[#262626] active:scale-95 transition-all"
                   >
-                    <Plus size={20} />
+                    <Plus size={18} />
                   </button>
                 </div>
               </div>
 
-              {/* 추가된 링크 */}
+              {/* Added links */}
               {links.length > 0 && (
                 <div className="flex flex-col gap-1.5 max-h-[200px] overflow-y-auto">
                   {links.map((link, index) => (
                     <div
                       key={`${link.url}-${index}`}
-                      className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl group animate-in fade-in slide-in-from-left-2 duration-200"
+                      className="flex items-center gap-3 px-4 py-3 bg-[#f5f5f5] rounded-xl group animate-in fade-in slide-in-from-left-2 duration-200"
                     >
-                      <span className="text-base shrink-0">{getLinkIcon(link.type)}</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-black truncate">{link.handle ? `@${link.handle}` : link.label}</p>
-                      </div>
+                      <span className="text-sm shrink-0">{getLinkIcon(link.type)}</span>
+                      <p className="text-[13px] font-medium truncate flex-1">{link.handle ? `@${link.handle}` : link.label}</p>
                       {isSnsLink(link.type) && (
-                        <span className="text-[9px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full shrink-0">SNS</span>
+                        <span className="text-[9px] font-semibold text-[#0a0a0a] bg-[#e5e5e5] px-2 py-0.5 rounded-full shrink-0">SNS</span>
                       )}
                       {link.type === 'naver_place' && (
-                        <span className="text-[9px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded-full shrink-0">플레이스</span>
+                        <span className="text-[9px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full shrink-0">플레이스</span>
                       )}
                       <button
                         onClick={() => handleRemoveLink(index)}
-                        className="text-gray-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 shrink-0"
+                        className="text-[#a3a3a3] hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 shrink-0"
                       >
                         <Trash2 size={12} />
                       </button>
@@ -274,20 +269,19 @@ export default function Onboarding() {
               )}
 
               {snsLinks.length > 0 && (
-                <p className="text-[10px] font-bold text-blue-500">SNS {snsLinks.length}개 감지 — 어드민에서 피드 연동 가능</p>
+                <p className="text-[11px] font-medium text-[#525252]">SNS {snsLinks.length}개 감지 — 어드민에서 피드 연동 가능</p>
               )}
               {hasNaverPlace && (
-                <p className="text-[10px] font-bold text-green-600">네이버 플레이스 감지 — 업체 정보 자동 표시</p>
+                <p className="text-[11px] font-medium text-green-700">네이버 플레이스 감지 — 업체 정보 자동 표시</p>
               )}
 
-              {/* 구분선 */}
-              <div className="border-t border-gray-100" />
+              <div className="border-t border-[#e5e5e5]" />
 
-              {/* 프로필 사진 (선택) */}
+              {/* Profile photo */}
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="h-24 rounded-2xl flex items-center gap-4 px-5 bg-gray-50 border border-dashed border-gray-200 hover:border-black cursor-pointer transition-all overflow-hidden group"
+                className="h-24 rounded-xl flex items-center gap-4 px-5 bg-[#f5f5f5] border border-dashed border-[#e5e5e5] hover:border-[#0a0a0a] cursor-pointer transition-all overflow-hidden group"
               >
                 {photo ? (
                   <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0">
@@ -300,54 +294,54 @@ export default function Onboarding() {
                     </button>
                   </div>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center shrink-0 group-hover:bg-gray-300 transition-colors">
-                    <Camera size={20} className="text-gray-400" />
+                  <div className="w-16 h-16 rounded-full bg-[#e5e5e5] flex items-center justify-center shrink-0 group-hover:bg-[#d4d4d4] transition-colors">
+                    <Camera size={20} className="text-[#a3a3a3]" />
                   </div>
                 )}
                 <div>
-                  <p className="text-xs font-black">{photo ? '사진 변경하기' : '프로필 사진 추가'}</p>
-                  <p className="text-[10px] text-gray-400">선택사항</p>
+                  <p className="text-[13px] font-semibold">{photo ? '사진 변경하기' : '프로필 사진 추가'}</p>
+                  <p className="text-[11px] text-[#a3a3a3]">선택사항</p>
                 </div>
               </div>
 
-              {/* 페이지 주소 + 계정 정보 (미로그인 상태만) */}
+              {/* Account info (not logged in) */}
               {!isLoggedIn && (
                 <div className="flex flex-col gap-3">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">페이지 주소</p>
-                      <p className="text-[10px] font-bold text-blue-400">영문·숫자·_ 만 가능</p>
+                      <p className="text-[11px] font-semibold text-[#a3a3a3] uppercase tracking-[0.15em]">페이지 주소</p>
+                      <p className="text-[11px] font-medium text-[#a3a3a3]">영문·숫자·_ 만 가능</p>
                     </div>
-                    <div className="flex items-center gap-0 border border-gray-200 rounded-2xl bg-gray-50 focus-within:border-black transition-colors overflow-hidden">
-                      <span className="text-[11px] font-bold text-gray-300 pl-4 shrink-0">monopage.kr/</span>
+                    <div className="flex items-center gap-0 border border-[#e5e5e5] rounded-xl bg-[#f5f5f5] focus-within:border-[#0a0a0a] focus-within:bg-white transition-all overflow-hidden">
+                      <span className="text-[12px] font-medium text-[#a3a3a3] pl-4 shrink-0">monopage.kr/</span>
                       <input
                         type="text"
                         placeholder="my_page"
-                        className="bg-transparent outline-none font-black text-sm flex-1 py-4 pr-4"
+                        className="bg-transparent outline-none font-semibold text-[14px] flex-1 py-4 pr-4"
                         value={form.username}
                         onChange={(e) => setForm({ ...form, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })}
                       />
                     </div>
-                    <p className="text-[10px] text-gray-300 font-medium mt-2">
-                      💡 나중에 <span className="font-black text-gray-400">내 도메인</span>으로도 연결할 수 있어요 (예: mybrand.com)
+                    <p className="text-[11px] text-[#a3a3a3] font-medium mt-2">
+                      나중에 내 도메인으로도 연결할 수 있어요 (예: mybrand.com)
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">저장할 이메일</p>
+                    <p className="text-[11px] font-semibold text-[#a3a3a3] uppercase tracking-[0.15em] mb-2">이메일</p>
                     <input
                       type="email"
                       placeholder="email@example.com"
-                      className="w-full p-4 border border-gray-200 rounded-2xl bg-gray-50 outline-none font-bold text-sm focus:border-black transition-colors"
+                      className="w-full p-4 border border-[#e5e5e5] rounded-xl bg-[#f5f5f5] outline-none font-medium text-[14px] focus:border-[#0a0a0a] focus:bg-white transition-all placeholder:text-[#a3a3a3]"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                     />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">비밀번호</p>
+                    <p className="text-[11px] font-semibold text-[#a3a3a3] uppercase tracking-[0.15em] mb-2">비밀번호</p>
                     <input
                       type="password"
                       placeholder="6자 이상"
-                      className="w-full p-4 border border-gray-200 rounded-2xl bg-gray-50 outline-none font-bold text-sm focus:border-black transition-colors"
+                      className="w-full p-4 border border-[#e5e5e5] rounded-xl bg-[#f5f5f5] outline-none font-medium text-[14px] focus:border-[#0a0a0a] focus:bg-white transition-all placeholder:text-[#a3a3a3]"
                       value={form.password}
                       onChange={(e) => setForm({ ...form, password: e.target.value })}
                       onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
@@ -356,19 +350,18 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
+              {error && <p className="text-red-500 text-[12px] font-medium text-center">{error}</p>}
 
               {/* CTA */}
               <button
                 onClick={handleCreate}
-                className="w-full py-5 bg-black text-white rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all relative overflow-hidden group"
+                className="w-full py-4.5 bg-[#0a0a0a] text-white rounded-full font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#262626] active:scale-[0.98] transition-all"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <Sparkles size={18} />
-                {links.length > 0 ? `페이지 만들기` : '내 페이지 만들기'}
+                <Sparkles size={16} />
+                {links.length > 0 ? '페이지 만들기' : '내 페이지 만들기'}
               </button>
 
-              <p className="text-[10px] text-gray-300 text-center font-medium">
+              <p className="text-[11px] text-[#a3a3a3] text-center font-medium">
                 링크는 나중에 어드민에서 추가/수정할 수 있어요
               </p>
             </div>

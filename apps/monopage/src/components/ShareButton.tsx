@@ -33,45 +33,53 @@ export function ShareButton({ username, theme }: ShareButtonProps) {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2.5">
         <button
           onClick={handleShare}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-opacity hover:opacity-60"
-          style={{ backgroundColor: t?.cardBg || '#f3f4f6', color: t?.textMuted || '#9ca3af', border: `1px solid ${t?.cardBorder || '#f3f4f6'}` }}
+          className="flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[11px] font-semibold transition-all hover:opacity-70"
+          style={{
+            backgroundColor: t?.cardBg || '#f5f5f5',
+            color: t?.textMuted || '#a3a3a3',
+            border: `1px solid ${t?.cardBorder || '#e5e5e5'}`,
+          }}
         >
-          <Share2 size={11} /> 공유
+          <Share2 size={12} /> 공유
         </button>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-opacity hover:opacity-60"
-          style={{ backgroundColor: t?.cardBg || '#f3f4f6', color: t?.textMuted || '#9ca3af', border: `1px solid ${t?.cardBorder || '#f3f4f6'}` }}
+          className="flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[11px] font-semibold transition-all hover:opacity-70"
+          style={{
+            backgroundColor: t?.cardBg || '#f5f5f5',
+            color: t?.textMuted || '#a3a3a3',
+            border: `1px solid ${t?.cardBorder || '#e5e5e5'}`,
+          }}
         >
-          <QrCode size={11} /> QR
+          <QrCode size={12} /> QR
         </button>
       </div>
 
       {showModal && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="relative bg-white rounded-3xl w-full max-w-sm p-8 flex flex-col items-center gap-5"
+            className="relative bg-white rounded-2xl w-full max-w-sm p-8 flex flex-col items-center gap-5"
             onClick={e => e.stopPropagation()}
           >
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-gray-300 hover:text-black transition-colors"
+              className="absolute top-4 right-4 text-[#a3a3a3] hover:text-[#0a0a0a] transition-colors"
             >
               <X size={16} />
             </button>
 
             <div className="text-center">
-              <h3 className="text-base font-bold mb-0.5">@{username}</h3>
-              <p className="text-[11px] text-gray-400">이 페이지를 공유하세요</p>
+              <h3 className="text-[15px] font-bold mb-0.5">@{username}</h3>
+              <p className="text-[12px] text-[#a3a3a3]">이 페이지를 공유하세요</p>
             </div>
 
-            <div className="bg-white p-3 rounded-2xl border border-gray-100">
+            <div className="bg-white p-3 rounded-xl border border-[#e5e5e5]">
               <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}&margin=8`}
                 alt="QR Code"
@@ -83,12 +91,12 @@ export function ShareButton({ username, theme }: ShareButtonProps) {
 
             <button
               onClick={handleCopy}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-black text-white rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#0a0a0a] text-white rounded-full text-[12px] font-semibold hover:bg-[#262626] transition-colors"
             >
               {copied ? <><Check size={13} /> 복사됨!</> : <><Copy size={13} /> 링크 복사</>}
             </button>
 
-            <p className="text-[10px] text-gray-300">{url}</p>
+            <p className="text-[11px] text-[#a3a3a3]">{url}</p>
           </div>
         </div>
       )}

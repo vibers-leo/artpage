@@ -46,19 +46,20 @@ export const LinkCard: React.FC<LinkCardProps> = ({ title, url, favicon, domain,
       target="_blank"
       rel="noopener noreferrer"
       onClick={onClick}
-      className={cn('flex items-center gap-3 w-full px-3.5 py-3 rounded-2xl active:scale-[0.97] transition-all group cursor-pointer', className)}
+      className={cn('flex items-center gap-3 w-full px-4 py-3.5 rounded-xl active:scale-[0.98] transition-all group cursor-pointer', className)}
       style={{
         backgroundColor: t?.cardBg || '#ffffff',
-        border: `1px solid ${t?.cardBorder || '#f3f4f6'}`,
+        border: `1px solid ${t?.cardBorder || '#e5e5e5'}`,
+        boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
       }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = t?.cardHover || '#f9fafb'; }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = t?.cardHover || '#f5f5f5'; }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = t?.cardBg || '#ffffff'; }}
     >
-      {/* 아이콘 — squircle */}
+      {/* Icon — squircle */}
       <div
-        className="w-9 h-9 shrink-0 flex items-center justify-center text-[13px] font-black overflow-hidden"
+        className="w-10 h-10 shrink-0 flex items-center justify-center text-[14px] font-bold overflow-hidden"
         style={{
-          backgroundColor: sns ? sns.color + '18' : (t?.cardBorder || '#f3f4f6'),
+          backgroundColor: sns ? sns.color + '12' : (t?.cardBorder || '#f5f5f5'),
           borderRadius: '28%',
         }}
       >
@@ -67,18 +68,18 @@ export const LinkCard: React.FC<LinkCardProps> = ({ title, url, favicon, domain,
         ) : favicon && !faviconError ? (
           <img src={favicon} alt="" className="w-5 h-5 object-contain" onError={() => setFaviconError(true)} />
         ) : (
-          <span style={{ color: t?.textMuted || '#9ca3af' }} className="text-[11px] font-black">
+          <span style={{ color: t?.textMuted || '#a3a3a3' }} className="text-[12px] font-bold">
             {(hostname?.[0] || '?').toUpperCase()}
           </span>
         )}
       </div>
 
-      {/* 텍스트 */}
+      {/* Text */}
       <div className="flex-1 min-w-0">
         <p className="text-[13px] font-semibold truncate leading-tight" style={{ color: t?.text || '#0a0a0a' }}>
           {title}
         </p>
-        <p className="text-[11px] truncate font-normal mt-0.5" style={{ color: t?.textMuted || '#9ca3af' }}>
+        <p className="text-[11px] truncate font-normal mt-0.5" style={{ color: t?.textMuted || '#a3a3a3' }}>
           {hostname}
         </p>
       </div>
@@ -86,7 +87,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({ title, url, favicon, domain,
       <ArrowUpRight
         size={14}
         className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
-        style={{ color: t?.textMuted || '#d1d5db' }}
+        style={{ color: t?.textMuted || '#d4d4d4' }}
       />
     </a>
   );

@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="font-sans antialiased text-black bg-white">{children}</body>
+      <body className="antialiased text-[#0a0a0a] bg-white">{children}</body>
     </html>
   );
 }

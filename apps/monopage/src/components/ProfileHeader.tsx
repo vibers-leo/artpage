@@ -15,42 +15,42 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ username, bio, ava
   const t = theme?.vars;
 
   return (
-    <div className="flex flex-col items-center gap-3 mb-7 w-full">
-      {/* 아바타 */}
+    <div className="flex flex-col items-center gap-4 mb-8 w-full">
+      {/* Avatar */}
       <div
-        className="w-[60px] h-[60px] rounded-full overflow-hidden shrink-0"
-        style={{ boxShadow: `0 0 0 2.5px ${t?.avatarRing || '#f3f4f6'}` }}
+        className="w-[80px] h-[80px] rounded-full overflow-hidden shrink-0"
+        style={{ boxShadow: `0 0 0 2px ${t?.avatarRing || '#e5e5e5'}` }}
       >
         {avatarUrl ? (
           <img src={avatarUrl} alt={username} className="w-full h-full object-cover" />
         ) : (
           <div
-            className="w-full h-full flex items-center justify-center text-lg font-semibold"
-            style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #404040 100%)', color: '#fff' }}
+            className="w-full h-full flex items-center justify-center text-xl font-bold"
+            style={{ background: '#0a0a0a', color: '#fff' }}
           >
             {(username[0] || '?').toUpperCase()}
           </div>
         )}
       </div>
 
-      {/* 텍스트 */}
-      <div className="flex flex-col items-center gap-[3px]">
+      {/* Text */}
+      <div className="flex flex-col items-center gap-1">
         <h1
-          className="text-[13px] font-semibold tracking-tight leading-tight"
-          style={{ color: t?.text || '#0a0a0a' }}
+          className="text-[15px] font-bold tracking-tight leading-tight"
+          style={{ color: t?.text || '#0a0a0a', fontFamily: "'Paperlogy', 'Pretendard', sans-serif" }}
         >
           {displayName || username}
         </h1>
         <p
-          className="text-[10px] font-medium tracking-wide"
-          style={{ color: t?.textMuted || '#9ca3af' }}
+          className="text-[11px] font-medium"
+          style={{ color: t?.textMuted || '#a3a3a3' }}
         >
           @{username}
         </p>
         {bio && (
           <p
-            className="text-[12px] max-w-[260px] text-center leading-relaxed mt-2 font-normal"
-            style={{ color: t?.textSub || '#6b7280' }}
+            className="text-[13px] max-w-[280px] text-center leading-[1.6] mt-2 font-normal"
+            style={{ color: t?.textSub || '#525252' }}
           >
             {bio}
           </p>

@@ -27,14 +27,14 @@ export function ProfileView({ username }: ProfileViewProps) {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+      <div className="w-5 h-5 border-2 border-[#0a0a0a] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 
   if (notFound) return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-3 bg-white">
-      <p className="text-3xl font-black tracking-tight">404</p>
-      <p className="text-gray-400 text-[13px] font-medium">@{username} 페이지를 찾을 수 없어요</p>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-3 bg-white px-5">
+      <p className="font-paperlogy text-[28px] font-extrabold tracking-tight">404</p>
+      <p className="text-[#a3a3a3] text-[13px] font-medium">@{username} 페이지를 찾을 수 없어요</p>
     </div>
   );
 
@@ -62,12 +62,12 @@ export function ProfileView({ username }: ProfileViewProps) {
       className="min-h-screen w-full"
       style={{ backgroundColor: t.bg, ...cssVars }}
     >
-      {/* 배경 그라디언트 */}
+      {/* Background gradient */}
       {t.bgGradient !== 'transparent' && (
         <div className="fixed inset-0 pointer-events-none" style={{ background: t.bgGradient }} />
       )}
 
-      <div className="relative max-w-[390px] mx-auto px-5 pt-10 pb-16 flex flex-col items-center">
+      <div className="relative max-w-[420px] mx-auto px-5 sm:px-6 pt-12 pb-16 flex flex-col items-center">
         <SectionRenderer
           sections={sections}
           profile={profile}
@@ -77,7 +77,7 @@ export function ProfileView({ username }: ProfileViewProps) {
           theme={theme}
         />
 
-        <div className="mt-8 w-full">
+        <div className="mt-10 w-full">
           <ShareButton username={profile.username} theme={theme} />
         </div>
 
@@ -85,7 +85,7 @@ export function ProfileView({ username }: ProfileViewProps) {
           href="https://monopage.kr"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 opacity-25 hover:opacity-50 transition-opacity text-[9px] font-black uppercase tracking-[0.3em]"
+          className="mt-10 opacity-20 hover:opacity-40 transition-opacity text-[9px] font-medium uppercase tracking-[0.25em]"
           style={{ color: t.textMuted }}
         >
           Made with Monopage
